@@ -10,10 +10,11 @@ use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
-use MooseX::ClassAttribute;
 use namespace::autoclean;
 use IO::Dir;
 use Carp qw();
+use Gentoo::Overlay::Category;
+use Gentoo::Overlay::Types qw( :all );
 
 =head1 SYNOPSIS
 
@@ -61,7 +62,7 @@ has 'name' => ( isa => Str, ro, lazy_build );
 
 has '_profile_dir' => ( isa => Dir, ro, lazy_build );
 has(
-  '_categories' => ( isa => HashRef [Dir], ro, lazy_build ),
+  '_categories' => ( isa => HashRef [Gentoo__Overlay_Category], ro, lazy_build ),
   traits        => [qw( Hash )],
   handles       => {
     '_has_category'  => 'exists',
@@ -71,30 +72,24 @@ has(
   }
 );
 
-=pc_attr _default_paths
+=p_attr _default_paths
 
 =cut
 
-=pc_attr _category_scan_blacklist
+=p_attr _category_scan_blacklist
 
 =cut
 
-class_has(
+has(
   '_default_paths' => ( isa => HashRef [CodeRef], ro, lazy_build ),
   traits => [qw( Hash )],
-);
-
-class_has(
-  '_category_scan_blacklist' => ( isa => HashRef [Str], ro, lazy_build, ),
-  traits => [qw( Hash )],
-  handles => { '_category_scan_blacklisted' => 'exists' },
 );
 
 =p_method _default_path
 
 =cut
 
-=pc_method _build__default_paths
+=p_method _build__default_paths
 
 =cut
 
@@ -119,10 +114,6 @@ sub _build__default_paths {
 
 =cut
 
-sub _build__category_scan_blacklist {
-  my ($self) = shift;
-  return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-}
 
 =p_method _build__profile_dir
 
@@ -158,13 +149,19 @@ sub _build___categories_file {
   my ($self) = shift;
   my %out;
   for my $cat ( $self->_default_path('catfile')->slurp( chomp => 1, iomode => '<:raw' ) ) {
-    my $file = $self->_default_path( 'category', $cat );
-    if ( ( !-e $file ) or ( !-d $file ) ) {
-      Carp::carp( sprintf q{category %s is not an existing directory (%s) for overlay %s}, $cat, $file->stringify, $self->name,
+    my $category = Gentoo::Overlay::Category->new(
+      name    => $cat,
+      overlay => $self,
+    );
+    if ( !$category->exists ) {
+      Carp::carp(
+        sprintf q{category %s is not an existing directory (%s) for overlay %s},
+        $category->name, $category->path->stringify,
+        $self->name,
       );
       next;
     }
-    $out{$cat} = $file;
+    $out{$cat} = $category;
   }
   return \%out;
 }
@@ -179,9 +176,13 @@ sub _build___categories_scan {
   ## no critic ( ProhibitTies )
   tie my %dir, 'IO::Dir', $self->path->absolute->stringify;
   for my $cat ( sort keys %dir ) {
-    next if $self->_category_scan_blacklisted($cat);
-    next unless -d $dir{$cat};
-    $out{$cat} = $self->_default_path( 'category', $cat );
+    my $category = Gentoo::Overlay::Category->new(
+        overlay => $self,
+        name => $cat,
+    );
+    next unless $category->exists();
+    next if $category->is_blacklisted();
+    $out{$cat} = $category;
   }
   return \%out;
 
@@ -194,7 +195,7 @@ sub _build___categories_scan {
 sub _build__categories {
   my ($self) = shift;
   my $cf = $self->_default_path('catfile');
-  if (( !-e $cf ) or ( !-f $cf ) ) {
+  if ( ( !-e $cf ) or ( !-f $cf ) ) {
     Carp::carp( sprintf qq{No category file for overlay %s, expected: %s. \n Falling back to scanning},
       $self->name, $cf->stringify );
     return $self->_build___categories_scan();
