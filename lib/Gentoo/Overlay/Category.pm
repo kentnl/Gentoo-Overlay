@@ -48,7 +48,7 @@ The classes short name
 
     isa => Str, required, ro
 
-L<MooseX::Types::Moose>
+L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
 
 =cut
 
@@ -86,7 +86,7 @@ Class-Wide list of blacklisted directory names.
 
 L</_scan_blacklisted>
 
-L<MooseX::Types::Moose>
+L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
 
 =cut
 
@@ -111,7 +111,7 @@ class_has(
 
 =pc_method _build__scan_blacklist
 
-Generates the default list of blacklisted items for the classwide record.
+Generates the default list of blacklisted items for the class-wide record.
 
     ::Category->_build__scan_blacklist()
 
@@ -155,7 +155,7 @@ sub exists {
 
 =method is_blacklisted
 
-Does the category name appear on a blacklist meaning autoscan should ignore this?
+Does the category name appear on a blacklist meaning auto-scan should ignore this?
 
     ::Category->new( name => '..', overlay => $overlay )->is_blacklisted  # true
 
