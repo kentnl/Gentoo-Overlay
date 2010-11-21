@@ -17,7 +17,10 @@ corpus/overlay_3/metadata/keepdir
 corpus/overlay_3/profiles/categories
 corpus/overlay_3/profiles/repo_name
 dist.ini
+examples/portage.pl
 lib/Gentoo/Overlay.pm
+lib/Gentoo/Overlay/Category.pm
+lib/Gentoo/Overlay/Types.pm
 perlcritic.rc
 t/00-compile.t
 t/000-report-versions-tiny.t

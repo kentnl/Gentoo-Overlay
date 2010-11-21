@@ -60,6 +60,7 @@ eval { $v .= pmver('Module::Build','0.3601') };
 eval { $v .= pmver('Moose','any version') };
 eval { $v .= pmver('MooseX::ClassAttribute','any version') };
 eval { $v .= pmver('MooseX::Has::Sugar','any version') };
+eval { $v .= pmver('MooseX::Types','any version') };
 eval { $v .= pmver('MooseX::Types::Moose','any version') };
 eval { $v .= pmver('MooseX::Types::Path::Class','any version') };
 eval { $v .= pmver('Test::Fatal','any version') };

@@ -24,7 +24,7 @@ my %module_build_args = (
     'Kent Fredric <kentnl@cpan.org>'
   ],
   'dist_name' => 'Gentoo-Overlay',
-  'dist_version' => '0.01000015',
+  'dist_version' => '0.01000020',
   'license' => 'perl',
   'module_name' => 'Gentoo::Overlay',
   'recommends' => {},
@@ -35,6 +35,7 @@ my %module_build_args = (
     'Moose' => '0',
     'MooseX::ClassAttribute' => '0',
     'MooseX::Has::Sugar' => '0',
+    'MooseX::Types' => '0',
     'MooseX::Types::Moose' => '0',
     'MooseX::Types::Path::Class' => '0',
     'namespace::autoclean' => '0'

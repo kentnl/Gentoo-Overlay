@@ -27,20 +27,27 @@ no_index:
 provides:
   Gentoo::Overlay:
     file: lib/Gentoo/Overlay.pm
-    version: 0.01000015
+    version: 0.01000020
+  Gentoo::Overlay::Category:
+    file: lib/Gentoo/Overlay/Category.pm
+    version: 0.01000020
+  Gentoo::Overlay::Types:
+    file: lib/Gentoo/Overlay/Types.pm
+    version: 0.01000020
 requires:
   Carp: 0
   IO::Dir: 0
   Moose: 0
   MooseX::ClassAttribute: 0
   MooseX::Has::Sugar: 0
+  MooseX::Types: 0
   MooseX::Types::Moose: 0
   MooseX::Types::Path::Class: 0
   namespace::autoclean: 0
 resources:
   homepage: http://github.com/kentfredric/Gentoo-Overlay/tree
   repository: git://github.com/kentfredric/Gentoo-Overlay.git
-version: 0.01000015
+version: 0.01000020
 x_BuiltWith:
   modules:
     Carp: 1.17
@@ -53,6 +60,7 @@ x_BuiltWith:
     Moose: 1.19
     MooseX::ClassAttribute: 0.21
     MooseX::Has::Sugar: 0.05055616
+    MooseX::Types: 0.24
     MooseX::Types::Moose: 0.24
     MooseX::Types::Path::Class: 0.05
     Test::Fatal: 0.003

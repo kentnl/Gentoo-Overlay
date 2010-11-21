@@ -1,5 +1,10 @@
 Revision history for Gentoo-Overlay
 
+0.01000020 2010-11-21 21:17:06 Pacific/Auckland
+         Refactored to create a Category Package
+         Added a type Package.
+         Documentation on steroids.
+
 0.01000015 2010-11-21 16:17:46 Pacific/Auckland
           First version.
 

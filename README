@@ -2,7 +2,7 @@ NAME
     Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 VERSION
-    version 0.01000015
+    version 0.01000020
 
 SYNOPSIS
       my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
@@ -22,29 +22,168 @@ SYNOPSIS
 
     There will be more features eventually, this is just a first release.
 
+METHODS
+  default_path
+    Useful function to easily wrap the class-wide method with a per-object
+    sugar.
+
+        $overlay->default_path('profiles');
+        ->
+        ::Overlay->_default_paths->{'profiles'}->($overlay);
+        ->
+        $overlay->path->subdir('profiles')
+
+
+        $overlay->default_path('category','foo');
+        ->
+        ::Overlay->_default_path('category')->( $overlay, 'foo' );
+        ->
+        $overlay->path->subdir('foo')
+
+        $overlay->default_path('repo_name');
+        ->
+        ::Overlay->_default_path('repo_name')->( $overlay );
+        ->
+        $overlay->_profile_dir->file('repo_name')
+
+    They're class wide functions, but they need individual instances to
+    work.
+
 ATTRIBUTES
   path
     Path to repository.
 
+        isa => Dir, ro, required, coerce
+
+    "Dir" in MooseX::Types::Path::Class
+
   name
     Repository name.
 
+        isa => Str, ro, lazy_build
+
+    "MooseX::Types::Moose"
+
+    "_build_name"
+
+ATTRIBUTE ACCESSORS
+  category_names
+    Returns a list of the names of all the categories.
+
+        my @list = sort $overlay->category_names();
+
+    "_categories"
+
+  categories
+    Returns a hash of "Category" objects.
+
+        my %hash = $overlay->categories;
+        print $hash{dev-perl}->pretty_name; # dev-perl/::gentoo
+
+    "_categories"
+
+  get_category
+    Returns a Category Object for a given category name
+
+        my $cat = $overlay->get_category('dev-perl');
+
+    "_categories"
+
 PRIVATE ATTRIBUTES
   _profile_dir
+    Path to the profile sub-directory.
+
+        isa => Dir, ro, lazy_build
+
+    "Dir" in MooseX::Types::Path::Class
+
+    "_build__profile_dir"
+
   _categories
+    The auto-generating category hash backing
+
+        isa => HashRef[ Gentoo__Overlay_Category ], ro, lazy_build
+
+    "_build__categories"
+
+    "_has_category"
+
+    "category_names"
+
+    "categories"
+
+    "get_category"
+
+    "Gentoo__Overlay_Category" in Gentoo::Overlay::Types
+
+    "MooseX::Types::Moose"
+
+PRIVATE ATTRIBUTE ACCESSORS
+  _has_category
+    Returns if a named category exists
+
+        $overlay->_has_category("dev-perl");
+
+    "_categories"
+
 PRIVATE CLASS ATTRIBUTES
   _default_paths
-  _category_scan_blacklist
+    Class-wide list of path generators.
+
+        isa => HashRef[ CodeRef ], ro, lazy_build
+
+    "_build__default_paths"
+
 PRIVATE METHODS
-  _default_path
-  _build__profile_dir
   _build_name
-  _build___categories_file
-  _build___categories_scan
+    Extracts the repository name out of the file '"repo_name"' in
+    "$OVERLAY/profiles/repo_name"
+
+        $overlay->_build_name
+
+    "name"
+
+  _build__profile_dir
+    Verifies the existence of the profile directory, and returns the path to
+    it.
+
+        $overlay->_build__profile_dir
+
+    "_profile_dir"
+
   _build__categories
+    Generates the Category Hash-Table, either by reading the categories
+    index ( new, preferred ) or by traversing the directory ( old,
+    discouraged )
+
+        $category->_build_categories;
+
+    "_categories"
+
+    "_build___categories_scan"
+
+    "_build___categories_file"
+
+  _build___categories_file
+    Builds the category map using the 'categories' file found in the
+    overlays profile directory.
+
+        $overlay->_build___categories_file
+
+  _build___categories_scan
+    Builds the category map the hard way by scanning the directory and then
+    skipping things that are files and/or blacklisted.
+
+        $overlay->_build___categories_scan
+
 PRIVATE CLASS METHODS
   _build__default_paths
-  _build__category_scan_blacklist
+    Generator of the class-wide default path list.
+
+        ::Overlay->_build__default_paths
+
+    "_default_paths"
+
 AUTHOR
     Kent Fredric <kentnl@cpan.org>
 
