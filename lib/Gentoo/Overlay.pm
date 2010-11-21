@@ -60,6 +60,22 @@ has 'name' => ( isa => Str, ro, lazy_build );
 
 =cut
 
+=p_attr_acc _has_category
+
+=cut
+
+=attr_acc category_names
+
+=cut
+
+=attr_acc categories
+
+=cut
+
+=attr_acc get_category
+
+=cut
+
 has '_profile_dir' => ( isa => Dir, ro, lazy_build );
 has(
   '_categories' => ( isa => HashRef [Gentoo__Overlay_Category], ro, lazy_build ),
@@ -76,16 +92,12 @@ has(
 
 =cut
 
-=p_attr _category_scan_blacklist
-
-=cut
 
 has(
   '_default_paths' => ( isa => HashRef [CodeRef], ro, lazy_build ),
-  traits => [qw( Hash )],
 );
 
-=p_method _default_path
+=method default_path
 
 =cut
 
@@ -93,7 +105,7 @@ has(
 
 =cut
 
-sub _default_path {
+sub default_path {
   my ( $self, $name, @args ) = @_;
   if ( !exists $self->_default_paths->{$name} ) {
     Carp::croak("No default path '$name'");
@@ -110,10 +122,6 @@ sub _build__default_paths {
   };
 }
 
-=pc_method _build__category_scan_blacklist
-
-=cut
-
 
 =p_method _build__profile_dir
 
@@ -121,7 +129,7 @@ sub _build__default_paths {
 
 sub _build__profile_dir {
   my ($self) = shift;
-  my $pd = $self->_default_path('profiles');
+  my $pd = $self->default_path('profiles');
   if ( ( !-e $pd ) or ( !-d $pd ) ) {
     Carp::croak( sprintf qq{No profile directory for overlay at: %s\n  Expects:%s}, $self->path->stringify, $pd->stringify, );
   }
@@ -134,7 +142,7 @@ sub _build__profile_dir {
 
 sub _build_name {
   my ($self) = shift;
-  my $f = $self->_default_path('repo_name');
+  my $f = $self->default_path('repo_name');
   if ( ( !-e $f ) or ( !-f $f ) ) {
     Carp::croak( sprintf qq{No repo_name file for overlay at: %s\n Expects:%s}, $self->path->stringify, $f->stringify );
   }
@@ -148,7 +156,7 @@ sub _build_name {
 sub _build___categories_file {
   my ($self) = shift;
   my %out;
-  for my $cat ( $self->_default_path('catfile')->slurp( chomp => 1, iomode => '<:raw' ) ) {
+  for my $cat ( $self->default_path('catfile')->slurp( chomp => 1, iomode => '<:raw' ) ) {
     my $category = Gentoo::Overlay::Category->new(
       name    => $cat,
       overlay => $self,
@@ -194,7 +202,7 @@ sub _build___categories_scan {
 
 sub _build__categories {
   my ($self) = shift;
-  my $cf = $self->_default_path('catfile');
+  my $cf = $self->default_path('catfile');
   if ( ( !-e $cf ) or ( !-f $cf ) ) {
     Carp::carp( sprintf qq{No category file for overlay %s, expected: %s. \n Falling back to scanning},
       $self->name, $cf->stringify );

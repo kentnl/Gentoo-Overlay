@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+         Refactored to create a Category Package
+         Added a type Package.
+         Documentation on steroids.
 
 0.01000015 2010-11-21 16:17:46 Pacific/Auckland
           First version.
