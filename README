@@ -1,0 +1,56 @@
+NAME
+    Gentoo::Overlay - Tools for working with Gentoo Overlays
+
+VERSION
+    version 0.01000015
+
+SYNOPSIS
+      my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
+
+      my $name       = $overlay->name();
+      my %categories = $overlay->categories();
+
+      print "Overlay $name 's categories:\n";
+      for( sort keys %categories ){
+        printf "%30s : %s", $_, $categories{$_};
+      }
+
+      # Overlay gentoo 's categories:
+      #  .....
+      #  dev-lang      : /usr/portage/dev-lang
+      #  .....
+
+    There will be more features eventually, this is just a first release.
+
+ATTRIBUTES
+  path
+    Path to repository.
+
+  name
+    Repository name.
+
+PRIVATE ATTRIBUTES
+  _profile_dir
+  _categories
+PRIVATE CLASS ATTRIBUTES
+  _default_paths
+  _category_scan_blacklist
+PRIVATE METHODS
+  _default_path
+  _build__profile_dir
+  _build_name
+  _build___categories_file
+  _build___categories_scan
+  _build__categories
+PRIVATE CLASS METHODS
+  _build__default_paths
+  _build__category_scan_blacklist
+AUTHOR
+    Kent Fredric <kentnl@cpan.org>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2010 by Kent Fredric <kentnl@cpan.org>.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
