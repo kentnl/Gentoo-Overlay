@@ -11,7 +11,7 @@ use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
 use MooseX::ClassAttribute;
-
+use namespace::autoclean;
 use IO::Dir;
 use Carp qw();
 
@@ -131,7 +131,7 @@ sub _build__category_scan_blacklist {
 sub _build__profile_dir {
   my ($self) = shift;
   my $pd = $self->_default_path('profiles');
-  if ( !-e $pd or !-d $pd ) {
+  if ( ( !-e $pd ) or ( !-d $pd ) ) {
     Carp::croak( sprintf qq{No profile directory for overlay at: %s\n  Expects:%s}, $self->path->stringify, $pd->stringify, );
   }
   return $pd->absolute;
@@ -144,7 +144,7 @@ sub _build__profile_dir {
 sub _build_name {
   my ($self) = shift;
   my $f = $self->_default_path('repo_name');
-  if ( !-e $f or !-f $f ) {
+  if ( ( !-e $f ) or ( !-f $f ) ) {
     Carp::croak( sprintf qq{No repo_name file for overlay at: %s\n Expects:%s}, $self->path->stringify, $f->stringify );
   }
   return scalar $f->slurp( chomp => 1, iomode => '<:raw' );
@@ -159,8 +159,8 @@ sub _build___categories_file {
   my %out;
   for my $cat ( $self->_default_path('catfile')->slurp( chomp => 1, iomode => '<:raw' ) ) {
     my $file = $self->_default_path( 'category', $cat );
-    if ( !-e $file or !-d $file ) {
-      Carp::carp( sprintf qq{category %s is not an existing directory (%s) for overlay %s}, $cat, $file->stringify, $self->name,
+    if ( ( !-e $file ) or ( !-d $file ) ) {
+      Carp::carp( sprintf q{category %s is not an existing directory (%s) for overlay %s}, $cat, $file->stringify, $self->name,
       );
       next;
     }
@@ -176,6 +176,7 @@ sub _build___categories_file {
 sub _build___categories_scan {
   my ($self) = shift;
   my %out;
+  ## no critic ( ProhibitTies )
   tie my %dir, 'IO::Dir', $self->path->absolute->stringify;
   for my $cat ( sort keys %dir ) {
     next if $self->_category_scan_blacklisted($cat);
@@ -193,12 +194,15 @@ sub _build___categories_scan {
 sub _build__categories {
   my ($self) = shift;
   my $cf = $self->_default_path('catfile');
-  if ( !-e $cf or !-f $cf ) {
+  if (( !-e $cf ) or ( !-f $cf ) ) {
     Carp::carp( sprintf qq{No category file for overlay %s, expected: %s. \n Falling back to scanning},
       $self->name, $cf->stringify );
     return $self->_build___categories_scan();
   }
   return $self->_build___categories_file();
 }
+
+no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
 
