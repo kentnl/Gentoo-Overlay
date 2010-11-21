@@ -8,6 +8,7 @@ package Gentoo::Overlay::Types;
 use MooseX::Types -declare => [qw(
     Gentoo__Overlay_Overlay
     Gentoo__Overlay_Category
+    Gentoo__Overlay_Package
 )];
 use MooseX::Types::Moose qw( :all );
 
@@ -32,5 +33,13 @@ coerce Gentoo__Overlay_Overlay, from Str, via {
 =cut
 
 class_type Gentoo__Overlay_Category, { class => 'Gentoo::Overlay::Category' };
+
+=type Gentoo__Overlay_Package
+
+    class_type Gentoo::Overlay::Package
+
+=cut
+
+class_type Gentoo__Overlay_Package, { class => 'Gentoo::Overlay::Package' };
 
 1;

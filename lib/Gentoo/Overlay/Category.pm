@@ -40,6 +40,7 @@ use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
+use IO::Dir;
 use namespace::autoclean;
 
 =attr name
@@ -75,6 +76,37 @@ L<MooseX::Types::Path::Class/Dir>
 has name    => ( isa => Str,                     required,   ro );
 has overlay => ( isa => Gentoo__Overlay_Overlay, required,   ro, coerce );
 has path    => ( isa => Dir,                     lazy_build, ro );
+
+=p_attr _packages
+
+=cut
+
+has(
+  '_packages' => ( isa => HashRef [Gentoo__Overlay_Package], lazy_build, ro ),
+  traits      => [qw( Hash )],
+  handles     => {
+    '_has_package'  => 'exists',
+    'package_names' => 'keys',
+    'packages'      => 'elements',
+    'get_package'   => 'get',
+  },
+);
+
+sub _build__packages {
+  my ($self) = shift;
+  require Gentoo::Overlay::Package;
+  tie my %dir, 'IO::Dir', $self->path->stringify;
+  my %out;
+  for ( sort keys %dir ) {
+    my $p = Gentoo::Overlay::Package->new(
+        name => $_,
+        category => $self,
+    );
+    next unless $p->exists;
+    $out{$_} = $p;
+  }
+  return \%out;
+}
 
 =pc_attr _scan_blacklist
 

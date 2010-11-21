@@ -239,6 +239,7 @@ sub _build__default_paths {
     'repo_name' => sub { shift->_profile_dir->file('repo_name') },
     'catfile'   => sub { shift->_profile_dir->file('categories') },
     'category'  => sub { shift->path->subdir(shift) },
+    'package'   => sub { shift->default_path('category', shift)->subdir(shift) },
   };
 }
 

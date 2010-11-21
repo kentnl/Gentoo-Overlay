@@ -9,6 +9,12 @@ my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
 
 my %categories = $overlay->categories;
 
-for( sort keys %categories ){
-    print $categories{$_}->pretty_name, "\n";
+for my $category ( sort keys %categories ){
+    print $categories{$category}->pretty_name, "\n";
+
+    my %packages = $categories{$category}->packages;
+
+    for my $package ( sort keys %packages ){
+        print "   " . $packages{$package}->pretty_name . "\n";
+    }
 }
