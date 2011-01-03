@@ -48,21 +48,21 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has 'path' => ( isa => Dir, ro, required, coerce );
+has 'path' => isa => Dir, ro, required, coerce;
 
 =attr name
 
 Repository name.
 
-    isa => Str, ro, lazy_build
+    isa => Gentoo__Overlay_RepositoryName, ro, lazy_build
 
-L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
+L<< C<RepositoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_RepositoryName >>
 
 L</_build_name>
 
 =cut
 
-has 'name' => ( isa => Str, ro, lazy_build );
+has 'name' => isa => Gentoo__Overlay_RepositoryName, ro, lazy_build;
 
 =p_method _build_name
 
@@ -77,7 +77,7 @@ L</name>
 
 sub _build_name {
   my ($self) = shift;
-  my $f = $self->default_path('repo_name');
+  my $f = $self->default_path( repo_name => );
   if ( ( !-e $f ) or ( !-f $f ) ) {
     Carp::croak( sprintf qq{No repo_name file for overlay at: %s\n Expects:%s}, $self->path->stringify, $f->stringify );
   }
@@ -96,7 +96,7 @@ L</_build__profile_dir>
 
 =cut
 
-has '_profile_dir' => ( isa => Dir, ro, lazy_build );
+has _profile_dir => isa => Dir, ro, lazy_build;
 
 =p_method _build__profile_dir
 
@@ -110,7 +110,7 @@ L</_profile_dir>
 
 sub _build__profile_dir {
   my ($self) = shift;
-  my $pd = $self->default_path('profiles');
+  my $pd = $self->default_path( profiles => );
   if ( ( !-e $pd ) or ( !-d $pd ) ) {
     Carp::croak( sprintf qq{No profile directory for overlay at: %s\n  Expects:%s}, $self->path->stringify, $pd->stringify, );
   }
@@ -176,16 +176,15 @@ Returns a Category Object for a given category name
 L</_categories>
 =cut
 
-has(
-  '_categories' => ( isa => HashRef [Gentoo__Overlay_Category], ro, lazy_build ),
-  traits        => [qw( Hash )],
-  handles       => {
-    '_has_category'  => 'exists',
-    'category_names' => 'keys',
-    'categories'     => 'elements',
-    'get_category'   => 'get',
-  }
-);
+has _categories => isa => HashRef [Gentoo__Overlay_Category],
+  ro, lazy_build,
+  traits  => [qw( Hash )],
+  handles => {
+  _has_category  => exists   =>,
+  category_names => keys     =>,
+  categories     => elements =>,
+  get_category   => get      =>,
+  };
 
 =p_method _build__categories
 
@@ -222,26 +221,17 @@ Class-wide list of path generators.
 L</_build__default_paths>
 =cut
 
-class_has( '_default_paths' => ( isa => HashRef [CodeRef], ro, lazy_build ), );
-
-=pc_method _build__default_paths
-
-Generator of the class-wide default path list.
-
-    ::Overlay->_build__default_paths
-
-L</_default_paths>
-=cut
-
-sub _build__default_paths {
+class_has _default_paths => isa => HashRef [CodeRef],
+  ro, lazy, default => sub {
   return {
     'profiles'  => sub { shift->path->subdir('profiles') },
     'repo_name' => sub { shift->_profile_dir->file('repo_name') },
     'catfile'   => sub { shift->_profile_dir->file('categories') },
     'category'  => sub { shift->path->subdir(shift) },
-    'package'   => sub { shift->default_path('category', shift)->subdir(shift) },
+    'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
   };
-}
+
+  };
 
 =method default_path
 
@@ -322,12 +312,13 @@ sub _build___categories_scan {
   ## no critic ( ProhibitTies )
   tie my %dir, 'IO::Dir', $self->path->absolute->stringify;
   for my $cat ( sort keys %dir ) {
+    next if Gentoo::Overlay::Category->is_blacklisted($cat);
+
     my $category = Gentoo::Overlay::Category->new(
       overlay => $self,
       name    => $cat,
     );
     next unless $category->exists();
-    next if $category->is_blacklisted();
     $out{$cat} = $category;
   }
   return \%out;

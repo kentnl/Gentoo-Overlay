@@ -5,11 +5,16 @@ package Gentoo::Overlay::Types;
 
 # ABSTRACT: Gentoo Overlay types.
 
-use MooseX::Types -declare => [qw(
+use MooseX::Types -declare => [
+  qw(
     Gentoo__Overlay_Overlay
     Gentoo__Overlay_Category
     Gentoo__Overlay_Package
-)];
+    Gentoo__Overlay_CategoryName
+    Gentoo__Overlay_PackageName
+    Gentoo__Overlay_RepositoryName
+    )
+];
 use MooseX::Types::Moose qw( :all );
 
 =type Gentoo__Overlay_Overlay
@@ -22,8 +27,8 @@ use MooseX::Types::Moose qw( :all );
 
 class_type Gentoo__Overlay_Overlay, { class => 'Gentoo::Overlay' };
 coerce Gentoo__Overlay_Overlay, from Str, via {
-    require Gentoo::Overlay;
-    return Gentoo::Overlay->new( path => $_ );
+  require Gentoo::Overlay;
+  return Gentoo::Overlay->new( path => $_ );
 };
 
 =type Gentoo__Overlay_Category
@@ -41,5 +46,51 @@ class_type Gentoo__Overlay_Category, { class => 'Gentoo::Overlay::Category' };
 =cut
 
 class_type Gentoo__Overlay_Package, { class => 'Gentoo::Overlay::Package' };
+
+=type Gentoo__Overlay_CategoryName
+
+    Str matching         ^[A-Za-z0-9+_.-]+$
+        and not matching ^[-.]
+
+I<A category name may contain any of the characters [A-Za-z0-9+_.-]. It must not begin with a hyphen or a dot.>
+
+=cut
+
+subtype Gentoo__Overlay_CategoryName, as Str, where {
+  $_ =~ qr/^[a-zA-Z0-9+_.-]+$/
+    && $_ !~ qr/^[-.]/;
+};
+
+=type Gentoo__Overlay_PackageName
+
+    Str matching ^[A-Za-z0-9+_-]+$
+        and not matching ^-
+        and not matching -$
+        and not matching -\d+$
+
+I<A package name may contain any of the characters [A-Za-z0-9+_-]. It must not begin with a hyphen, and must not end in a hyphen followed by one or more digits.>
+
+=cut
+
+subtype Gentoo__Overlay_PackageName, as Str, where {
+       $_ =~ qr/^[A-Za-z0-9+_-]+$/
+    && $_ !~ qr/^-/
+    && $_ !~ qr/-$/
+    && $_ !~ qr/-\d+$/;
+};
+
+=type Gentoo__Overlay_RepositoryName
+
+    Str matching ^[A-Za-z0-9_-]+$
+        and not matching ^-
+
+I<A repository name may contain any of the characters [A-Za-z0-9_-]. It must not begin with a hyphen.>
+
+=cut
+
+subtype Gentoo__Overlay_RepositoryName, as Str, where {
+  $_ =~ qr/^[A-Za-z0-9_-]+$/
+    && $_ !~ qr/^-/;
+};
 
 1;

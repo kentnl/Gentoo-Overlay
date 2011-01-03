@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+         Added a Package class.
+         Removed lots of the builders and docs.
+         Replaced some Strs with EAPI constraints.
+         Rearranged 'blacklist' behaviour, it was stupid.
+
 
 0.01000020 2010-11-21 21:17:06 Pacific/Auckland
          Refactored to create a Category Package

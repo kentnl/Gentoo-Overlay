@@ -21,15 +21,11 @@ Still limited functionality, more to come.
 
     $category->exists()  # is the category there, is it a directory?
 
-    $category->is_backlisted() # is the category something dumb like '..' or 'metadata'
-
     $category->pretty_name()  #  dev-perl/::gentoo
 
     $category->path()  # /usr/portage/dev-perl
 
-    ::Overlay::Category->_scan_blacklist() # the blacklist
-
-    ::Overlay::Category->_scan_blacklisted('..') # is '..' a blacklisted category
+    ::Overlay::Category->is_blacklisted('..') # is '..' a blacklisted category
 
 
 =cut
@@ -47,9 +43,9 @@ use namespace::autoclean;
 
 The classes short name
 
-    isa => Str, required, ro
+    isa => Gentoo__Overlay_CategoryName, required, ro
 
-L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
+L<< C<CategoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_CategoryName >>
 
 =cut
 
@@ -73,24 +69,27 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has name    => ( isa => Str,                     required,   ro );
-has overlay => ( isa => Gentoo__Overlay_Overlay, required,   ro, coerce );
-has path    => ( isa => Dir,                     lazy_build, ro );
+has name => isa => Gentoo__Overlay_CategoryName, required, ro;
+has overlay => isa => Gentoo__Overlay_Overlay, required, ro, coerce;
+has path => isa => Dir,
+  lazy, ro, default => sub {
+  my ($self) = shift;
+  return $self->overlay->default_path( category => $self->name );
+  };
 
 =p_attr _packages
 
 =cut
 
-has(
-  '_packages' => ( isa => HashRef [Gentoo__Overlay_Package], lazy_build, ro ),
-  traits      => [qw( Hash )],
-  handles     => {
-    '_has_package'  => 'exists',
-    'package_names' => 'keys',
-    'packages'      => 'elements',
-    'get_package'   => 'get',
-  },
-);
+has _packages => isa => HashRef [Gentoo__Overlay_Package],
+  lazy_build, ro,
+  traits  => [qw( Hash )],
+  handles => {
+  _has_package  => exists   =>,
+  package_names => keys     =>,
+  packages      => elements =>,
+  get_package   => get      =>,
+  };
 
 sub _build__packages {
   my ($self) = shift;
@@ -98,9 +97,10 @@ sub _build__packages {
   tie my %dir, 'IO::Dir', $self->path->stringify;
   my %out;
   for ( sort keys %dir ) {
+    next if Gentoo::Overlay::Package->is_blacklisted($_);
     my $p = Gentoo::Overlay::Package->new(
-        name => $_,
-        category => $self,
+      name     => $_,
+      category => $self,
     );
     next unless $p->exists;
     $out{$_} = $p;
@@ -135,39 +135,13 @@ L</_scan_blacklist>
 
 =cut
 
-class_has(
-  '_scan_blacklist' => ( isa => HashRef [Str], ro, lazy_build, ),
-  traits => [qw( Hash )],
-  handles => { '_scan_blacklisted' => 'exists' },
-);
-
-=pc_method _build__scan_blacklist
-
-Generates the default list of blacklisted items for the class-wide record.
-
-    ::Category->_build__scan_blacklist()
-
-=cut
-
-sub _build__scan_blacklist {
-  my ($self) = shift;
+class_has _scan_blacklist => isa => HashRef [Str],
+  ro, lazy,
+  traits  => [qw( Hash )],
+  handles => { _scan_blacklisted => exists =>, },
+  default => sub {
   return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-}
-
-=p_method _build_path
-
-Generates the path by asking the overlay what the path should be for the category.
-
-    $category->_build_path();
-      ->
-    $overlay->default_path('category', $category->name );
-
-=cut
-
-sub _build_path {
-  my ($self) = shift;
-  return $self->overlay->default_path( 'category', $self->name );
-}
+  };
 
 =method exists
 
@@ -189,13 +163,18 @@ sub exists {
 
 Does the category name appear on a blacklist meaning auto-scan should ignore this?
 
-    ::Category->new( name => '..', overlay => $overlay )->is_blacklisted  # true
+    ::Category->is_blacklisted('..') # true
+
+    ::Category->is_blacklisted('metadata') # true
 
 =cut
 
 sub is_blacklisted {
-  my $self = shift;
-  return $self->_scan_blacklisted( $self->name );
+  my ( $self, $name ) = @_;
+  if ( not defined $name ) {
+    $name = $self->name;
+  }
+  return $self->_scan_blacklisted($name);
 }
 
 =method pretty_name
