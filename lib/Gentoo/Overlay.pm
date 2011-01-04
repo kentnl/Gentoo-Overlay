@@ -146,6 +146,7 @@ Returns if a named category exists
     $overlay->_has_category("dev-perl");
 
 L</_categories>
+
 =cut
 
 =attr_acc category_names
@@ -155,6 +156,7 @@ Returns a list of the names of all the categories.
     my @list = sort $overlay->category_names();
 
 L</_categories>
+
 =cut
 
 =attr_acc categories
@@ -165,6 +167,7 @@ Returns a hash of L<< C<Category>|Gentoo::Overlay::Category >> objects.
     print $hash{dev-perl}->pretty_name; # dev-perl/::gentoo
 
 L</_categories>
+
 =cut
 
 =attr_acc get_category
@@ -174,6 +177,7 @@ Returns a Category Object for a given category name
     my $cat = $overlay->get_category('dev-perl');
 
 L</_categories>
+
 =cut
 
 has _categories => isa => HashRef [Gentoo__Overlay_Category],

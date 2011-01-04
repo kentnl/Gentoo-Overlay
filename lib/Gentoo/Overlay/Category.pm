@@ -79,6 +79,53 @@ has path => isa => Dir,
 
 =p_attr _packages
 
+    isa => HashRef[ Gentoo__Overlay_Package ], lazy_build, ro
+
+    accessors => _has_package , package_names,
+                 packages, get_package
+
+L</_has_package>
+
+L</package_names>
+
+L</packages>
+
+L</get_package>
+
+=cut
+
+=p_attr_acc _has_package
+
+    $category->_has_package('Moose');
+
+L</_packages>
+
+=cut
+
+=attr_acc package_names
+
+    for( $category->package_names ){
+        print $_;
+    }
+
+L</_packages>
+
+=cut
+
+=attr_acc packages
+
+    my %packages = $category->packages;
+
+L</_packages>
+
+=cut
+
+=attr_acc get_package
+
+    my $package = $category->get_package('Moose');
+
+L</_packages>
+
 =cut
 
 has _packages => isa => HashRef [Gentoo__Overlay_Package],
@@ -91,6 +138,13 @@ has _packages => isa => HashRef [Gentoo__Overlay_Package],
   get_package   => get      =>,
   };
 
+=p_method _build__packages
+
+Generates the package Hash-Table, by scanning the category directory.
+
+L</_packages>
+
+=cut
 sub _build__packages {
   my ($self) = shift;
   require Gentoo::Overlay::Package;
