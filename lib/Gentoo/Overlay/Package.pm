@@ -56,10 +56,11 @@ class_has _scan_blacklist => isa => HashRef [Str],
   return { map { $_ => 1 } qw( . .. metadata.xml ) };
   };
 
+## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
-  return if $self->name eq '.';
-  return if $self->name eq '..';
+  return if $self->name eq q{.};
+  return if $self->name eq q{..};
   return if not -e $self->path;
   return if not -d $self->path;
   return 1;
@@ -83,7 +84,7 @@ sub is_blacklisted {
 
 sub pretty_name {
   my $self = shift;
-  return $self->category->name . '/' . $self->name . '::' . $self->overlay->name;
+  return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
 no Moose;
 __PACKAGE__->meta->make_immutable;

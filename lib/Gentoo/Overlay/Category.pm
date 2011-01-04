@@ -94,6 +94,7 @@ has _packages => isa => HashRef [Gentoo__Overlay_Package],
 sub _build__packages {
   my ($self) = shift;
   require Gentoo::Overlay::Package;
+  ## no critic ( ProhibitTies )
   tie my %dir, 'IO::Dir', $self->path->stringify;
   my %out;
   for ( sort keys %dir ) {

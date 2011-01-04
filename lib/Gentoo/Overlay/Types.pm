@@ -57,6 +57,7 @@ I<A category name may contain any of the characters [A-Za-z0-9+_.-]. It must not
 =cut
 
 subtype Gentoo__Overlay_CategoryName, as Str, where {
+## no critic ( RegularExpressions )
   $_ =~ qr/^[a-zA-Z0-9+_.-]+$/
     && $_ !~ qr/^[-.]/;
 };
@@ -73,6 +74,7 @@ I<A package name may contain any of the characters [A-Za-z0-9+_-]. It must not b
 =cut
 
 subtype Gentoo__Overlay_PackageName, as Str, where {
+  ## no critic ( RegularExpressions )
        $_ =~ qr/^[A-Za-z0-9+_-]+$/
     && $_ !~ qr/^-/
     && $_ !~ qr/-$/
@@ -89,6 +91,8 @@ I<A repository name may contain any of the characters [A-Za-z0-9_-]. It must not
 =cut
 
 subtype Gentoo__Overlay_RepositoryName, as Str, where {
+## no critic ( RegularExpressions )
+
   $_ =~ qr/^[A-Za-z0-9_-]+$/
     && $_ !~ qr/^-/;
 };
