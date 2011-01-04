@@ -55,7 +55,7 @@ L</overlay>
 
 =cut
 
-=p_attr_acc overlay
+=attr_acc overlay
 
     $package->overlay -> Gentoo::Overlay::Category->overlay
 
