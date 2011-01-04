@@ -63,7 +63,7 @@ L<Gentoo::Overlay::Types/Gentoo__Overlay_Overlay>
 
 The full path to the category
 
-    isa => Dir, lazy_build, ro
+    isa => Dir, lazy, ro
 
 L<MooseX::Types::Path::Class/Dir>
 
@@ -113,7 +113,7 @@ sub _build__packages {
 
 Class-Wide list of blacklisted directory names.
 
-    isa => HashRef[ Str ], ro, lazy_build,
+    isa => HashRef[ Str ], ro, lazy
 
     accessors => _scan_blacklisted
 

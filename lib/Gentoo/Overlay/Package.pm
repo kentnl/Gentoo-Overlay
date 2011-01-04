@@ -13,6 +13,68 @@ use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all  );
 use namespace::autoclean;
 
+=head1 SYNOPSIS
+
+    my $package = Overlay::Package->new(
+        name => 'Moose',
+        category => $category_object,
+    );
+
+    $package->exists() # Moose exists
+
+    print $package->pretty_name() # dev-perl/Moose::gentoo
+
+    print $package->path() # /usr/portage/dev-perl/Moose
+
+    ::Package->is_blacklisted("..") # '..' is not a valid package name
+    ::Package->is_blacklisted('metadata.xml') # is not a valid directory
+
+=cut
+
+=attr name
+
+The packages Short name.
+
+    isa => Gentoo__Overlay_PackageName, required, ro
+
+L<< C<PackageName>|Gentoo::Overlay::Types/Gentoo__Overlay_PackageName >>
+
+=cut
+
+=attr category
+
+The category object that this package is in.
+
+    isa => Gentoo__Overlay_Category, required, ro
+
+    accessors => overlay
+
+L<< C<Category>|Gentoo::Overlay::Types/Gentoo__Overlay_Category >>
+
+L</overlay>
+
+=cut
+
+=p_attr_acc overlay
+
+    $package->overlay -> Gentoo::Overlay::Category->overlay
+
+L<Gentoo::Overlay::Category/overlay>
+
+L</category>
+
+=cut
+
+=attr path
+
+The full path to the package.
+
+    isa => Dir, lazy, ro
+
+L<MooseX::Types::Path::Class/Dir>
+
+=cut
+
 has name => isa => Gentoo__Overlay_PackageName, required, ro;
 has category => isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )];
 has path => isa => Dir,
@@ -23,9 +85,9 @@ has path => isa => Dir,
 
 =pc_attr _scan_blacklist
 
-Class-Wide list of blacklisted directory names.
+Class-Wide list of blacklisted package names.
 
-    isa => HashRef[ Str ], ro, lazy_build,
+    isa => HashRef[ Str ], ro, lazy,
 
     accessors => _scan_blacklisted
 
@@ -56,6 +118,15 @@ class_has _scan_blacklist => isa => HashRef [Str],
   return { map { $_ => 1 } qw( . .. metadata.xml ) };
   };
 
+=method exists
+
+Does the Package exist, and is it a directory?
+
+
+    $package->exists();
+
+=cut
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -81,6 +152,14 @@ sub is_blacklisted {
   }
   return $self->_scan_blacklisted($name);
 }
+
+=method pretty_name
+
+A pretty form of the name
+
+    $package->pretty_name # dev-perl/Moose::gentoo
+
+=cut
 
 sub pretty_name {
   my $self = shift;
