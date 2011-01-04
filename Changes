@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.02004319 2011-01-05 01:25:26 Pacific/Auckland
          Added a Package class.
          Removed lots of the builders and docs in favour of simple defaults.
          Replaced some Strs with EAPI constraints.
