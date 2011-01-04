@@ -1,5 +1,14 @@
 Revision history for Gentoo-Overlay
 
+0.02004319 2011-01-05 01:25:26 Pacific/Auckland
+         Added a Package class.
+         Removed lots of the builders and docs in favour of simple defaults.
+         Replaced some Strs with EAPI constraints.
+         Rearranged 'blacklist' behaviour, it was stupid.
+         Extended the example to handle packages.
+         category objects now have a ->packages, ->_has_package, ->package_names, ->get_package
+         3 New Types, _CategoryName, _PackageName, _RepositoryName, all EAPI2 compliant.
+
 0.01000020 2010-11-21 21:17:06 Pacific/Auckland
          Refactored to create a Category Package
          Added a type Package.

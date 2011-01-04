@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 BEGIN {
-  $Gentoo::Overlay::Category::VERSION = '0.01000020';
+  $Gentoo::Overlay::Category::VERSION = '0.02004319';
 }
 
 # ABSTRACT: A singular category in a repository;
@@ -15,34 +15,62 @@ use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
+use IO::Dir;
 use namespace::autoclean;
 
 
 
 
-has name    => ( isa => Str,                     required,   ro );
-has overlay => ( isa => Gentoo__Overlay_Overlay, required,   ro, coerce );
-has path    => ( isa => Dir,                     lazy_build, ro );
-
-
-
-class_has(
-  '_scan_blacklist' => ( isa => HashRef [Str], ro, lazy_build, ),
-  traits => [qw( Hash )],
-  handles => { '_scan_blacklisted' => 'exists' },
-);
-
-
-sub _build__scan_blacklist {
+has name => isa => Gentoo__Overlay_CategoryName, required, ro;
+has overlay => isa => Gentoo__Overlay_Overlay, required, ro, coerce;
+has path => isa => Dir,
+  lazy, ro, default => sub {
   my ($self) = shift;
+  return $self->overlay->default_path( category => $self->name );
+  };
+
+
+
+
+
+
+has _packages => isa => HashRef [Gentoo__Overlay_Package],
+  lazy_build, ro,
+  traits  => [qw( Hash )],
+  handles => {
+  _has_package  => exists   =>,
+  package_names => keys     =>,
+  packages      => elements =>,
+  get_package   => get      =>,
+  };
+
+sub _build__packages {
+  my ($self) = shift;
+  require Gentoo::Overlay::Package;
+  ## no critic ( ProhibitTies )
+  tie my %dir, 'IO::Dir', $self->path->stringify;
+  my %out;
+  for ( sort keys %dir ) {
+    next if Gentoo::Overlay::Package->is_blacklisted($_);
+    my $p = Gentoo::Overlay::Package->new(
+      name     => $_,
+      category => $self,
+    );
+    next unless $p->exists;
+    $out{$_} = $p;
+  }
+  return \%out;
+}
+
+
+
+class_has _scan_blacklist => isa => HashRef [Str],
+  ro, lazy,
+  traits  => [qw( Hash )],
+  handles => { _scan_blacklisted => exists =>, },
+  default => sub {
   return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-}
-
-
-sub _build_path {
-  my ($self) = shift;
-  return $self->overlay->default_path( 'category', $self->name );
-}
+  };
 
 
 ## no critic ( ProhibitBuiltinHomonyms )
@@ -55,8 +83,11 @@ sub exists {
 
 
 sub is_blacklisted {
-  my $self = shift;
-  return $self->_scan_blacklisted( $self->name );
+  my ( $self, $name ) = @_;
+  if ( not defined $name ) {
+    $name = $self->name;
+  }
+  return $self->_scan_blacklisted($name);
 }
 
 
@@ -78,7 +109,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 0.01000020
+version 0.02004319
 
 =head1 SYNOPSIS
 
@@ -96,15 +127,11 @@ Still limited functionality, more to come.
 
     $category->exists()  # is the category there, is it a directory?
 
-    $category->is_backlisted() # is the category something dumb like '..' or 'metadata'
-
     $category->pretty_name()  #  dev-perl/::gentoo
 
     $category->path()  # /usr/portage/dev-perl
 
-    ::Overlay::Category->_scan_blacklist() # the blacklist
-
-    ::Overlay::Category->_scan_blacklisted('..') # is '..' a blacklisted category
+    ::Overlay::Category->is_blacklisted('..') # is '..' a blacklisted category
 
 =head1 METHODS
 
@@ -118,7 +145,9 @@ Does the category exist, and is it a directory?
 
 Does the category name appear on a blacklist meaning auto-scan should ignore this?
 
-    ::Category->new( name => '..', overlay => $overlay )->is_blacklisted  # true
+    ::Category->is_blacklisted('..') # true
+
+    ::Category->is_blacklisted('metadata') # true
 
 =head2 pretty_name
 
@@ -132,9 +161,9 @@ A pretty form of the name.
 
 The classes short name
 
-    isa => Str, required, ro
+    isa => Gentoo__Overlay_CategoryName, required, ro
 
-L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
+L<< C<CategoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_CategoryName >>
 
 =head2 overlay
 
@@ -148,9 +177,56 @@ L<Gentoo::Overlay::Types/Gentoo__Overlay_Overlay>
 
 The full path to the category
 
-    isa => Dir, lazy_build, ro
+    isa => Dir, lazy, ro
 
 L<MooseX::Types::Path::Class/Dir>
+
+=head1 ATTRIBUTE ACCESSORS
+
+=head2 package_names
+
+    for( $category->package_names ){
+        print $_;
+    }
+
+L</_packages>
+
+=head2 packages
+
+    my %packages = $category->packages;
+
+L</_packages>
+
+=head2 get_package
+
+    my $package = $category->get_package('Moose');
+
+L</_packages>
+
+=head1 PRIVATE ATTRIBUTES
+
+=head2 _packages
+
+    isa => HashRef[ Gentoo__Overlay_Package ], lazy_build, ro
+
+    accessors => _has_package , package_names,
+                 packages, get_package
+
+L</_has_package>
+
+L</package_names>
+
+L</packages>
+
+L</get_package>
+
+=head1 PRIVATE ATTRIBUTE ACCESSORS
+
+=head2 _has_package
+
+    $category->_has_package('Moose');
+
+L</_packages>
 
 =head1 PRIVATE CLASS ATTRIBUTES
 
@@ -158,7 +234,7 @@ L<MooseX::Types::Path::Class/Dir>
 
 Class-Wide list of blacklisted directory names.
 
-    isa => HashRef[ Str ], ro, lazy_build,
+    isa => HashRef[ Str ], ro, lazy
 
     accessors => _scan_blacklisted
 
@@ -180,21 +256,11 @@ L</_scan_blacklist>
 
 =head1 PRIVATE METHODS
 
-=head2 _build_path
+=head2 _build__packages
 
-Generates the path by asking the overlay what the path should be for the category.
+Generates the package Hash-Table, by scanning the category directory.
 
-    $category->_build_path();
-      ->
-    $overlay->default_path('category', $category->name );
-
-=head1 PRIVATE CLASS METHODS
-
-=head2 _build__scan_blacklist
-
-Generates the default list of blacklisted items for the class-wide record.
-
-    ::Category->_build__scan_blacklist()
+L</_packages>
 
 =head1 AUTHOR
 
@@ -202,7 +268,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2011 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

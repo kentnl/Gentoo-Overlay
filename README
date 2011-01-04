@@ -2,7 +2,7 @@ NAME
     Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 VERSION
-    version 0.01000020
+    version 0.02004319
 
 SYNOPSIS
       my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
@@ -60,9 +60,9 @@ ATTRIBUTES
   name
     Repository name.
 
-        isa => Str, ro, lazy_build
+        isa => Gentoo__Overlay_RepositoryName, ro, lazy_build
 
-    "MooseX::Types::Moose"
+    "RepositoryName"
 
     "_build_name"
 
@@ -176,19 +176,11 @@ PRIVATE METHODS
 
         $overlay->_build___categories_scan
 
-PRIVATE CLASS METHODS
-  _build__default_paths
-    Generator of the class-wide default path list.
-
-        ::Overlay->_build__default_paths
-
-    "_default_paths"
-
 AUTHOR
     Kent Fredric <kentnl@cpan.org>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2010 by Kent Fredric <kentnl@cpan.org>.
+    This software is copyright (c) 2011 by Kent Fredric <kentnl@cpan.org>.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

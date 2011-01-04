@@ -45,7 +45,7 @@ sub pmver {
     }
 
     # So, we should be good, right?
-    return sprintf('%-40s => %-10s%-15s%s', $module, $pmver, $wanted, "\n");
+    return sprintf('%-45s => %-10s%-15s%s', $module, $pmver, $wanted, "\n");
 }
 
 eval { $v .= pmver('Carp','any version') };
