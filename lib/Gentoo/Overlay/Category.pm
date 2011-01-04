@@ -36,7 +36,6 @@ use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
-use IO::Dir;
 use namespace::autoclean;
 
 =attr name
@@ -145,20 +144,21 @@ Generates the package Hash-Table, by scanning the category directory.
 L</_packages>
 
 =cut
+
 sub _build__packages {
   my ($self) = shift;
   require Gentoo::Overlay::Package;
-  ## no critic ( ProhibitTies )
-  tie my %dir, 'IO::Dir', $self->path->stringify;
+
+  my $dir = $self->path->open();
   my %out;
-  for ( sort keys %dir ) {
-    next if Gentoo::Overlay::Package->is_blacklisted($_);
+  while ( defined( my $entry = $dir->read() ) ) {
+    next if Gentoo::Overlay::Package->is_blacklisted($entry);
     my $p = Gentoo::Overlay::Package->new(
-      name     => $_,
+      name     => $entry,
       category => $self,
     );
     next unless $p->exists;
-    $out{$_} = $p;
+    $out{$entry} = $p;
   }
   return \%out;
 }

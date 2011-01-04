@@ -12,7 +12,6 @@ use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
 use MooseX::ClassAttribute;
 use namespace::autoclean;
-use IO::Dir;
 use Carp qw();
 use Gentoo::Overlay::Category;
 use Gentoo::Overlay::Types qw( :all );
@@ -313,9 +312,9 @@ that are files and/or blacklisted.
 sub _build___categories_scan {
   my ($self) = shift;
   my %out;
-  ## no critic ( ProhibitTies )
-  tie my %dir, 'IO::Dir', $self->path->absolute->stringify;
-  for my $cat ( sort keys %dir ) {
+  my $dir = $self->path->absolute->open();
+  while ( defined( my $entry = $dir->read() ) ) {
+    my $cat = $entry;
     next if Gentoo::Overlay::Category->is_blacklisted($cat);
 
     my $category = Gentoo::Overlay::Category->new(
