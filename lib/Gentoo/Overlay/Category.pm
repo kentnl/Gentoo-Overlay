@@ -245,6 +245,14 @@ sub pretty_name {
   return $self->name . '/::' . $self->overlay->name;
 }
 
+=begin Pod::Coverage
+
+iterate
+
+=end Pod::Coverage
+
+=cut
+
 sub iterate {
   my ( $self, $what, $callback ) = @_;
   if ( $what eq 'packages' ) {
@@ -267,7 +275,7 @@ sub iterate {
     }
     return;
   }
-  exception(
+  return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
     payload => { what_method => $what, },

@@ -296,7 +296,7 @@ sub default_path {
   if ( !exists $self->_default_paths->{$name} ) {
     exception(
       ident   => 'no default path',
-      message => "No default path '%{name}s'",
+      message => q[No default path '%{name}s'],
       payload => { path => $name }
     );
   }
@@ -322,7 +322,7 @@ sub _build___categories_file {
     if ( !$category->exists ) {
       exception(
         ident   => 'missing category',
-        message => qq[category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s ],
+        message => q[category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s ],
         payload => {
           category_name => $category->name,
           expected_path => $category->path->stringify,
@@ -364,6 +364,14 @@ sub _build___categories_scan {
 
 }
 
+=begin Pod::Coverage
+
+iterate
+
+=end Pod::Coverage
+
+=cut
+
 sub iterate {
   my ( $self, $what, $callback ) = @_;
   if ( $what eq 'categories' ) {
@@ -393,14 +401,14 @@ sub iterate {
         $cconfig{category}->iterate(
           'packages' => sub {
             my %pconfig = %{ $_[1] };
-            $self->$callback( { %cconfig, %pconfig } );
+            $self->$callback( { ( %cconfig, %pconfig ) } );
           }
         );
       }
     );
     return;
   }
-  exception(
+  return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
     payload => { what_method => $what, },
