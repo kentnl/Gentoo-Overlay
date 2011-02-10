@@ -364,6 +364,48 @@ sub _build___categories_scan {
 
 }
 
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  if ( $what eq 'categories' ) {
+    my %categories     = $self->categories();
+    my $num_categories = scalar keys %categories;
+    my $last_category  = $num_categories - 1;
+    my $offset         = 0;
+    for my $cname ( sort keys %categories ) {
+      local $_ = $categories{$cname};
+      $self->$callback(
+        {
+          category_name  => $cname,
+          category       => $categories{$cname},
+          num_categories => $num_categories,
+          last_category  => $last_category,
+          category_num   => $offset,
+        }
+      );
+      $offset++;
+    }
+    return;
+  }
+  if ( $what eq 'packages' ) {
+    $self->iterate(
+      'categories' => sub {
+        my (%cconfig) = %{ $_[1] };
+        $cconfig{category}->iterate(
+          'packages' => sub {
+            my %pconfig = %{ $_[1] };
+            $self->$callback( { %cconfig, %pconfig } );
+          }
+        );
+      }
+    );
+    return;
+  }
+  exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what, },
+  );
+}
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;

@@ -245,6 +245,34 @@ sub pretty_name {
   return $self->name . '/::' . $self->overlay->name;
 }
 
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  if ( $what eq 'packages' ) {
+    my %packages     = $self->packages();
+    my $num_packages = scalar keys %packages;
+    my $last_package = $num_packages - 1;
+    my $offset       = 0;
+    for my $pname ( sort keys %packages ) {
+      local $_ = $packages{$pname};
+      $self->$callback(
+        {
+          package_name => $pname,
+          package      => $packages{$pname},
+          num_packages => $num_packages,
+          last_package => $last_package,
+          package_num  => $offset,
+        }
+      );
+      $offset++;
+    }
+    return;
+  }
+  exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what, },
+  );
+}
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
