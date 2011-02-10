@@ -15,6 +15,7 @@ use namespace::autoclean;
 use Carp qw();
 use Gentoo::Overlay::Category;
 use Gentoo::Overlay::Types qw( :all );
+use Gentoo::Overlay::Exceptions qw( :all );
 
 =head1 SYNOPSIS
 
@@ -47,7 +48,14 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has 'path' => isa => Dir, ro, required, coerce;
+has 'path' => isa => Dir,
+  ro, coerce, default => sub {
+  exception(
+    ident   => 'path parameter required',
+    message => '%{package}s requires the \'path\' attribute passed during construction',
+    payload => { package => __PACKAGE__ }
+  );
+  };
 
 =attr name
 
@@ -78,7 +86,14 @@ sub _build_name {
   my ($self) = shift;
   my $f = $self->default_path( repo_name => );
   if ( ( !-e $f ) or ( !-f $f ) ) {
-    Carp::croak( sprintf qq{No repo_name file for overlay at: %s\n Expects:%s}, $self->path->stringify, $f->stringify );
+    exception(
+      ident   => 'no repo_name',
+      message => qq[No repo_name file for overlay at: %{overlay_path}s\n Expects:%{expected_path}s}],
+      payload => {
+        overlay_path  => $self->path->stringify,
+        expected_path => $f->stringify,
+      }
+    );
   }
   return scalar $f->slurp( chomp => 1, iomode => '<:raw' );
 }
@@ -111,7 +126,14 @@ sub _build__profile_dir {
   my ($self) = shift;
   my $pd = $self->default_path( profiles => );
   if ( ( !-e $pd ) or ( !-d $pd ) ) {
-    Carp::croak( sprintf qq{No profile directory for overlay at: %s\n  Expects:%s}, $self->path->stringify, $pd->stringify, );
+    exception(
+      ident   => 'no profile directory',
+      message => qq[No profile directory for overlay at: %{overlay_path}s\n  Expects:%{expected_path}s],
+      payload => {
+        overlay_path  => $self->path->stringify,
+        expected_path => $pd->stringify,
+      }
+    );
   }
   return $pd->absolute;
 }
@@ -208,8 +230,14 @@ sub _build__categories {
   my ($self) = @_;
   my $cf = $self->default_path('catfile');
   if ( ( !-e $cf ) or ( !-f $cf ) ) {
-    Carp::carp( sprintf qq{No category file for overlay %s, expected: %s. \n Falling back to scanning},
-      $self->name, $cf->stringify );
+    warning(
+      ident   => 'no category file',
+      message => "No category file for overlay %{name}s, expected: %{category_file}s. \n Falling back to scanning",
+      payload => {
+        name          => $self->name,
+        category_file => $cf->stringify
+      }
+    );
     goto $self->can('_build___categories_scan');
   }
   goto $self->can('_build___categories_file');
@@ -266,7 +294,11 @@ They're class wide functions, but they need individual instances to work.
 sub default_path {
   my ( $self, $name, @args ) = @_;
   if ( !exists $self->_default_paths->{$name} ) {
-    Carp::croak("No default path '$name'");
+    exception(
+      ident   => 'no default path',
+      message => "No default path '%{name}s'",
+      payload => { path => $name }
+    );
   }
   return $self->_default_paths->{$name}->( $self, @args );
 }
@@ -288,10 +320,14 @@ sub _build___categories_file {
       overlay => $self,
     );
     if ( !$category->exists ) {
-      Carp::carp(
-        sprintf q{category %s is not an existing directory (%s) for overlay %s},
-        $category->name, $category->path->stringify,
-        $self->name,
+      exception(
+        ident   => 'missing category',
+        message => qq[category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s ],
+        payload => {
+          category_name => $category->name,
+          expected_path => $category->path->stringify,
+          overlay_name  => $self->name,
+        }
       );
       next;
     }

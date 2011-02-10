@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
          Eliminate 'tie' in favour of ->open + ->read
+         Throw Exceptions. Even warnings are exceptions now. You can't
+          catch them, but you can toggle a switch to make them die()
+          instead of warn. ( local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
 
 0.02004319 2011-01-05 01:25:26 Pacific/Auckland
          Added a Package class.
