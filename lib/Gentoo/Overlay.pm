@@ -48,14 +48,17 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has 'path' => isa => Dir,
-  ro, coerce, default => sub {
-  exception(
-    ident   => 'path parameter required',
-    message => '%{package}s requires the \'path\' attribute passed during construction',
-    payload => { package => __PACKAGE__ }
-  );
-  };
+has 'path' => (
+  ro, coerce,
+  isa     => Dir,
+  default => sub {
+    exception(
+      ident   => 'path parameter required',
+      message => '%{package}s requires the \'path\' attribute passed during construction',
+      payload => { package => __PACKAGE__ }
+    );
+  }
+);
 
 =attr name
 
@@ -69,7 +72,7 @@ L</_build_name>
 
 =cut
 
-has 'name' => isa => Gentoo__Overlay_RepositoryName, ro, lazy_build;
+has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
 
 =p_method _build_name
 
@@ -110,7 +113,7 @@ L</_build__profile_dir>
 
 =cut
 
-has _profile_dir => isa => Dir, ro, lazy_build;
+has _profile_dir => ( isa => Dir, ro, lazy_build, );
 
 =p_method _build__profile_dir
 
@@ -201,15 +204,18 @@ L</_categories>
 
 =cut
 
-has _categories => isa => HashRef [Gentoo__Overlay_Category],
-  ro, lazy_build,
+has _categories => (
+  lazy_build,
+  ro,
+  isa => HashRef [Gentoo__Overlay_Category],
   traits  => [qw( Hash )],
   handles => {
-  _has_category  => exists   =>,
-  category_names => keys     =>,
-  categories     => elements =>,
-  get_category   => get      =>,
-  };
+    _has_category  => exists   =>,
+    category_names => keys     =>,
+    categories     => elements =>,
+    get_category   => get      =>,
+  }
+);
 
 =p_method _build__categories
 
@@ -252,17 +258,20 @@ Class-wide list of path generators.
 L</_build__default_paths>
 =cut
 
-class_has _default_paths => isa => HashRef [CodeRef],
-  ro, lazy, default => sub {
-  return {
-    'profiles'  => sub { shift->path->subdir('profiles') },
-    'repo_name' => sub { shift->_profile_dir->file('repo_name') },
-    'catfile'   => sub { shift->_profile_dir->file('categories') },
-    'category'  => sub { shift->path->subdir(shift) },
-    'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
-  };
-
-  };
+class_has _default_paths => (
+  ro, lazy,
+  isa => HashRef [CodeRef],
+  default => sub {
+    return {
+      'profiles'  => sub { shift->path->subdir('profiles') },
+      'repo_name' => sub { shift->_profile_dir->file('repo_name') },
+      'catfile'   => sub { shift->_profile_dir->file('categories') },
+      'category'  => sub { shift->path->subdir(shift) },
+      'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
+      'ebuild'    => sub { shift->default_path( 'package', shift, shift )->file(shift) },
+    };
+  }
+);
 
 =method default_path
 
@@ -408,6 +417,21 @@ sub iterate {
     );
     return;
   }
+  if ( $what eq 'ebuilds' ) {
+    $self->iterate(
+      'packages' => sub {
+        my (%cconfig) = %{ $_[1] };
+        $cconfig{package}->iterate(
+          'ebuilds' => sub {
+            my %pconfig = %{ $_[1] };
+            $self->$callback( { ( %cconfig, %pconfig ) } );
+          }
+        );
+      }
+    );
+    return;
+  }
+
   return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',

@@ -75,13 +75,17 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has name => isa => Gentoo__Overlay_PackageName, required, ro;
-has category => isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )];
-has path => isa => Dir,
-  ro, lazy, default => sub {
-  my ($self) = shift;
-  return $self->overlay->default_path( 'package', $self->category->name, $self->name );
-  };
+has name => ( isa => Gentoo__Overlay_PackageName, required, ro );
+has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )] );
+has path => (
+  isa => Dir,
+  ro,
+  lazy,
+  default => sub {
+    my ($self) = shift;
+    return $self->overlay->default_path( 'package', $self->category->name, $self->name );
+  }
+);
 
 =pc_attr _scan_blacklist
 
@@ -110,13 +114,108 @@ L</_scan_blacklist>
 
 =cut
 
-class_has _scan_blacklist => isa => HashRef [Str],
-  ro, lazy,
+class_has _scan_blacklist => (
+  isa => HashRef [Str],
+  ro,
+  lazy,
   traits  => [qw( Hash )],
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
-  return { map { $_ => 1 } qw( . .. metadata.xml ) };
-  };
+    return { map { $_ => 1 } qw( . .. metadata.xml ) };
+  }
+);
+
+=p_attr _ebuilds
+
+    isa => HashRef[ Gentoo__Overlay_Ebuild ], lazy_build, ro
+
+    accessors => _has_ebuild , ebuild_names,
+                 ebuilds, get_ebuild
+
+L</_has_ebuild>
+
+L</ebuild_names>
+
+L</ebuilds>
+
+L</get_ebuild>
+
+=cut
+
+=p_attr_acc _has_ebuild
+
+    $package->_has_ebuild('Moose-2.0.0.ebuild');
+
+L</_ebuilds>
+
+=cut
+
+=attr_acc ebuild_names
+
+    for( $package->ebuild_names ){
+        print $_;
+    }
+
+L</_ebuilds>
+
+=cut
+
+=attr_acc ebuilds
+
+    my %ebuilds = $package->ebuilds;
+
+L</_ebuilds>
+
+=cut
+
+=attr_acc get_ebuild
+
+    my $ebuild = $package->get_ebuild('Moose-2.0.0.ebuild');
+
+L</_ebuilds>
+
+=cut
+
+
+has _ebuilds => (
+  isa => HashRef [Gentoo__Overlay_Ebuild],
+  lazy_build,
+  ro,
+  traits  => [qw( Hash )],
+  handles => {
+    _has_ebuild  => exists   =>,
+    ebuild_names => keys     =>,
+    ebuilds      => elements =>,
+    get_ebuild   => get      =>,
+  }
+);
+
+=p_method _build__ebuilds
+
+Generates the ebuild Hash-Table, by scanning the package directory.
+
+L</_packages>
+
+=cut
+
+sub _build__ebuilds {
+  my ($self) = shift;
+  require Gentoo::Overlay::Ebuild;
+  my $dir = $self->path->open();
+  my %out;
+  while ( defined( my $entry = $dir->read() ) ) {
+    next if Gentoo::Overlay::Ebuild->is_blacklisted($entry);
+    next if -d $entry;
+    next if $entry !~ /.ebuild$/;
+    my $e = Gentoo::Overlay::Ebuild->new(
+      name    => $entry,
+      package => $self,
+    );
+    next unless $e->exists;
+    $out{$entry} = $e;
+  }
+  return \%out;
+}
 
 =method exists
 
@@ -164,6 +263,35 @@ A pretty form of the name
 sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
+}
+
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  if ( $what eq 'ebuilds' ) {
+    my %ebuilds     = $self->ebuilds();
+    my $num_ebuilds = scalar keys %ebuilds;
+    my $last_ebuild = $num_ebuilds - 1;
+    my $offset      = 0;
+    for my $ename ( sort keys %ebuilds ) {
+      local $_ = $ebuilds{$ename};
+      $self->$callback(
+        {
+          ebuild_name => $ename,
+          ebuild      => $ebuilds{$ename},
+          num_ebuilds => $num_ebuilds,
+          last_ebuild => $last_ebuild,
+          ebuild_num  => $offset,
+        }
+      );
+      $offset++;
+    }
+    return;
+  }
+  return exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what },
+  );
 }
 no Moose;
 __PACKAGE__->meta->make_immutable;

@@ -68,13 +68,15 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has name => isa => Gentoo__Overlay_CategoryName, required, ro;
-has overlay => isa => Gentoo__Overlay_Overlay, required, ro, coerce;
-has path => isa => Dir,
-  lazy, ro, default => sub {
-  my ($self) = shift;
-  return $self->overlay->default_path( category => $self->name );
-  };
+has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
+has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
+has path => ( lazy, ro,
+  isa     => Dir,
+  default => sub {
+    my ($self) = shift;
+    return $self->overlay->default_path( category => $self->name );
+  }
+);
 
 =p_attr _packages
 
@@ -127,15 +129,18 @@ L</_packages>
 
 =cut
 
-has _packages => isa => HashRef [Gentoo__Overlay_Package],
-  lazy_build, ro,
+has _packages => (
+  isa => HashRef [Gentoo__Overlay_Package],
+  lazy_build,
+  ro,
   traits  => [qw( Hash )],
   handles => {
-  _has_package  => exists   =>,
-  package_names => keys     =>,
-  packages      => elements =>,
-  get_package   => get      =>,
-  };
+    _has_package  => exists   =>,
+    package_names => keys     =>,
+    packages      => elements =>,
+    get_package   => get      =>,
+  }
+);
 
 =p_method _build__packages
 
@@ -190,13 +195,16 @@ L</_scan_blacklist>
 
 =cut
 
-class_has _scan_blacklist => isa => HashRef [Str],
-  ro, lazy,
+class_has _scan_blacklist => (
+  isa => HashRef [Str],
+  ro,
+  lazy,
   traits  => [qw( Hash )],
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
-  return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-  };
+    return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
+  }
+);
 
 =method exists
 
@@ -273,6 +281,20 @@ sub iterate {
       );
       $offset++;
     }
+    return;
+  }
+  if ( $what eq 'ebuilds' ) {
+    $self->iterate(
+      packages => sub {
+        my (%pconfig) = %{ $_[1] };
+        $pconfig{package}->iterate(
+          'ebuilds' => sub {
+            my %econfig = %{ $_[1] };
+            $self->$callback( { ( %pconfig, %econfig ) } );
+          }
+        );
+      }
+    );
     return;
   }
   return exception(
