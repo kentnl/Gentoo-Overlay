@@ -253,11 +253,45 @@ sub pretty_name {
   return $self->name . '/::' . $self->overlay->name;
 }
 
-=begin Pod::Coverage
+=method iterate
 
-iterate
+  $overlay->iterate( $what, sub {
+      my ( $context_information ) = shift;
 
-=end Pod::Coverage
+  } );
+
+The iterate method provides a handy way to do walking across the whole tree stopping at each of a given type.
+
+=over 4
+
+=item * C<$what = 'packages'>
+
+  $overlay->iterate( packages => sub {
+      my ( $self, $c ) = shift;
+      # $c->{package_name}  # String
+      # $c->{package}       # Package Object
+      # $c->{num_packages}  # How many packages are there to iterate
+      # $c->{last_package}  # Index ID of the last package.
+      # $c->{package_num}   # Index ID of the current package.
+  } );
+
+
+=item * C<$what = 'ebuilds'>
+
+  $overlay->iterate( ebuilds => sub {
+      my ( $self, $c ) = shift;
+      # $c->{package_name}  # String
+      # $c->{package}       # Package Object
+      # $c->{num_packages}  # How many packages are there to iterate
+      # $c->{last_package}  # Index ID of the last package.
+      # $c->{package_num}   # Index ID of the current package.
+
+      # $c->{ebuild_name}   # String
+      # See ::Ebuild for the rest of the fields provided by the ebuild Iterator.
+      # Very similar though.
+  } );
+
+=back
 
 =cut
 

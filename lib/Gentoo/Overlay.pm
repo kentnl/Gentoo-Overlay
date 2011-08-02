@@ -373,11 +373,64 @@ sub _build___categories_scan {
 
 }
 
-=begin Pod::Coverage
+=method iterate
 
-iterate
+  $overlay->iterate( $what, sub {
+      my ( $context_information ) = shift;
 
-=end Pod::Coverage
+  } );
+
+The iterate method provides a handy way to do walking across the whole tree stopping at each of a given type.
+
+=over 4
+
+=item * C<$what = 'categories'>
+
+  $overlay->iterate( categories => sub {
+      my ( $self, $c ) = shift;
+      # $c->{category_name}  # String
+      # $c->{category}       # Category Object
+      # $c->{num_categories} # How many categories are there to iterate
+      # $c->{last_category}  # Index ID of the last category.
+      # $c->{category_num}   # Index ID of the current category.
+  } );
+
+=item * C<$what = 'packages'>
+
+  $overlay->iterate( packages => sub {
+      my ( $self, $c ) = shift;
+      # $c->{category_name}  # String
+      # $c->{category}       # Category Object
+      # $c->{num_categories} # How many categories are there to iterate
+      # $c->{last_category}  # Index ID of the last category.
+      # $c->{category_num}   # Index ID of the current category.
+      #
+      # $c->{package_name}   # String
+      # See ::Category for the rest of the fields provided by the package Iterator.
+      # Very similar though.
+  } );
+
+
+=item * C<$what = 'ebuilds'>
+
+  $overlay->iterate( ebuilds => sub {
+      my ( $self, $c ) = shift;
+      # $c->{category_name}  # String
+      # $c->{category}       # Category Object
+      # $c->{num_categories} # How many categories are there to iterate
+      # $c->{last_category}  # Index ID of the last category.
+      # $c->{category_num}   # Index ID of the current category.
+      #
+      # $c->{package_name}   # String
+      # See ::Category for the rest of the fields provided by the package Iterator.
+      # Very similar though.
+      #
+      # $c->{ebuild_name}   # String
+      # See ::Package for the rest of the fields provided by the ebuild Iterator.
+      # Very similar though.
+  } );
+
+=back
 
 =cut
 
