@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.0.0 2011-08-02T10:24:40Z
  [Features]
  - Have a new iteration interface for easy overlay walking. ( Partially
    Existed in code but was undocumented )
