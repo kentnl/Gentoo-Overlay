@@ -1,6 +1,35 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ [Features]
+ - Have a new iteration interface for easy overlay walking. ( Partially
+   Existed in code but was undocumented )
+ - Can now iterate by 'ebuilds'.
+
+ [Internals]
+ - Restyled a lot of the internals because the 'has' form I was using was
+   ugly and buggy.
+
+ [Meta]
+ - resource URI's moved to https:// only.
+
+ [Modules::New]
+ - Gentoo::Overlay::Ebuild # A representaition of an individual ebuild.
+
+ [Packaging]
+ - Migrating to x.y.z versioning.
+ - Rehashed the Changelog for CPANChanges form.
+ - Updated GNU LICENSE file.
+
+ [Tests::New]
+ - release-cpan-changes.t # Test conformance with CPAN::Changes
+
+ [Tests::Updated]
+ - 00-compile.t # updated/regenerated to use find instead of glob.
+
+ [Types::New]
+ - Gentoo__Overlay_Ebuild
+ - Gentoo__Overlay_EbuildName
 
 0.03000000 2011-02-10T22:15:53Z
  - Eliminate 'tie' in favour of ->open + ->read
