@@ -57,7 +57,7 @@ has 'path' => (
       message => '%{package}s requires the \'path\' attribute passed during construction',
       payload => { package => __PACKAGE__ }
     );
-  }
+  },
 );
 
 =attr name
@@ -214,7 +214,7 @@ has _categories => (
     category_names => keys     =>,
     categories     => elements =>,
     get_category   => get      =>,
-  }
+  },
 );
 
 =p_method _build__categories
@@ -270,7 +270,7 @@ class_has _default_paths => (
       'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
       'ebuild'    => sub { shift->default_path( 'package', shift, shift )->file(shift) },
     };
-  }
+  },
 );
 
 =method default_path

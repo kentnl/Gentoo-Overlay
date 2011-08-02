@@ -88,7 +88,7 @@ has name => ( isa => Gentoo__Overlay_EbuildName, required, ro );
 has package => (
   isa => Gentoo__Overlay_Package,
   required, ro,
-  handles => [qw( overlay category )]
+  handles => [qw( overlay category )],
 );
 
 has path => (
@@ -98,7 +98,7 @@ has path => (
   default => sub {
     my ($self) = shift;
     return $self->overlay->default_path( 'ebuild', $self->category->name, $self->package->name, $self->name );
-  }
+  },
 );
 
 =pc_attr _scan_blacklist
@@ -136,9 +136,19 @@ class_has _scan_blacklist => (
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( . .. ChangeLog Manifest metadata.xml ) };
-  }
+  },
 );
 
+=method exists
+
+Does the Ebuild exist, and is it a file?
+
+
+    $ebuild->exists();
+
+=cut
+
+## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
   return if $self->name eq q{.};
@@ -148,6 +158,14 @@ sub exists {
   return 1;
 }
 
+=method is_blacklisted
+
+Does the ebuild name appear on a blacklist meaning auto-scan should ignore this?
+
+    ::Ebuild->is_blacklisted('..') # true
+
+=cut
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -156,11 +174,20 @@ sub is_blacklisted {
   return $self->_scan_blacklisted($name);
 }
 
+=method pretty_name
+
+A pretty form of the name
+
+    $ebuild->pretty_name # =dev-perl/Moose-2.0.0::gentoo
+
+=cut
+
 sub pretty_name {
   my $self     = shift;
   my $filename = $self->name;
+  ## no critic (RegularExpressions)
   $filename =~ s/\.ebuild$//;
-  return '=' . $self->category->name . q{/} . $filename . q{::} . $self->overlay->name;
+  return q{=} . $self->category->name . q{/} . $filename . q{::} . $self->overlay->name;
 }
 
 no Moose;

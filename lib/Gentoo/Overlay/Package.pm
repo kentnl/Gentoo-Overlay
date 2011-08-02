@@ -75,8 +75,8 @@ L<MooseX::Types::Path::Class/Dir>
 
 =cut
 
-has name => ( isa => Gentoo__Overlay_PackageName, required, ro );
-has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )] );
+has name => ( isa => Gentoo__Overlay_PackageName, required, ro, );
+has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )], );
 has path => (
   isa => Dir,
   ro,
@@ -84,7 +84,7 @@ has path => (
   default => sub {
     my ($self) = shift;
     return $self->overlay->default_path( 'package', $self->category->name, $self->name );
-  }
+  },
 );
 
 =pc_attr _scan_blacklist
@@ -122,7 +122,7 @@ class_has _scan_blacklist => (
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( . .. metadata.xml ) };
-  }
+  },
 );
 
 =p_attr _ebuilds
@@ -176,7 +176,6 @@ L</_ebuilds>
 
 =cut
 
-
 has _ebuilds => (
   isa => HashRef [Gentoo__Overlay_Ebuild],
   lazy_build,
@@ -187,7 +186,7 @@ has _ebuilds => (
     ebuild_names => keys     =>,
     ebuilds      => elements =>,
     get_ebuild   => get      =>,
-  }
+  },
 );
 
 =p_method _build__ebuilds
@@ -206,7 +205,8 @@ sub _build__ebuilds {
   while ( defined( my $entry = $dir->read() ) ) {
     next if Gentoo::Overlay::Ebuild->is_blacklisted($entry);
     next if -d $entry;
-    next if $entry !~ /.ebuild$/;
+    ## no critic ( RegularExpressions )
+    next if $entry !~ /\.ebuild$/;
     my $e = Gentoo::Overlay::Ebuild->new(
       name    => $entry,
       package => $self,
@@ -264,6 +264,14 @@ sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
+
+=begin Pod::Coverage
+
+iterate
+
+=end Pod::Coverage
+
+=cut
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;

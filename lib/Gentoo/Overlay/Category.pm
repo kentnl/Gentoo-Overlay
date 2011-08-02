@@ -75,7 +75,7 @@ has path => ( lazy, ro,
   default => sub {
     my ($self) = shift;
     return $self->overlay->default_path( category => $self->name );
-  }
+  },
 );
 
 =p_attr _packages
@@ -139,7 +139,7 @@ has _packages => (
     package_names => keys     =>,
     packages      => elements =>,
     get_package   => get      =>,
-  }
+  },
 );
 
 =p_method _build__packages
@@ -203,7 +203,7 @@ class_has _scan_blacklist => (
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-  }
+  },
 );
 
 =method exists
