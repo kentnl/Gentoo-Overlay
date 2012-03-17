@@ -3,6 +3,8 @@ use warnings;
 
 package Gentoo::Overlay::Exceptions;
 
+# ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
+#
 use Moose;
 use MooseX::Types::Moose qw( :all );
 use Sub::Exporter ();

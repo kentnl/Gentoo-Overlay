@@ -265,7 +265,6 @@ sub pretty_name {
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
 
-
 =method iterate
 
   $overlay->iterate( $what, sub {

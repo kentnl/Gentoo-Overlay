@@ -88,9 +88,8 @@ subtype Gentoo__Overlay_EbuildName, as Str, where {
        $_ =~ qr/^[A-Za-z0-9+_.-]+$/
     && $_ !~ qr/^-/
     && $_ !~ qr/-$/
-    && $_ =~ qr/\.ebuild$/
+    && $_ =~ qr/\.ebuild$/;
 };
-
 
 =type Gentoo__Overlay_PackageName
 
