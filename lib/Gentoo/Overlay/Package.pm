@@ -304,6 +304,16 @@ sub iterate {
   );
 }
 
+=p_method _iterate_ebuilds
+
+  $object->_iterate_ebuilds( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( ebuilds => sub { } );
+
+=cut
+
 # ebuilds = {/ebuilds }
 sub _iterate_ebuilds {
   my ( $self, $what, $callback ) = @_;

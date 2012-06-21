@@ -451,6 +451,16 @@ sub iterate {
   );
 }
 
+=p_method _iterate_ebuilds
+
+  $object->_iterate_ebuilds( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( ebuilds => sub { } );
+
+=cut
+
 # ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
   my ( $self, $what, $callback ) = @_;
@@ -468,6 +478,16 @@ sub _iterate_ebuilds {
   return;
 
 }
+
+=p_method _iterate_categories
+
+  $object->_iterate_categories( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( categories => sub { } );
+
+=cut
 
 # categories = { /categories }
 sub _iterate_categories {
@@ -491,6 +511,16 @@ sub _iterate_categories {
   }
   return;
 }
+
+=p_method _iterate_packages
+
+  $object->_iterate_packages( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( packages => sub { } );
+
+=cut
 
 # packages = { /categories/packages }
 sub _iterate_packages {
