@@ -510,6 +510,30 @@ that are files and/or blacklisted.
 
     $overlay->_build___categories_scan
 
+=head2 _iterate_ebuilds
+
+  $object->_iterate_ebuilds( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( ebuilds => sub { } );
+
+=head2 _iterate_categories
+
+  $object->_iterate_categories( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( categories => sub { } );
+
+=head2 _iterate_packages
+
+  $object->_iterate_packages( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( packages => sub { } );
+
 =head1 AUTHOR
 
 Kent Fredric <kentnl@cpan.org>

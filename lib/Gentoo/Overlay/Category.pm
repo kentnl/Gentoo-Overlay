@@ -355,6 +355,22 @@ Generates the package Hash-Table, by scanning the category directory.
 
 L</_packages>
 
+=head2 _iterate_packages
+
+  $object->_iterate_packages( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( packages => sub { } );
+
+=head2 _iterate_ebuilds
+
+  $object->_iterate_ebuilds( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( ebuilds => sub { } );
+
 =head1 AUTHOR
 
 Kent Fredric <kentnl@cpan.org>

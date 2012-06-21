@@ -330,6 +330,14 @@ Generates the ebuild Hash-Table, by scanning the package directory.
 
 L</_packages>
 
+=head2 _iterate_ebuilds
+
+  $object->_iterate_ebuilds( ignored_value => sub {  } );
+
+Handles dispatch call for
+
+  $object->iterate( ebuilds => sub { } );
+
 =head1 AUTHOR
 
 Kent Fredric <kentnl@cpan.org>
