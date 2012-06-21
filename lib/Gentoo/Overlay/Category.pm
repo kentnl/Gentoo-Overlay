@@ -109,6 +109,7 @@ sub iterate {
   );
 }
 
+# packages = { /packages }
 sub _iterate_packages {
   my ( $self, $what, $callback ) = @_;
   my %packages     = $self->packages();
@@ -132,16 +133,17 @@ sub _iterate_packages {
 
 }
 
+# ebuilds = { /packages/ebuilds }
 sub _iterate_ebuilds {
   my ( $self, $what, $callback ) = @_;
   my $real_callback = sub {
+
     my (%pconfig) = %{ $_[1] };
-    $pconfig{package}->iterate(
-      'ebuilds' => sub {
-        my %econfig = %{ $_[1] };
-        $self->$callback( { ( %pconfig, %econfig ) } );
-      }
-    );
+    my $inner_callback = sub {
+      my %econfig = %{ $_[1] };
+      $self->$callback( { ( %pconfig, %econfig ) } );
+    };
+    $pconfig{package}->_iterate_ebuilds( 'ebuilds' => $inner_callback );
   };
   $self->_iterate_packages( packages => $real_callback );
   return;
