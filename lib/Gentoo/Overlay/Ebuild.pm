@@ -7,7 +7,7 @@ BEGIN {
   $Gentoo::Overlay::Ebuild::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Ebuild::VERSION = '0.02004320';
+  $Gentoo::Overlay::Ebuild::VERSION = '1.0.2';
 }
 
 # FILENAME: Ebuild.pm
@@ -90,7 +90,7 @@ Gentoo::Overlay::Ebuild - A Class for Ebuilds in Gentoo Overlays
 
 =head1 VERSION
 
-version 0.02004320
+version 1.0.2
 
 =head1 SYNOPSIS
 

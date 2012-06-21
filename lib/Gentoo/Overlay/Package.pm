@@ -7,7 +7,7 @@ BEGIN {
   $Gentoo::Overlay::Package::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Package::VERSION = '0.02004320';
+  $Gentoo::Overlay::Package::VERSION = '1.0.2';
 }
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
@@ -148,7 +148,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 0.02004320
+version 1.0.2
 
 =head1 SYNOPSIS
 
