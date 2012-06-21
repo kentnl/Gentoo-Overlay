@@ -1,5 +1,11 @@
 Revision history for Gentoo-Overlay
 
+1.0.2 2012-06-21T11:34:49Z
+ [Internals]
+ - Refactor iteration logic to use a dispatch table depending on what you
+   want to iterate, instead of using a big mesy conditional. This will make
+   internal calling code faster and cleaner.
+
 1.0.1 2012-03-17T05:14:32Z
  - Minor Maintenance release
 

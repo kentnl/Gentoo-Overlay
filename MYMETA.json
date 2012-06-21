@@ -4,7 +4,7 @@
       "Kent Fredric <kentnl@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300018, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -22,23 +22,18 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Module::Build" : "0.3601"
+            "File::Find" : "0",
+            "File::Temp" : "0",
+            "FindBin" : "0",
+            "Module::Build" : "0.3601",
+            "Test::Fatal" : "0",
+            "Test::More" : "0.96",
+            "Test::Output" : "0"
          }
       },
       "configure" : {
          "requires" : {
             "Module::Build" : "0.3601"
-         }
-      },
-      "develop" : {
-         "recommends" : {
-            "Dist::Zilla::PluginBundle::Author::KENTNL::Lite" : "v1.3.0"
-         },
-         "requires" : {
-            "Dist::Zilla::PluginBundle::Author::KENTNL::Lite" : "0"
-         },
-         "suggests" : {
-            "Dist::Zilla::PluginBundle::Author::KENTNL" : "v1.3.0"
          }
       },
       "runtime" : {
@@ -64,16 +59,6 @@
             "perl" : "5.006",
             "strict" : "0",
             "warnings" : "0"
-         }
-      },
-      "test" : {
-         "requires" : {
-            "File::Find" : "0",
-            "File::Temp" : "0",
-            "FindBin" : "0",
-            "Test::Fatal" : "0",
-            "Test::More" : "0.96",
-            "Test::Output" : "0"
          }
       }
    },
@@ -107,9 +92,7 @@
    "resources" : {
       "homepage" : "https://github.com/kentfredric/Gentoo-Overlay",
       "repository" : {
-         "type" : "git",
-         "url" : "https://github.com/kentfredric/Gentoo-Overlay.git",
-         "web" : "https://github.com/kentfredric/Gentoo-Overlay"
+         "url" : "https://github.com/kentfredric/Gentoo-Overlay.git"
       }
    },
    "version" : "1.0.2",
@@ -148,11 +131,11 @@
       },
       "perl" : {
          "original" : "v5.16.0",
-         "qv" : 1,
+         "qv" : "1",
          "version" : [
-            5,
-            16,
-            0
+            "5",
+            "16",
+            "0"
          ]
       },
       "perl-config" : {
@@ -466,4 +449,3 @@
    },
    "x_authority" : "cpan:KENTNL"
 }
-

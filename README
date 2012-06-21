@@ -2,7 +2,7 @@ NAME
     Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 VERSION
-    version 1.0.1
+    version 1.0.2
 
 SYNOPSIS
       my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
@@ -229,6 +229,27 @@ PRIVATE METHODS
     skipping things that are files and/or blacklisted.
 
         $overlay->_build___categories_scan
+
+  _iterate_ebuilds
+      $object->_iterate_ebuilds( ignored_value => sub {  } );
+
+    Handles dispatch call for
+
+      $object->iterate( ebuilds => sub { } );
+
+  _iterate_categories
+      $object->_iterate_categories( ignored_value => sub {  } );
+
+    Handles dispatch call for
+
+      $object->iterate( categories => sub { } );
+
+  _iterate_packages
+      $object->_iterate_packages( ignored_value => sub {  } );
+
+    Handles dispatch call for
+
+      $object->iterate( packages => sub { } );
 
 AUTHOR
     Kent Fredric <kentnl@cpan.org>
