@@ -13,7 +13,7 @@ my %module_build_args = (
     'FindBin' => '0',
     'Module::Build' => '0.3601',
     'Test::Fatal' => '0',
-    'Test::More' => '0.88',
+    'Test::More' => '0.96',
     'Test::Output' => '0'
   },
   'configure_requires' => {
@@ -24,21 +24,30 @@ my %module_build_args = (
     'Kent Fredric <kentnl@cpan.org>'
   ],
   'dist_name' => 'Gentoo-Overlay',
-  'dist_version' => '0.02004319',
+  'dist_version' => '0.03000000',
   'license' => 'perl',
   'module_name' => 'Gentoo::Overlay',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
     'Carp' => '0',
-    'IO::Dir' => '0',
+    'Data::Dump' => '0',
     'Moose' => '0',
     'MooseX::ClassAttribute' => '0',
     'MooseX::Has::Sugar' => '0',
+    'MooseX::OneArgNew' => '0',
     'MooseX::Types' => '0',
     'MooseX::Types::Moose' => '0',
     'MooseX::Types::Path::Class' => '0',
-    'namespace::autoclean' => '0'
+    'Readonly' => '0',
+    'Role::HasMessage::Errf' => '0',
+    'Role::Identifiable::HasIdent' => '0',
+    'Role::Identifiable::HasTags' => '0',
+    'StackTrace::Auto' => '0',
+    'Sub::Exporter' => '0',
+    'Throwable' => '0',
+    'namespace::autoclean' => '0',
+    'overload' => '0'
   },
   'script_files' => []
 );

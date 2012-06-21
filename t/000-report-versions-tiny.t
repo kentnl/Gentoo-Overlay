@@ -49,24 +49,33 @@ sub pmver {
 }
 
 eval { $v .= pmver('Carp','any version') };
-eval { $v .= pmver('Dist::Zilla::PluginBundle::KENTNL','0.01017119') };
-eval { $v .= pmver('Dist::Zilla::PluginBundle::KENTNL::Lite','0.01009803') };
+eval { $v .= pmver('Data::Dump','any version') };
+eval { $v .= pmver('Dist::Zilla::PluginBundle::Author::KENTNL','1.0.0') };
+eval { $v .= pmver('Dist::Zilla::PluginBundle::Author::KENTNL::Lite','0.01009803') };
 eval { $v .= pmver('English','any version') };
 eval { $v .= pmver('File::Find','any version') };
 eval { $v .= pmver('File::Temp','any version') };
 eval { $v .= pmver('FindBin','any version') };
-eval { $v .= pmver('IO::Dir','any version') };
 eval { $v .= pmver('Module::Build','0.3601') };
 eval { $v .= pmver('Moose','any version') };
 eval { $v .= pmver('MooseX::ClassAttribute','any version') };
 eval { $v .= pmver('MooseX::Has::Sugar','any version') };
+eval { $v .= pmver('MooseX::OneArgNew','any version') };
 eval { $v .= pmver('MooseX::Types','any version') };
 eval { $v .= pmver('MooseX::Types::Moose','any version') };
 eval { $v .= pmver('MooseX::Types::Path::Class','any version') };
+eval { $v .= pmver('Readonly','any version') };
+eval { $v .= pmver('Role::HasMessage::Errf','any version') };
+eval { $v .= pmver('Role::Identifiable::HasIdent','any version') };
+eval { $v .= pmver('Role::Identifiable::HasTags','any version') };
+eval { $v .= pmver('StackTrace::Auto','any version') };
+eval { $v .= pmver('Sub::Exporter','any version') };
 eval { $v .= pmver('Test::Fatal','any version') };
-eval { $v .= pmver('Test::More','0.88') };
+eval { $v .= pmver('Test::More','0.96') };
 eval { $v .= pmver('Test::Output','any version') };
+eval { $v .= pmver('Throwable','any version') };
 eval { $v .= pmver('namespace::autoclean','any version') };
+eval { $v .= pmver('overload','any version') };
 
 
 

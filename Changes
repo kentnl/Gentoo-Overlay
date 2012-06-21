@@ -1,5 +1,12 @@
 Revision history for Gentoo-Overlay
 
+0.03000000 2011-02-11 11:15:53 Pacific/Auckland
+         Eliminate 'tie' in favour of ->open + ->read
+         Throw Exceptions. Even warnings are exceptions now. You can't
+          catch them, but you can toggle a switch to make them die()
+          instead of warn. ( local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
+         Added an ( currently undocumented ) iteration interface.
+
 0.02004319 2011-01-05 01:25:26 Pacific/Auckland
          Added a Package class.
          Removed lots of the builders and docs in favour of simple defaults.

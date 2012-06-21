@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 BEGIN {
-  $Gentoo::Overlay::Category::VERSION = '0.02004319';
+  $Gentoo::Overlay::Category::VERSION = '0.03000000';
 }
 
 # ABSTRACT: A singular category in a repository;
@@ -15,7 +15,6 @@ use MooseX::Types::Moose qw( :all );
 use MooseX::Types::Path::Class qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
-use IO::Dir;
 use namespace::autoclean;
 
 
@@ -44,20 +43,21 @@ has _packages => isa => HashRef [Gentoo__Overlay_Package],
   get_package   => get      =>,
   };
 
+
 sub _build__packages {
   my ($self) = shift;
   require Gentoo::Overlay::Package;
-  ## no critic ( ProhibitTies )
-  tie my %dir, 'IO::Dir', $self->path->stringify;
+
+  my $dir = $self->path->open();
   my %out;
-  for ( sort keys %dir ) {
-    next if Gentoo::Overlay::Package->is_blacklisted($_);
+  while ( defined( my $entry = $dir->read() ) ) {
+    next if Gentoo::Overlay::Package->is_blacklisted($entry);
     my $p = Gentoo::Overlay::Package->new(
-      name     => $_,
+      name     => $entry,
       category => $self,
     );
     next unless $p->exists;
-    $out{$_} = $p;
+    $out{$entry} = $p;
   }
   return \%out;
 }
@@ -96,6 +96,35 @@ sub pretty_name {
   return $self->name . '/::' . $self->overlay->name;
 }
 
+
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  if ( $what eq 'packages' ) {
+    my %packages     = $self->packages();
+    my $num_packages = scalar keys %packages;
+    my $last_package = $num_packages - 1;
+    my $offset       = 0;
+    for my $pname ( sort keys %packages ) {
+      local $_ = $packages{$pname};
+      $self->$callback(
+        {
+          package_name => $pname,
+          package      => $packages{$pname},
+          num_packages => $num_packages,
+          last_package => $last_package,
+          package_num  => $offset,
+        }
+      );
+      $offset++;
+    }
+    return;
+  }
+  return exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what, },
+  );
+}
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
@@ -109,7 +138,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 0.02004319
+version 0.03000000
 
 =head1 SYNOPSIS
 
@@ -261,6 +290,8 @@ L</_scan_blacklist>
 Generates the package Hash-Table, by scanning the category directory.
 
 L</_packages>
+
+=for Pod::Coverage iterate
 
 =head1 AUTHOR
 
