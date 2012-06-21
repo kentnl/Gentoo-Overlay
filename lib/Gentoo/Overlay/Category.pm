@@ -3,7 +3,165 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 
+BEGIN {
+  $Gentoo::Overlay::Category::AUTHORITY = 'cpan:KENTNL';
+}
+{
+  $Gentoo::Overlay::Category::VERSION = '0.02004320';
+}
+
 # ABSTRACT: A singular category in a repository;
+
+use Moose;
+use MooseX::Has::Sugar;
+use MooseX::Types::Moose qw( :all );
+use MooseX::Types::Path::Class qw( File Dir );
+use MooseX::ClassAttribute;
+use Gentoo::Overlay::Types qw( :all );
+use namespace::autoclean;
+
+has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
+has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
+has path => ( lazy, ro,
+  isa     => Dir,
+  default => sub {
+    my ($self) = shift;
+    return $self->overlay->default_path( category => $self->name );
+  },
+);
+
+has _packages => (
+  isa => HashRef [Gentoo__Overlay_Package],
+  lazy_build,
+  ro,
+  traits  => [qw( Hash )],
+  handles => {
+    _has_package  => exists   =>,
+    package_names => keys     =>,
+    packages      => elements =>,
+    get_package   => get      =>,
+  },
+);
+
+sub _build__packages {
+  my ($self) = shift;
+  require Gentoo::Overlay::Package;
+
+  my $dir = $self->path->open();
+  my %out;
+  while ( defined( my $entry = $dir->read() ) ) {
+    next if Gentoo::Overlay::Package->is_blacklisted($entry);
+    my $p = Gentoo::Overlay::Package->new(
+      name     => $entry,
+      category => $self,
+    );
+    next unless $p->exists;
+    $out{$entry} = $p;
+  }
+  return \%out;
+}
+
+class_has _scan_blacklist => (
+  isa => HashRef [Str],
+  ro,
+  lazy,
+  traits  => [qw( Hash )],
+  handles => { _scan_blacklisted => exists =>, },
+  default => sub {
+    return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
+  },
+);
+
+## no critic ( ProhibitBuiltinHomonyms )
+sub exists {
+  my $self = shift;
+  return if not -e $self->path;
+  return if not -d $self->path;
+  return 1;
+}
+
+sub is_blacklisted {
+  my ( $self, $name ) = @_;
+  if ( not defined $name ) {
+    $name = $self->name;
+  }
+  return $self->_scan_blacklisted($name);
+}
+
+sub pretty_name {
+  my $self = shift;
+  return $self->name . '/::' . $self->overlay->name;
+}
+
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  my %method_map = (
+    packages => _iterate_packages =>,
+    ebuilds  => _iterate_ebuilds  =>,
+  );
+  if ( exists $method_map{$what} ) {
+    goto $self->can( $method_map{$what} );
+  }
+  return exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what, },
+  );
+}
+
+sub _iterate_packages {
+  my ( $self, $what, $callback ) = @_;
+  my %packages     = $self->packages();
+  my $num_packages = scalar keys %packages;
+  my $last_package = $num_packages - 1;
+  my $offset       = 0;
+  for my $pname ( sort keys %packages ) {
+    local $_ = $packages{$pname};
+    $self->$callback(
+      {
+        package_name => $pname,
+        package      => $packages{$pname},
+        num_packages => $num_packages,
+        last_package => $last_package,
+        package_num  => $offset,
+      }
+    );
+    $offset++;
+  }
+  return;
+
+}
+
+sub _iterate_ebuilds {
+  my ( $self, $what, $callback ) = @_;
+  my $real_callback = sub {
+    my (%pconfig) = %{ $_[1] };
+    $pconfig{package}->iterate(
+      'ebuilds' => sub {
+        my %econfig = %{ $_[1] };
+        $self->$callback( { ( %pconfig, %econfig ) } );
+      }
+    );
+  };
+  $self->_iterate_packages( packages => $real_callback );
+  return;
+
+}
+no Moose;
+__PACKAGE__->meta->make_immutable;
+1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Gentoo::Overlay::Category - A singular category in a repository;
+
+=head1 VERSION
+
+version 0.02004320
 
 =head1 SYNOPSIS
 
@@ -27,202 +185,15 @@ Still limited functionality, more to come.
 
     ::Overlay::Category->is_blacklisted('..') # is '..' a blacklisted category
 
+=head1 METHODS
 
-=cut
-
-use Moose;
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( File Dir );
-use MooseX::ClassAttribute;
-use Gentoo::Overlay::Types qw( :all );
-use namespace::autoclean;
-
-=attr name
-
-The classes short name
-
-    isa => Gentoo__Overlay_CategoryName, required, ro
-
-L<< C<CategoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_CategoryName >>
-
-=cut
-
-=attr overlay
-
-The overlay it is in.
-
-    isa => Gentoo__Overlay_Overlay, required, coerce
-
-L<Gentoo::Overlay::Types/Gentoo__Overlay_Overlay>
-
-=cut
-
-=attr path
-
-The full path to the category
-
-    isa => Dir, lazy, ro
-
-L<MooseX::Types::Path::Class/Dir>
-
-=cut
-
-has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
-has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
-has path => ( lazy, ro,
-  isa     => Dir,
-  default => sub {
-    my ($self) = shift;
-    return $self->overlay->default_path( category => $self->name );
-  },
-);
-
-=p_attr _packages
-
-    isa => HashRef[ Gentoo__Overlay_Package ], lazy_build, ro
-
-    accessors => _has_package , package_names,
-                 packages, get_package
-
-L</_has_package>
-
-L</package_names>
-
-L</packages>
-
-L</get_package>
-
-=cut
-
-=p_attr_acc _has_package
-
-    $category->_has_package('Moose');
-
-L</_packages>
-
-=cut
-
-=attr_acc package_names
-
-    for( $category->package_names ){
-        print $_;
-    }
-
-L</_packages>
-
-=cut
-
-=attr_acc packages
-
-    my %packages = $category->packages;
-
-L</_packages>
-
-=cut
-
-=attr_acc get_package
-
-    my $package = $category->get_package('Moose');
-
-L</_packages>
-
-=cut
-
-has _packages => (
-  isa => HashRef [Gentoo__Overlay_Package],
-  lazy_build,
-  ro,
-  traits  => [qw( Hash )],
-  handles => {
-    _has_package  => exists   =>,
-    package_names => keys     =>,
-    packages      => elements =>,
-    get_package   => get      =>,
-  },
-);
-
-=p_method _build__packages
-
-Generates the package Hash-Table, by scanning the category directory.
-
-L</_packages>
-
-=cut
-
-sub _build__packages {
-  my ($self) = shift;
-  require Gentoo::Overlay::Package;
-
-  my $dir = $self->path->open();
-  my %out;
-  while ( defined( my $entry = $dir->read() ) ) {
-    next if Gentoo::Overlay::Package->is_blacklisted($entry);
-    my $p = Gentoo::Overlay::Package->new(
-      name     => $entry,
-      category => $self,
-    );
-    next unless $p->exists;
-    $out{$entry} = $p;
-  }
-  return \%out;
-}
-
-=pc_attr _scan_blacklist
-
-Class-Wide list of blacklisted directory names.
-
-    isa => HashRef[ Str ], ro, lazy
-
-    accessors => _scan_blacklisted
-
-L</_scan_blacklisted>
-
-L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
-
-=cut
-
-=pc_attr_acc _scan_blacklisted
-
-is C<$arg> blacklisted in the Class Wide Blacklist?
-
-    ::Category->_scan_blacklisted( $arg )
-       ->
-    exists ::Category->_scan_blacklist->{$arg}
-
-
-L</_scan_blacklist>
-
-=cut
-
-class_has _scan_blacklist => (
-  isa => HashRef [Str],
-  ro,
-  lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
-  default => sub {
-    return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-  },
-);
-
-=method exists
+=head2 exists
 
 Does the category exist, and is it a directory?
 
     $category->exists();
 
-=cut
-
-## no critic ( ProhibitBuiltinHomonyms )
-sub exists {
-  my $self = shift;
-  return if not -e $self->path;
-  return if not -d $self->path;
-  return 1;
-}
-
-=method is_blacklisted
+=head2 is_blacklisted
 
 Does the category name appear on a blacklist meaning auto-scan should ignore this?
 
@@ -230,30 +201,13 @@ Does the category name appear on a blacklist meaning auto-scan should ignore thi
 
     ::Category->is_blacklisted('metadata') # true
 
-=cut
-
-sub is_blacklisted {
-  my ( $self, $name ) = @_;
-  if ( not defined $name ) {
-    $name = $self->name;
-  }
-  return $self->_scan_blacklisted($name);
-}
-
-=method pretty_name
+=head2 pretty_name
 
 A pretty form of the name.
 
     $category->pretty_name  # dev-perl/::gentoo
 
-=cut
-
-sub pretty_name {
-  my $self = shift;
-  return $self->name . '/::' . $self->overlay->name;
-}
-
-=method iterate
+=head2 iterate
 
   $overlay->iterate( $what, sub {
       my ( $context_information ) = shift;
@@ -275,7 +229,6 @@ The iterate method provides a handy way to do walking across the whole tree stop
       # $c->{package_num}   # Index ID of the current package.
   } );
 
-
 =item * C<$what = 'ebuilds'>
 
   $overlay->iterate( ebuilds => sub {
@@ -293,50 +246,122 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 =back
 
-=cut
+=head1 ATTRIBUTES
 
-sub iterate {
-  my ( $self, $what, $callback ) = @_;
-  if ( $what eq 'packages' ) {
-    my %packages     = $self->packages();
-    my $num_packages = scalar keys %packages;
-    my $last_package = $num_packages - 1;
-    my $offset       = 0;
-    for my $pname ( sort keys %packages ) {
-      local $_ = $packages{$pname};
-      $self->$callback(
-        {
-          package_name => $pname,
-          package      => $packages{$pname},
-          num_packages => $num_packages,
-          last_package => $last_package,
-          package_num  => $offset,
-        }
-      );
-      $offset++;
+=head2 name
+
+The classes short name
+
+    isa => Gentoo__Overlay_CategoryName, required, ro
+
+L<< C<CategoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_CategoryName >>
+
+=head2 overlay
+
+The overlay it is in.
+
+    isa => Gentoo__Overlay_Overlay, required, coerce
+
+L<Gentoo::Overlay::Types/Gentoo__Overlay_Overlay>
+
+=head2 path
+
+The full path to the category
+
+    isa => Dir, lazy, ro
+
+L<MooseX::Types::Path::Class/Dir>
+
+=head1 ATTRIBUTE ACCESSORS
+
+=head2 package_names
+
+    for( $category->package_names ){
+        print $_;
     }
-    return;
-  }
-  if ( $what eq 'ebuilds' ) {
-    $self->iterate(
-      packages => sub {
-        my (%pconfig) = %{ $_[1] };
-        $pconfig{package}->iterate(
-          'ebuilds' => sub {
-            my %econfig = %{ $_[1] };
-            $self->$callback( { ( %pconfig, %econfig ) } );
-          }
-        );
-      }
-    );
-    return;
-  }
-  return exception(
-    ident   => 'bad iteration method',
-    message => 'The iteration method %{what_method}s is not a known way to iterate.',
-    payload => { what_method => $what, },
-  );
-}
-no Moose;
-__PACKAGE__->meta->make_immutable;
-1;
+
+L</_packages>
+
+=head2 packages
+
+    my %packages = $category->packages;
+
+L</_packages>
+
+=head2 get_package
+
+    my $package = $category->get_package('Moose');
+
+L</_packages>
+
+=head1 PRIVATE ATTRIBUTES
+
+=head2 _packages
+
+    isa => HashRef[ Gentoo__Overlay_Package ], lazy_build, ro
+
+    accessors => _has_package , package_names,
+                 packages, get_package
+
+L</_has_package>
+
+L</package_names>
+
+L</packages>
+
+L</get_package>
+
+=head1 PRIVATE ATTRIBUTE ACCESSORS
+
+=head2 _has_package
+
+    $category->_has_package('Moose');
+
+L</_packages>
+
+=head1 PRIVATE CLASS ATTRIBUTES
+
+=head2 _scan_blacklist
+
+Class-Wide list of blacklisted directory names.
+
+    isa => HashRef[ Str ], ro, lazy
+
+    accessors => _scan_blacklisted
+
+L</_scan_blacklisted>
+
+L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
+
+=head1 PRIVATE CLASS ATTRIBUTE ACCESSORS
+
+=head2 _scan_blacklisted
+
+is C<$arg> blacklisted in the Class Wide Blacklist?
+
+    ::Category->_scan_blacklisted( $arg )
+       ->
+    exists ::Category->_scan_blacklist->{$arg}
+
+L</_scan_blacklist>
+
+=head1 PRIVATE METHODS
+
+=head2 _build__packages
+
+Generates the package Hash-Table, by scanning the category directory.
+
+L</_packages>
+
+=head1 AUTHOR
+
+Kent Fredric <kentnl@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

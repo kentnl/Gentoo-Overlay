@@ -3,6 +3,13 @@ use warnings;
 
 package Gentoo::Overlay;
 
+BEGIN {
+  $Gentoo::Overlay::AUTHORITY = 'cpan:KENTNL';
+}
+{
+  $Gentoo::Overlay::VERSION = '0.02004320';
+}
+
 # ABSTRACT: Tools for working with Gentoo Overlays
 
 use Moose;
@@ -17,37 +24,6 @@ use Gentoo::Overlay::Category;
 use Gentoo::Overlay::Types qw( :all );
 use Gentoo::Overlay::Exceptions qw( :all );
 
-=head1 SYNOPSIS
-
-  my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
-
-  my $name       = $overlay->name();
-  my %categories = $overlay->categories();
-
-  print "Overlay $name 's categories:\n";
-  for( sort keys %categories ){
-    printf "%30s : %s", $_, $categories{$_};
-  }
-
-  # Overlay gentoo 's categories:
-  #  .....
-  #  dev-lang      : /usr/portage/dev-lang
-  #  .....
-
-There will be more features eventually, this is just a first release.
-
-=cut
-
-=attr path
-
-Path to repository.
-
-    isa => Dir, ro, required, coerce
-
-L<MooseX::Types::Path::Class/Dir>
-
-=cut
-
 has 'path' => (
   ro, coerce,
   isa     => Dir,
@@ -60,30 +36,7 @@ has 'path' => (
   },
 );
 
-=attr name
-
-Repository name.
-
-    isa => Gentoo__Overlay_RepositoryName, ro, lazy_build
-
-L<< C<RepositoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_RepositoryName >>
-
-L</_build_name>
-
-=cut
-
 has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
-
-=p_method _build_name
-
-Extracts the repository name out of the file 'C<repo_name>'
-in C<$OVERLAY/profiles/repo_name>
-
-    $overlay->_build_name
-
-L</name>
-
-=cut
 
 sub _build_name {
   my ($self) = shift;
@@ -101,29 +54,7 @@ sub _build_name {
   return scalar $f->slurp( chomp => 1, iomode => '<:raw' );
 }
 
-=p_attr _profile_dir
-
-Path to the profile sub-directory.
-
-    isa => Dir, ro, lazy_build
-
-L<MooseX::Types::Path::Class/Dir>
-
-L</_build__profile_dir>
-
-=cut
-
 has _profile_dir => ( isa => Dir, ro, lazy_build, );
-
-=p_method _build__profile_dir
-
-Verifies the existence of the profile directory, and returns the path to it.
-
-    $overlay->_build__profile_dir
-
-L</_profile_dir>
-
-=cut
 
 sub _build__profile_dir {
   my ($self) = shift;
@@ -141,69 +72,6 @@ sub _build__profile_dir {
   return $pd->absolute;
 }
 
-=p_attr _categories
-
-The auto-generating category hash backing
-
-    isa => HashRef[ Gentoo__Overlay_Category ], ro, lazy_build
-
-L</_build__categories>
-
-L</_has_category>
-
-L</category_names>
-
-L</categories>
-
-L</get_category>
-
-L<Gentoo::Overlay::Types/Gentoo__Overlay_Category>
-
-L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
-
-=cut
-
-=p_attr_acc _has_category
-
-Returns if a named category exists
-
-    $overlay->_has_category("dev-perl");
-
-L</_categories>
-
-=cut
-
-=attr_acc category_names
-
-Returns a list of the names of all the categories.
-
-    my @list = sort $overlay->category_names();
-
-L</_categories>
-
-=cut
-
-=attr_acc categories
-
-Returns a hash of L<< C<Category>|Gentoo::Overlay::Category >> objects.
-
-    my %hash = $overlay->categories;
-    print $hash{dev-perl}->pretty_name; # dev-perl/::gentoo
-
-L</_categories>
-
-=cut
-
-=attr_acc get_category
-
-Returns a Category Object for a given category name
-
-    my $cat = $overlay->get_category('dev-perl');
-
-L</_categories>
-
-=cut
-
 has _categories => (
   lazy_build,
   ro,
@@ -216,21 +84,6 @@ has _categories => (
     get_category   => get      =>,
   },
 );
-
-=p_method _build__categories
-
-Generates the Category Hash-Table, either by reading the categories index ( new, preferred )
-or by traversing the directory ( old, discouraged )
-
-    $category->_build_categories;
-
-L</_categories>
-
-L</_build___categories_scan>
-
-L</_build___categories_file>
-
-=cut
 
 sub _build__categories {
   my ($self) = @_;
@@ -249,15 +102,6 @@ sub _build__categories {
   goto $self->can('_build___categories_file');
 }
 
-=pc_attr _default_paths
-
-Class-wide list of path generators.
-
-    isa => HashRef[ CodeRef ], ro, lazy_build
-
-L</_build__default_paths>
-=cut
-
 class_has _default_paths => (
   ro, lazy,
   isa => HashRef [CodeRef],
@@ -273,33 +117,6 @@ class_has _default_paths => (
   },
 );
 
-=method default_path
-
-Useful function to easily wrap the class-wide method with a per-object sugar.
-
-    $overlay->default_path('profiles');
-    ->
-    ::Overlay->_default_paths->{'profiles'}->($overlay);
-    ->
-    $overlay->path->subdir('profiles')
-
-
-    $overlay->default_path('category','foo');
-    ->
-    ::Overlay->_default_path('category')->( $overlay, 'foo' );
-    ->
-    $overlay->path->subdir('foo')
-
-    $overlay->default_path('repo_name');
-    ->
-    ::Overlay->_default_path('repo_name')->( $overlay );
-    ->
-    $overlay->_profile_dir->file('repo_name')
-
-They're class wide functions, but they need individual instances to work.
-
-=cut
-
 sub default_path {
   my ( $self, $name, @args ) = @_;
   if ( !exists $self->_default_paths->{$name} ) {
@@ -311,14 +128,6 @@ sub default_path {
   }
   return $self->_default_paths->{$name}->( $self, @args );
 }
-
-=p_method _build___categories_file
-
-Builds the category map using the 'categories' file found in the overlays profile directory.
-
-    $overlay->_build___categories_file
-
-=cut
 
 sub _build___categories_file {
   my ($self) = shift;
@@ -345,15 +154,6 @@ sub _build___categories_file {
   return \%out;
 }
 
-=p_method _build___categories_scan
-
-Builds the category map the hard way by scanning the directory and then skipping things
-that are files and/or blacklisted.
-
-    $overlay->_build___categories_scan
-
-=cut
-
 sub _build___categories_scan {
   my ($self) = shift;
   my %out;
@@ -373,7 +173,139 @@ sub _build___categories_scan {
 
 }
 
-=method iterate
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  my %method_map = (
+    categories => _iterate_categories =>,
+    packages   => _iterate_packages   =>,
+    ebuilds    => _iterate_ebuilds    =>,
+  );
+  if ( exists $method_map{$what} ) {
+    goto $self->can( $method_map{$what} );
+  }
+  return exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what, },
+  );
+}
+
+sub _iterate_ebuilds {
+  my ( $self, $what, $callback ) = @_;
+  my $real_callback = sub {
+    my (%cconfig) = %{ $_[1] };
+    $cconfig{package}->iterate(
+      'ebuilds' => sub {
+        my %pconfig = %{ $_[1] };
+        $self->$callback( { ( %cconfig, %pconfig ) } );
+      }
+    );
+  };
+
+  $self->_iterate_packages( 'packages' => $real_callback );
+  return;
+
+}
+
+sub _iterate_categories {
+  my ( $self, $what, $callback ) = @_;
+  my %categories     = $self->categories();
+  my $num_categories = scalar keys %categories;
+  my $last_category  = $num_categories - 1;
+  my $offset         = 0;
+  for my $cname ( sort keys %categories ) {
+    local $_ = $categories{$cname};
+    $self->$callback(
+      {
+        category_name  => $cname,
+        category       => $categories{$cname},
+        num_categories => $num_categories,
+        last_category  => $last_category,
+        category_num   => $offset,
+      }
+    );
+    $offset++;
+  }
+  return;
+}
+
+sub _iterate_packages {
+  my ( $self, $what, $callback ) = @_;
+  my $real_callback = sub {
+    my (%cconfig) = %{ $_[1] };
+    $cconfig{category}->iterate(
+      'packages' => sub {
+        my %pconfig = %{ $_[1] };
+        $self->$callback( { ( %cconfig, %pconfig ) } );
+      }
+    );
+  };
+  $self->_iterate_categories( 'categories' => $real_callback );
+  return;
+}
+no Moose;
+__PACKAGE__->meta->make_immutable;
+1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Gentoo::Overlay - Tools for working with Gentoo Overlays
+
+=head1 VERSION
+
+version 0.02004320
+
+=head1 SYNOPSIS
+
+  my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
+
+  my $name       = $overlay->name();
+  my %categories = $overlay->categories();
+
+  print "Overlay $name 's categories:\n";
+  for( sort keys %categories ){
+    printf "%30s : %s", $_, $categories{$_};
+  }
+
+  # Overlay gentoo 's categories:
+  #  .....
+  #  dev-lang      : /usr/portage/dev-lang
+  #  .....
+
+There will be more features eventually, this is just a first release.
+
+=head1 METHODS
+
+=head2 default_path
+
+Useful function to easily wrap the class-wide method with a per-object sugar.
+
+    $overlay->default_path('profiles');
+    ->
+    ::Overlay->_default_paths->{'profiles'}->($overlay);
+    ->
+    $overlay->path->subdir('profiles')
+
+
+    $overlay->default_path('category','foo');
+    ->
+    ::Overlay->_default_path('category')->( $overlay, 'foo' );
+    ->
+    $overlay->path->subdir('foo')
+
+    $overlay->default_path('repo_name');
+    ->
+    ::Overlay->_default_path('repo_name')->( $overlay );
+    ->
+    $overlay->_profile_dir->file('repo_name')
+
+They're class wide functions, but they need individual instances to work.
+
+=head2 iterate
 
   $overlay->iterate( $what, sub {
       my ( $context_information ) = shift;
@@ -410,7 +342,6 @@ The iterate method provides a handy way to do walking across the whole tree stop
       # Very similar though.
   } );
 
-
 =item * C<$what = 'ebuilds'>
 
   $overlay->iterate( ebuilds => sub {
@@ -432,66 +363,159 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 =back
 
+=head1 ATTRIBUTES
+
+=head2 path
+
+Path to repository.
+
+    isa => Dir, ro, required, coerce
+
+L<MooseX::Types::Path::Class/Dir>
+
+=head2 name
+
+Repository name.
+
+    isa => Gentoo__Overlay_RepositoryName, ro, lazy_build
+
+L<< C<RepositoryName>|Gentoo::Overlay::Types/Gentoo__Overlay_RepositoryName >>
+
+L</_build_name>
+
+=head1 ATTRIBUTE ACCESSORS
+
+=head2 category_names
+
+Returns a list of the names of all the categories.
+
+    my @list = sort $overlay->category_names();
+
+L</_categories>
+
+=head2 categories
+
+Returns a hash of L<< C<Category>|Gentoo::Overlay::Category >> objects.
+
+    my %hash = $overlay->categories;
+    print $hash{dev-perl}->pretty_name; # dev-perl/::gentoo
+
+L</_categories>
+
+=head2 get_category
+
+Returns a Category Object for a given category name
+
+    my $cat = $overlay->get_category('dev-perl');
+
+L</_categories>
+
+=head1 PRIVATE ATTRIBUTES
+
+=head2 _profile_dir
+
+Path to the profile sub-directory.
+
+    isa => Dir, ro, lazy_build
+
+L<MooseX::Types::Path::Class/Dir>
+
+L</_build__profile_dir>
+
+=head2 _categories
+
+The auto-generating category hash backing
+
+    isa => HashRef[ Gentoo__Overlay_Category ], ro, lazy_build
+
+L</_build__categories>
+
+L</_has_category>
+
+L</category_names>
+
+L</categories>
+
+L</get_category>
+
+L<Gentoo::Overlay::Types/Gentoo__Overlay_Category>
+
+L<< C<MooseX::Types::Moose>|MooseX::Types::Moose >>
+
+=head1 PRIVATE ATTRIBUTE ACCESSORS
+
+=head2 _has_category
+
+Returns if a named category exists
+
+    $overlay->_has_category("dev-perl");
+
+L</_categories>
+
+=head1 PRIVATE CLASS ATTRIBUTES
+
+=head2 _default_paths
+
+Class-wide list of path generators.
+
+    isa => HashRef[ CodeRef ], ro, lazy_build
+
+L</_build__default_paths>
+
+=head1 PRIVATE METHODS
+
+=head2 _build_name
+
+Extracts the repository name out of the file 'C<repo_name>'
+in C<$OVERLAY/profiles/repo_name>
+
+    $overlay->_build_name
+
+L</name>
+
+=head2 _build__profile_dir
+
+Verifies the existence of the profile directory, and returns the path to it.
+
+    $overlay->_build__profile_dir
+
+L</_profile_dir>
+
+=head2 _build__categories
+
+Generates the Category Hash-Table, either by reading the categories index ( new, preferred )
+or by traversing the directory ( old, discouraged )
+
+    $category->_build_categories;
+
+L</_categories>
+
+L</_build___categories_scan>
+
+L</_build___categories_file>
+
+=head2 _build___categories_file
+
+Builds the category map using the 'categories' file found in the overlays profile directory.
+
+    $overlay->_build___categories_file
+
+=head2 _build___categories_scan
+
+Builds the category map the hard way by scanning the directory and then skipping things
+that are files and/or blacklisted.
+
+    $overlay->_build___categories_scan
+
+=head1 AUTHOR
+
+Kent Fredric <kentnl@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
 =cut
-
-sub iterate {
-  my ( $self, $what, $callback ) = @_;
-  if ( $what eq 'categories' ) {
-    my %categories     = $self->categories();
-    my $num_categories = scalar keys %categories;
-    my $last_category  = $num_categories - 1;
-    my $offset         = 0;
-    for my $cname ( sort keys %categories ) {
-      local $_ = $categories{$cname};
-      $self->$callback(
-        {
-          category_name  => $cname,
-          category       => $categories{$cname},
-          num_categories => $num_categories,
-          last_category  => $last_category,
-          category_num   => $offset,
-        }
-      );
-      $offset++;
-    }
-    return;
-  }
-  if ( $what eq 'packages' ) {
-    $self->iterate(
-      'categories' => sub {
-        my (%cconfig) = %{ $_[1] };
-        $cconfig{category}->iterate(
-          'packages' => sub {
-            my %pconfig = %{ $_[1] };
-            $self->$callback( { ( %cconfig, %pconfig ) } );
-          }
-        );
-      }
-    );
-    return;
-  }
-  if ( $what eq 'ebuilds' ) {
-    $self->iterate(
-      'packages' => sub {
-        my (%cconfig) = %{ $_[1] };
-        $cconfig{package}->iterate(
-          'ebuilds' => sub {
-            my %pconfig = %{ $_[1] };
-            $self->$callback( { ( %cconfig, %pconfig ) } );
-          }
-        );
-      }
-    );
-    return;
-  }
-
-  return exception(
-    ident   => 'bad iteration method',
-    message => 'The iteration method %{what_method}s is not a known way to iterate.',
-    payload => { what_method => $what, },
-  );
-}
-no Moose;
-__PACKAGE__->meta->make_immutable;
-1;
-
