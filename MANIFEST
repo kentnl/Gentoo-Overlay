@@ -26,6 +26,7 @@ dist.ini
 examples/portage.pl
 lib/Gentoo/Overlay.pm
 lib/Gentoo/Overlay/Category.pm
+lib/Gentoo/Overlay/Ebuild.pm
 lib/Gentoo/Overlay/Exceptions.pm
 lib/Gentoo/Overlay/Package.pm
 lib/Gentoo/Overlay/Types.pm
@@ -35,6 +36,7 @@ t/000-report-versions-tiny.t
 t/author-critic.t
 t/basic.t
 t/iterate.t
+t/release-cpan-changes.t
 t/release-distmeta.t
 t/release-eol.t
 t/release-kwalitee.t

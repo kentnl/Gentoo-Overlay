@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay::Types;
 BEGIN {
-  $Gentoo::Overlay::Types::VERSION = '0.03000000';
+  $Gentoo::Overlay::Types::VERSION = '1.0.0';
 }
 
 # ABSTRACT: Gentoo Overlay types.
@@ -12,8 +12,10 @@ use MooseX::Types -declare => [
   qw(
     Gentoo__Overlay_Overlay
     Gentoo__Overlay_Category
+    Gentoo__Overlay_Ebuild
     Gentoo__Overlay_Package
     Gentoo__Overlay_CategoryName
+    Gentoo__Overlay_EbuildName
     Gentoo__Overlay_PackageName
     Gentoo__Overlay_RepositoryName
     )
@@ -31,6 +33,9 @@ coerce Gentoo__Overlay_Overlay, from Str, via {
 class_type Gentoo__Overlay_Category, { class => 'Gentoo::Overlay::Category' };
 
 
+class_type Gentoo__Overlay_Ebuild, { class => 'Gentoo::Overlay::Ebuild' };
+
+
 class_type Gentoo__Overlay_Package, { class => 'Gentoo::Overlay::Package' };
 
 
@@ -39,6 +44,16 @@ subtype Gentoo__Overlay_CategoryName, as Str, where {
   $_ =~ qr/^[a-zA-Z0-9+_.-]+$/
     && $_ !~ qr/^[-.]/;
 };
+
+
+subtype Gentoo__Overlay_EbuildName, as Str, where {
+  ## no critic ( RegularExpressions )
+       $_ =~ qr/^[A-Za-z0-9+_.-]+$/
+    && $_ !~ qr/^-/
+    && $_ !~ qr/-$/
+    && $_ =~ qr/\.ebuild$/
+};
+
 
 
 subtype Gentoo__Overlay_PackageName, as Str, where {
@@ -68,7 +83,7 @@ Gentoo::Overlay::Types - Gentoo Overlay types.
 
 =head1 VERSION
 
-version 0.03000000
+version 1.0.0
 
 =head1 TYPES
 
@@ -82,6 +97,10 @@ version 0.03000000
 
     class_type Gentoo::Overlay::Category
 
+=head2 Gentoo__Overlay_Ebuild
+
+    class_type Gentoo::Overlay::Ebuild
+
 =head2 Gentoo__Overlay_Package
 
     class_type Gentoo::Overlay::Package
@@ -92,6 +111,15 @@ version 0.03000000
         and not matching ^[-.]
 
 I<A category name may contain any of the characters [A-Za-z0-9+_.-]. It must not begin with a hyphen or a dot.>
+
+=head2 Gentoo__Overlay_EbuildName
+
+    Str matching ^[A-Za-z0-9+_.-]+$
+        and not matching ^-
+        and not matching -$
+        and matching \.ebuild$
+
+I<An ebuild name may contain any of the characters [A-Za-z0-9+_.-]. It must not begin with a hyphen, and must not end in a hyphen.>
 
 =head2 Gentoo__Overlay_PackageName
 

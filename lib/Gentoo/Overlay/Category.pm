@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 BEGIN {
-  $Gentoo::Overlay::Category::VERSION = '0.03000000';
+  $Gentoo::Overlay::Category::VERSION = '1.0.0';
 }
 
 # ABSTRACT: A singular category in a repository;
@@ -20,28 +20,33 @@ use namespace::autoclean;
 
 
 
-has name => isa => Gentoo__Overlay_CategoryName, required, ro;
-has overlay => isa => Gentoo__Overlay_Overlay, required, ro, coerce;
-has path => isa => Dir,
-  lazy, ro, default => sub {
-  my ($self) = shift;
-  return $self->overlay->default_path( category => $self->name );
-  };
+has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
+has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
+has path => ( lazy, ro,
+  isa     => Dir,
+  default => sub {
+    my ($self) = shift;
+    return $self->overlay->default_path( category => $self->name );
+  },
+);
 
 
 
 
 
 
-has _packages => isa => HashRef [Gentoo__Overlay_Package],
-  lazy_build, ro,
+has _packages => (
+  isa => HashRef [Gentoo__Overlay_Package],
+  lazy_build,
+  ro,
   traits  => [qw( Hash )],
   handles => {
-  _has_package  => exists   =>,
-  package_names => keys     =>,
-  packages      => elements =>,
-  get_package   => get      =>,
-  };
+    _has_package  => exists   =>,
+    package_names => keys     =>,
+    packages      => elements =>,
+    get_package   => get      =>,
+  },
+);
 
 
 sub _build__packages {
@@ -64,13 +69,16 @@ sub _build__packages {
 
 
 
-class_has _scan_blacklist => isa => HashRef [Str],
-  ro, lazy,
+class_has _scan_blacklist => (
+  isa => HashRef [Str],
+  ro,
+  lazy,
   traits  => [qw( Hash )],
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
-  return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
-  };
+    return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
+  },
+);
 
 
 ## no critic ( ProhibitBuiltinHomonyms )
@@ -119,6 +127,20 @@ sub iterate {
     }
     return;
   }
+  if ( $what eq 'ebuilds' ) {
+    $self->iterate(
+      packages => sub {
+        my (%pconfig) = %{ $_[1] };
+        $pconfig{package}->iterate(
+          'ebuilds' => sub {
+            my %econfig = %{ $_[1] };
+            $self->$callback( { ( %pconfig, %econfig ) } );
+          }
+        );
+      }
+    );
+    return;
+  }
   return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
@@ -138,7 +160,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 0.03000000
+version 1.0.0
 
 =head1 SYNOPSIS
 
@@ -183,6 +205,45 @@ Does the category name appear on a blacklist meaning auto-scan should ignore thi
 A pretty form of the name.
 
     $category->pretty_name  # dev-perl/::gentoo
+
+=head2 iterate
+
+  $overlay->iterate( $what, sub {
+      my ( $context_information ) = shift;
+
+  } );
+
+The iterate method provides a handy way to do walking across the whole tree stopping at each of a given type.
+
+=over 4
+
+=item * C<$what = 'packages'>
+
+  $overlay->iterate( packages => sub {
+      my ( $self, $c ) = shift;
+      # $c->{package_name}  # String
+      # $c->{package}       # Package Object
+      # $c->{num_packages}  # How many packages are there to iterate
+      # $c->{last_package}  # Index ID of the last package.
+      # $c->{package_num}   # Index ID of the current package.
+  } );
+
+=item * C<$what = 'ebuilds'>
+
+  $overlay->iterate( ebuilds => sub {
+      my ( $self, $c ) = shift;
+      # $c->{package_name}  # String
+      # $c->{package}       # Package Object
+      # $c->{num_packages}  # How many packages are there to iterate
+      # $c->{last_package}  # Index ID of the last package.
+      # $c->{package_num}   # Index ID of the current package.
+
+      # $c->{ebuild_name}   # String
+      # See ::Ebuild for the rest of the fields provided by the ebuild Iterator.
+      # Very similar though.
+  } );
+
+=back
 
 =head1 ATTRIBUTES
 
@@ -290,8 +351,6 @@ L</_scan_blacklist>
 Generates the package Hash-Table, by scanning the category directory.
 
 L</_packages>
-
-=for Pod::Coverage iterate
 
 =head1 AUTHOR
 

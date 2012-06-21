@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay::Exceptions;
 BEGIN {
-  $Gentoo::Overlay::Exceptions::VERSION = '0.03000000';
+  $Gentoo::Overlay::Exceptions::VERSION = '1.0.0';
 }
 
 use Moose;
@@ -87,7 +87,7 @@ Gentoo::Overlay::Exceptions
 
 =head1 VERSION
 
-version 0.03000000
+version 1.0.0
 
 =for Pod::Coverage as_string exception warning
 

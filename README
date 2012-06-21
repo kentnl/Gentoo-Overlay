@@ -2,7 +2,7 @@ NAME
     Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 VERSION
-    version 0.03000000
+    version 1.0.0
 
 SYNOPSIS
       my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
@@ -48,6 +48,60 @@ METHODS
 
     They're class wide functions, but they need individual instances to
     work.
+
+  iterate
+      $overlay->iterate( $what, sub {
+          my ( $context_information ) = shift;
+
+      } );
+
+    The iterate method provides a handy way to do walking across the whole
+    tree stopping at each of a given type.
+
+    *   "$what = 'categories'"
+
+          $overlay->iterate( categories => sub {
+              my ( $self, $c ) = shift;
+              # $c->{category_name}  # String
+              # $c->{category}       # Category Object
+              # $c->{num_categories} # How many categories are there to iterate
+              # $c->{last_category}  # Index ID of the last category.
+              # $c->{category_num}   # Index ID of the current category.
+          } );
+
+    *   "$what = 'packages'"
+
+          $overlay->iterate( packages => sub {
+              my ( $self, $c ) = shift;
+              # $c->{category_name}  # String
+              # $c->{category}       # Category Object
+              # $c->{num_categories} # How many categories are there to iterate
+              # $c->{last_category}  # Index ID of the last category.
+              # $c->{category_num}   # Index ID of the current category.
+              #
+              # $c->{package_name}   # String
+              # See ::Category for the rest of the fields provided by the package Iterator.
+              # Very similar though.
+          } );
+
+    *   "$what = 'ebuilds'"
+
+          $overlay->iterate( ebuilds => sub {
+              my ( $self, $c ) = shift;
+              # $c->{category_name}  # String
+              # $c->{category}       # Category Object
+              # $c->{num_categories} # How many categories are there to iterate
+              # $c->{last_category}  # Index ID of the last category.
+              # $c->{category_num}   # Index ID of the current category.
+              #
+              # $c->{package_name}   # String
+              # See ::Category for the rest of the fields provided by the package Iterator.
+              # Very similar though.
+              #
+              # $c->{ebuild_name}   # String
+              # See ::Package for the rest of the fields provided by the ebuild Iterator.
+              # Very similar though.
+          } );
 
 ATTRIBUTES
   path

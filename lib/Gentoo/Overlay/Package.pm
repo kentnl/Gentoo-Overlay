@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay::Package;
 BEGIN {
-  $Gentoo::Overlay::Package::VERSION = '0.03000000';
+  $Gentoo::Overlay::Package::VERSION = '1.0.0';
 }
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
@@ -21,23 +21,69 @@ use namespace::autoclean;
 
 
 
-has name => isa => Gentoo__Overlay_PackageName, required, ro;
-has category => isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )];
-has path => isa => Dir,
-  ro, lazy, default => sub {
-  my ($self) = shift;
-  return $self->overlay->default_path( 'package', $self->category->name, $self->name );
-  };
+has name => ( isa => Gentoo__Overlay_PackageName, required, ro, );
+has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )], );
+has path => (
+  isa => Dir,
+  ro,
+  lazy,
+  default => sub {
+    my ($self) = shift;
+    return $self->overlay->default_path( 'package', $self->category->name, $self->name );
+  },
+);
 
 
 
-class_has _scan_blacklist => isa => HashRef [Str],
-  ro, lazy,
+class_has _scan_blacklist => (
+  isa => HashRef [Str],
+  ro,
+  lazy,
   traits  => [qw( Hash )],
   handles => { _scan_blacklisted => exists =>, },
   default => sub {
-  return { map { $_ => 1 } qw( . .. metadata.xml ) };
-  };
+    return { map { $_ => 1 } qw( . .. metadata.xml ) };
+  },
+);
+
+
+
+
+
+
+has _ebuilds => (
+  isa => HashRef [Gentoo__Overlay_Ebuild],
+  lazy_build,
+  ro,
+  traits  => [qw( Hash )],
+  handles => {
+    _has_ebuild  => exists   =>,
+    ebuild_names => keys     =>,
+    ebuilds      => elements =>,
+    get_ebuild   => get      =>,
+  },
+);
+
+
+sub _build__ebuilds {
+  my ($self) = shift;
+  require Gentoo::Overlay::Ebuild;
+  my $dir = $self->path->open();
+  my %out;
+  while ( defined( my $entry = $dir->read() ) ) {
+    next if Gentoo::Overlay::Ebuild->is_blacklisted($entry);
+    next if -d $entry;
+    ## no critic ( RegularExpressions )
+    next if $entry !~ /\.ebuild$/;
+    my $e = Gentoo::Overlay::Ebuild->new(
+      name    => $entry,
+      package => $self,
+    );
+    next unless $e->exists;
+    $out{$entry} = $e;
+  }
+  return \%out;
+}
 
 
 ## no critic ( ProhibitBuiltinHomonyms )
@@ -64,6 +110,37 @@ sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
+
+
+
+sub iterate {
+  my ( $self, $what, $callback ) = @_;
+  if ( $what eq 'ebuilds' ) {
+    my %ebuilds     = $self->ebuilds();
+    my $num_ebuilds = scalar keys %ebuilds;
+    my $last_ebuild = $num_ebuilds - 1;
+    my $offset      = 0;
+    for my $ename ( sort keys %ebuilds ) {
+      local $_ = $ebuilds{$ename};
+      $self->$callback(
+        {
+          ebuild_name => $ename,
+          ebuild      => $ebuilds{$ename},
+          num_ebuilds => $num_ebuilds,
+          last_ebuild => $last_ebuild,
+          ebuild_num  => $offset,
+        }
+      );
+      $offset++;
+    }
+    return;
+  }
+  return exception(
+    ident   => 'bad iteration method',
+    message => 'The iteration method %{what_method}s is not a known way to iterate.',
+    payload => { what_method => $what },
+  );
+}
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
@@ -77,7 +154,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 0.03000000
+version 1.0.0
 
 =head1 SYNOPSIS
 
@@ -114,6 +191,30 @@ Does the package name appear on a blacklist meaning auto-scan should ignore this
 A pretty form of the name
 
     $package->pretty_name # dev-perl/Moose::gentoo
+
+=head2 iterate
+
+  $overlay->iterate( $what, sub {
+      my ( $context_information ) = shift;
+
+  } );
+
+The iterate method provides a handy way to do walking across the whole tree stopping at each of a given type.
+
+=over 4
+
+=item * C<$what = 'ebuilds'>
+
+  $overlay->iterate( ebuilds => sub {
+      my ( $self, $c ) = shift;
+      # $c->{ebuild_name}  # String
+      # $c->{ebuild}       # Ebuild Object
+      # $c->{num_ebuilds}  # How many ebuild are there to iterate
+      # $c->{last_ebuild}  # Index ID of the last ebuild.
+      # $c->{ebuild_num}   # Index ID of the current ebuild.
+  } );
+
+=back
 
 =head1 ATTRIBUTES
 
@@ -155,6 +256,51 @@ L<Gentoo::Overlay::Category/overlay>
 
 L</category>
 
+=head2 ebuild_names
+
+    for( $package->ebuild_names ){
+        print $_;
+    }
+
+L</_ebuilds>
+
+=head2 ebuilds
+
+    my %ebuilds = $package->ebuilds;
+
+L</_ebuilds>
+
+=head2 get_ebuild
+
+    my $ebuild = $package->get_ebuild('Moose-2.0.0.ebuild');
+
+L</_ebuilds>
+
+=head1 PRIVATE ATTRIBUTES
+
+=head2 _ebuilds
+
+    isa => HashRef[ Gentoo__Overlay_Ebuild ], lazy_build, ro
+
+    accessors => _has_ebuild , ebuild_names,
+                 ebuilds, get_ebuild
+
+L</_has_ebuild>
+
+L</ebuild_names>
+
+L</ebuilds>
+
+L</get_ebuild>
+
+=head1 PRIVATE ATTRIBUTE ACCESSORS
+
+=head2 _has_ebuild
+
+    $package->_has_ebuild('Moose-2.0.0.ebuild');
+
+L</_ebuilds>
+
 =head1 PRIVATE CLASS ATTRIBUTES
 
 =head2 _scan_blacklist
@@ -180,6 +326,14 @@ is C<$arg> blacklisted in the Class Wide Blacklist?
     exists ::Package->_scan_blacklist->{$arg}
 
 L</_scan_blacklist>
+
+=head1 PRIVATE METHODS
+
+=head2 _build__ebuilds
+
+Generates the ebuild Hash-Table, by scanning the package directory.
+
+L</_packages>
 
 =head1 AUTHOR
 

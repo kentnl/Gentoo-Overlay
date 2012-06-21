@@ -3,7 +3,7 @@ use warnings;
 
 package Gentoo::Overlay;
 BEGIN {
-  $Gentoo::Overlay::VERSION = '0.03000000';
+  $Gentoo::Overlay::VERSION = '1.0.0';
 }
 
 # ABSTRACT: Tools for working with Gentoo Overlays
@@ -22,17 +22,20 @@ use Gentoo::Overlay::Exceptions qw( :all );
 
 
 
-has 'path' => isa => Dir,
-  ro, coerce, default => sub {
-  exception(
-    ident   => 'path parameter required',
-    message => '%{package}s requires the \'path\' attribute passed during construction',
-    payload => { package => __PACKAGE__ }
-  );
-  };
+has 'path' => (
+  ro, coerce,
+  isa     => Dir,
+  default => sub {
+    exception(
+      ident   => 'path parameter required',
+      message => '%{package}s requires the \'path\' attribute passed during construction',
+      payload => { package => __PACKAGE__ }
+    );
+  },
+);
 
 
-has 'name' => isa => Gentoo__Overlay_RepositoryName, ro, lazy_build;
+has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
 
 
 sub _build_name {
@@ -52,7 +55,7 @@ sub _build_name {
 }
 
 
-has _profile_dir => isa => Dir, ro, lazy_build;
+has _profile_dir => ( isa => Dir, ro, lazy_build, );
 
 
 sub _build__profile_dir {
@@ -76,15 +79,18 @@ sub _build__profile_dir {
 
 
 
-has _categories => isa => HashRef [Gentoo__Overlay_Category],
-  ro, lazy_build,
+has _categories => (
+  lazy_build,
+  ro,
+  isa => HashRef [Gentoo__Overlay_Category],
   traits  => [qw( Hash )],
   handles => {
-  _has_category  => exists   =>,
-  category_names => keys     =>,
-  categories     => elements =>,
-  get_category   => get      =>,
-  };
+    _has_category  => exists   =>,
+    category_names => keys     =>,
+    categories     => elements =>,
+    get_category   => get      =>,
+  },
+);
 
 
 sub _build__categories {
@@ -105,17 +111,20 @@ sub _build__categories {
 }
 
 
-class_has _default_paths => isa => HashRef [CodeRef],
-  ro, lazy, default => sub {
-  return {
-    'profiles'  => sub { shift->path->subdir('profiles') },
-    'repo_name' => sub { shift->_profile_dir->file('repo_name') },
-    'catfile'   => sub { shift->_profile_dir->file('categories') },
-    'category'  => sub { shift->path->subdir(shift) },
-    'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
-  };
-
-  };
+class_has _default_paths => (
+  ro, lazy,
+  isa => HashRef [CodeRef],
+  default => sub {
+    return {
+      'profiles'  => sub { shift->path->subdir('profiles') },
+      'repo_name' => sub { shift->_profile_dir->file('repo_name') },
+      'catfile'   => sub { shift->_profile_dir->file('categories') },
+      'category'  => sub { shift->path->subdir(shift) },
+      'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
+      'ebuild'    => sub { shift->default_path( 'package', shift, shift )->file(shift) },
+    };
+  },
+);
 
 
 sub default_path {
@@ -213,6 +222,21 @@ sub iterate {
     );
     return;
   }
+  if ( $what eq 'ebuilds' ) {
+    $self->iterate(
+      'packages' => sub {
+        my (%cconfig) = %{ $_[1] };
+        $cconfig{package}->iterate(
+          'ebuilds' => sub {
+            my %pconfig = %{ $_[1] };
+            $self->$callback( { ( %cconfig, %pconfig ) } );
+          }
+        );
+      }
+    );
+    return;
+  }
+
   return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
@@ -233,7 +257,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 =head1 VERSION
 
-version 0.03000000
+version 1.0.0
 
 =head1 SYNOPSIS
 
@@ -280,6 +304,64 @@ Useful function to easily wrap the class-wide method with a per-object sugar.
     $overlay->_profile_dir->file('repo_name')
 
 They're class wide functions, but they need individual instances to work.
+
+=head2 iterate
+
+  $overlay->iterate( $what, sub {
+      my ( $context_information ) = shift;
+
+  } );
+
+The iterate method provides a handy way to do walking across the whole tree stopping at each of a given type.
+
+=over 4
+
+=item * C<$what = 'categories'>
+
+  $overlay->iterate( categories => sub {
+      my ( $self, $c ) = shift;
+      # $c->{category_name}  # String
+      # $c->{category}       # Category Object
+      # $c->{num_categories} # How many categories are there to iterate
+      # $c->{last_category}  # Index ID of the last category.
+      # $c->{category_num}   # Index ID of the current category.
+  } );
+
+=item * C<$what = 'packages'>
+
+  $overlay->iterate( packages => sub {
+      my ( $self, $c ) = shift;
+      # $c->{category_name}  # String
+      # $c->{category}       # Category Object
+      # $c->{num_categories} # How many categories are there to iterate
+      # $c->{last_category}  # Index ID of the last category.
+      # $c->{category_num}   # Index ID of the current category.
+      #
+      # $c->{package_name}   # String
+      # See ::Category for the rest of the fields provided by the package Iterator.
+      # Very similar though.
+  } );
+
+=item * C<$what = 'ebuilds'>
+
+  $overlay->iterate( ebuilds => sub {
+      my ( $self, $c ) = shift;
+      # $c->{category_name}  # String
+      # $c->{category}       # Category Object
+      # $c->{num_categories} # How many categories are there to iterate
+      # $c->{last_category}  # Index ID of the last category.
+      # $c->{category_num}   # Index ID of the current category.
+      #
+      # $c->{package_name}   # String
+      # See ::Category for the rest of the fields provided by the package Iterator.
+      # Very similar though.
+      #
+      # $c->{ebuild_name}   # String
+      # See ::Package for the rest of the fields provided by the ebuild Iterator.
+      # Very similar though.
+  } );
+
+=back
 
 =head1 ATTRIBUTES
 
@@ -424,8 +506,6 @@ Builds the category map the hard way by scanning the directory and then skipping
 that are files and/or blacklisted.
 
     $overlay->_build___categories_scan
-
-=for Pod::Coverage iterate
 
 =head1 AUTHOR
 

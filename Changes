@@ -1,26 +1,59 @@
 Revision history for Gentoo-Overlay
 
-0.03000000 2011-02-11 11:15:53 Pacific/Auckland
-         Eliminate 'tie' in favour of ->open + ->read
-         Throw Exceptions. Even warnings are exceptions now. You can't
-          catch them, but you can toggle a switch to make them die()
-          instead of warn. ( local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
-         Added an ( currently undocumented ) iteration interface.
+1.0.0 2011-08-02T10:24:40Z
+ [Features]
+ - Have a new iteration interface for easy overlay walking. ( Partially
+   Existed in code but was undocumented )
+ - Can now iterate by 'ebuilds'.
 
-0.02004319 2011-01-05 01:25:26 Pacific/Auckland
-         Added a Package class.
-         Removed lots of the builders and docs in favour of simple defaults.
-         Replaced some Strs with EAPI constraints.
-         Rearranged 'blacklist' behaviour, it was stupid.
-         Extended the example to handle packages.
-         category objects now have a ->packages, ->_has_package, ->package_names, ->get_package
-         3 New Types, _CategoryName, _PackageName, _RepositoryName, all EAPI2 compliant.
+ [Internals]
+ - Restyled a lot of the internals because the 'has' form I was using was
+   ugly and buggy.
 
-0.01000020 2010-11-21 21:17:06 Pacific/Auckland
-         Refactored to create a Category Package
-         Added a type Package.
-         Documentation on steroids.
+ [Meta]
+ - resource URI's moved to https:// only.
 
-0.01000015 2010-11-21 16:17:46 Pacific/Auckland
-          First version.
+ [Modules::New]
+ - Gentoo::Overlay::Ebuild # A representaition of an individual ebuild.
+
+ [Packaging]
+ - Migrating to x.y.z versioning.
+ - Rehashed the Changelog for CPANChanges form.
+ - Updated GNU LICENSE file.
+
+ [Tests::New]
+ - release-cpan-changes.t # Test conformance with CPAN::Changes
+
+ [Tests::Updated]
+ - 00-compile.t # updated/regenerated to use find instead of glob.
+
+ [Types::New]
+ - Gentoo__Overlay_Ebuild
+ - Gentoo__Overlay_EbuildName
+
+0.03000000 2011-02-10T22:15:53Z
+ - Eliminate 'tie' in favour of ->open + ->read
+ - Throw Exceptions. Even warnings are exceptions now. You can't catch
+   them, but you can toggle a switch to make them die() instead of warn. (
+   local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
+ - Added an ( currently undocumented ) iteration interface.
+
+0.02004319 2011-01-04T12:25:26Z
+ - Added a Package class.
+ - Removed lots of the builders and docs in favour of simple defaults.
+ - Replaced some Strs with EAPI constraints.
+ - Rearranged 'blacklist' behaviour, it was stupid.
+ - Extended the example to handle packages.
+ - category objects now have a ->packages, ->_has_package, ->package_names,
+   ->get_package
+ - 3 New Types, _CategoryName, _PackageName, _RepositoryName, all EAPI2
+   compliant.
+
+0.01000020 2010-11-21T08:17:06Z
+ - Refactored to create a Category Package
+ - Added a type Package.
+ - Documentation on steroids.
+
+0.01000015 2010-11-21T03:17:46Z
+ - First version.
 
