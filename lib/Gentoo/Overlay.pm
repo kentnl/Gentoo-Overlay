@@ -451,16 +451,17 @@ sub iterate {
   );
 }
 
+# ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
   my ( $self, $what, $callback ) = @_;
+
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
-    $cconfig{package}->iterate(
-      'ebuilds' => sub {
-        my %pconfig = %{ $_[1] };
-        $self->$callback( { ( %cconfig, %pconfig ) } );
-      }
-    );
+    my $inner_callback = sub {
+      my %pconfig = %{ $_[1] };
+      $self->$callback( { ( %cconfig, %pconfig ) } );
+    };
+    $cconfig{package}->_iterate_ebuilds( 'ebuilds' => $inner_callback );
   };
 
   $self->_iterate_packages( 'packages' => $real_callback );
@@ -468,6 +469,7 @@ sub _iterate_ebuilds {
 
 }
 
+# categories = { /categories }
 sub _iterate_categories {
   my ( $self, $what, $callback ) = @_;
   my %categories     = $self->categories();
@@ -490,16 +492,17 @@ sub _iterate_categories {
   return;
 }
 
+# packages = { /categories/packages }
 sub _iterate_packages {
   my ( $self, $what, $callback ) = @_;
+
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
-    $cconfig{category}->iterate(
-      'packages' => sub {
-        my %pconfig = %{ $_[1] };
-        $self->$callback( { ( %cconfig, %pconfig ) } );
-      }
-    );
+    my $inner_callback = sub {
+      my %pconfig = %{ $_[1] };
+      $self->$callback( { ( %cconfig, %pconfig ) } );
+    };
+    $cconfig{category}->_iterate_packages( 'packages' => $inner_callback );
   };
   $self->_iterate_categories( 'categories' => $real_callback );
   return;

@@ -304,6 +304,7 @@ sub iterate {
   );
 }
 
+# ebuilds = {/ebuilds }
 sub _iterate_ebuilds {
   my ( $self, $what, $callback ) = @_;
   my %ebuilds     = $self->ebuilds();
