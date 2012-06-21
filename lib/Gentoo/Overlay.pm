@@ -436,60 +436,73 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
-  if ( $what eq 'categories' ) {
-    my %categories     = $self->categories();
-    my $num_categories = scalar keys %categories;
-    my $last_category  = $num_categories - 1;
-    my $offset         = 0;
-    for my $cname ( sort keys %categories ) {
-      local $_ = $categories{$cname};
-      $self->$callback(
-        {
-          category_name  => $cname,
-          category       => $categories{$cname},
-          num_categories => $num_categories,
-          last_category  => $last_category,
-          category_num   => $offset,
-        }
-      );
-      $offset++;
-    }
-    return;
+  my %method_map = (
+    categories => _iterate_categories =>,
+    packages   => _iterate_packages   =>,
+    ebuilds    => _iterate_ebuilds    =>,
+  );
+  if ( exists $method_map{$what} ) {
+    goto $self->can( $method_map{$what} );
   }
-  if ( $what eq 'packages' ) {
-    $self->iterate(
-      'categories' => sub {
-        my (%cconfig) = %{ $_[1] };
-        $cconfig{category}->iterate(
-          'packages' => sub {
-            my %pconfig = %{ $_[1] };
-            $self->$callback( { ( %cconfig, %pconfig ) } );
-          }
-        );
-      }
-    );
-    return;
-  }
-  if ( $what eq 'ebuilds' ) {
-    $self->iterate(
-      'packages' => sub {
-        my (%cconfig) = %{ $_[1] };
-        $cconfig{package}->iterate(
-          'ebuilds' => sub {
-            my %pconfig = %{ $_[1] };
-            $self->$callback( { ( %cconfig, %pconfig ) } );
-          }
-        );
-      }
-    );
-    return;
-  }
-
   return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
     payload => { what_method => $what, },
   );
+}
+
+sub _iterate_ebuilds {
+  my ( $self, $what, $callback ) = @_;
+  my $real_callback = sub {
+    my (%cconfig) = %{ $_[1] };
+    $cconfig{package}->iterate(
+      'ebuilds' => sub {
+        my %pconfig = %{ $_[1] };
+        $self->$callback( { ( %cconfig, %pconfig ) } );
+      }
+    );
+  };
+
+  $self->_iterate_packages( 'packages' => $real_callback );
+  return;
+
+}
+
+sub _iterate_categories {
+  my ( $self, $what, $callback ) = @_;
+  my %categories     = $self->categories();
+  my $num_categories = scalar keys %categories;
+  my $last_category  = $num_categories - 1;
+  my $offset         = 0;
+  for my $cname ( sort keys %categories ) {
+    local $_ = $categories{$cname};
+    $self->$callback(
+      {
+        category_name  => $cname,
+        category       => $categories{$cname},
+        num_categories => $num_categories,
+        last_category  => $last_category,
+        category_num   => $offset,
+      }
+    );
+    $offset++;
+  }
+  return;
+}
+
+sub _iterate_packages {
+  my ( $self, $what, $callback ) = @_;
+  my $real_callback = sub {
+    my (%cconfig) = %{ $_[1] };
+    $cconfig{category}->iterate(
+      'packages' => sub {
+        my %pconfig = %{ $_[1] };
+        $self->$callback( { ( %cconfig, %pconfig ) } );
+      }
+    );
+  };
+  $self->_iterate_categories( 'categories' => $real_callback );
+  return;
 }
 no Moose;
 __PACKAGE__->meta->make_immutable;

@@ -293,31 +293,38 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
-  if ( $what eq 'ebuilds' ) {
-    my %ebuilds     = $self->ebuilds();
-    my $num_ebuilds = scalar keys %ebuilds;
-    my $last_ebuild = $num_ebuilds - 1;
-    my $offset      = 0;
-    for my $ename ( sort keys %ebuilds ) {
-      local $_ = $ebuilds{$ename};
-      $self->$callback(
-        {
-          ebuild_name => $ename,
-          ebuild      => $ebuilds{$ename},
-          num_ebuilds => $num_ebuilds,
-          last_ebuild => $last_ebuild,
-          ebuild_num  => $offset,
-        }
-      );
-      $offset++;
-    }
-    return;
+  my %method_map = ( ebuilds => _iterate_ebuilds =>, );
+  if ( exists $method_map{$what} ) {
+    goto $self->can( $method_map{$what} );
   }
   return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
     payload => { what_method => $what },
   );
+}
+
+sub _iterate_ebuilds {
+  my ( $self, $what, $callback ) = @_;
+  my %ebuilds     = $self->ebuilds();
+  my $num_ebuilds = scalar keys %ebuilds;
+  my $last_ebuild = $num_ebuilds - 1;
+  my $offset      = 0;
+  for my $ename ( sort keys %ebuilds ) {
+    local $_ = $ebuilds{$ename};
+    $self->$callback(
+      {
+        ebuild_name => $ename,
+        ebuild      => $ebuilds{$ename},
+        num_ebuilds => $num_ebuilds,
+        last_ebuild => $last_ebuild,
+        ebuild_num  => $offset,
+      }
+    );
+    $offset++;
+  }
+  return;
+
 }
 no Moose;
 __PACKAGE__->meta->make_immutable;

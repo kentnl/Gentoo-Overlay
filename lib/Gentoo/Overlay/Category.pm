@@ -297,45 +297,57 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
-  if ( $what eq 'packages' ) {
-    my %packages     = $self->packages();
-    my $num_packages = scalar keys %packages;
-    my $last_package = $num_packages - 1;
-    my $offset       = 0;
-    for my $pname ( sort keys %packages ) {
-      local $_ = $packages{$pname};
-      $self->$callback(
-        {
-          package_name => $pname,
-          package      => $packages{$pname},
-          num_packages => $num_packages,
-          last_package => $last_package,
-          package_num  => $offset,
-        }
-      );
-      $offset++;
-    }
-    return;
-  }
-  if ( $what eq 'ebuilds' ) {
-    $self->iterate(
-      packages => sub {
-        my (%pconfig) = %{ $_[1] };
-        $pconfig{package}->iterate(
-          'ebuilds' => sub {
-            my %econfig = %{ $_[1] };
-            $self->$callback( { ( %pconfig, %econfig ) } );
-          }
-        );
-      }
-    );
-    return;
+  my %method_map = (
+    packages => _iterate_packages =>,
+    ebuilds  => _iterate_ebuilds  =>,
+  );
+  if ( exists $method_map{$what} ) {
+    goto $self->can( $method_map{$what} );
   }
   return exception(
     ident   => 'bad iteration method',
     message => 'The iteration method %{what_method}s is not a known way to iterate.',
     payload => { what_method => $what, },
   );
+}
+
+sub _iterate_packages {
+  my ( $self, $what, $callback ) = @_;
+  my %packages     = $self->packages();
+  my $num_packages = scalar keys %packages;
+  my $last_package = $num_packages - 1;
+  my $offset       = 0;
+  for my $pname ( sort keys %packages ) {
+    local $_ = $packages{$pname};
+    $self->$callback(
+      {
+        package_name => $pname,
+        package      => $packages{$pname},
+        num_packages => $num_packages,
+        last_package => $last_package,
+        package_num  => $offset,
+      }
+    );
+    $offset++;
+  }
+  return;
+
+}
+
+sub _iterate_ebuilds {
+  my ( $self, $what, $callback ) = @_;
+  my $real_callback = sub {
+    my (%pconfig) = %{ $_[1] };
+    $pconfig{package}->iterate(
+      'ebuilds' => sub {
+        my %econfig = %{ $_[1] };
+        $self->$callback( { ( %pconfig, %econfig ) } );
+      }
+    );
+  };
+  $self->_iterate_packages( packages => $real_callback );
+  return;
+
 }
 no Moose;
 __PACKAGE__->meta->make_immutable;
