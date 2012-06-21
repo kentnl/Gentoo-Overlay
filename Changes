@@ -1,5 +1,32 @@
 Revision history for Gentoo-Overlay
 
+1.0.1 2012-03-17T05:14:32Z
+ - Minor Maintenance release
+
+ [Dependencies::Changed]
+ - develop recommends : Dist::Zilla::PluginBundle::Author::KENTNL::Lite
+   0.01009803 -> v1.3.0
+ - develop suggests : Dist::Zilla::PluginBundle::Author::KENTNL
+   v1.0.0 -> v1.3.0
+
+ [Dependencies::New]
+ - runtime requires : strict
+ - runtime requires : warnings
+ - runtime requires : perl
+
+ [Dependencies::Removed]
+ - test requires : English
+
+ [Internals]
+ - Move Version Declaration out of BEGIN
+ - All namespaces now declare $AUTHORITY
+
+ [Packaging]
+ - Update LICENSE (Year, Indent, Address)
+ - Move author/release tests to xt/
+ - Update repository.url
+ - Set x_authority
+
 1.0.0 2011-08-02T10:24:40Z
  [Features]
  - Have a new iteration interface for easy overlay walking. ( Partially

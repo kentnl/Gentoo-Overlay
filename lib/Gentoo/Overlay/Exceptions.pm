@@ -2,10 +2,16 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Exceptions;
+
 BEGIN {
-  $Gentoo::Overlay::Exceptions::VERSION = '1.0.0';
+  $Gentoo::Overlay::Exceptions::AUTHORITY = 'cpan:KENTNL';
+}
+{
+  $Gentoo::Overlay::Exceptions::VERSION = '1.0.1';
 }
 
+# ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
+#
 use Moose;
 use MooseX::Types::Moose qw( :all );
 use Sub::Exporter ();
@@ -16,7 +22,6 @@ Readonly our $W_WARNING => 'warning';
 Readonly our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
-
 
 has 'payload' => (
   is       => 'ro',
@@ -79,15 +84,16 @@ no Moose;
 1;
 
 __END__
+
 =pod
 
 =head1 NAME
 
-Gentoo::Overlay::Exceptions
+Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 
 =head1 VERSION
 
-version 1.0.0
+version 1.0.1
 
 =for Pod::Coverage as_string exception warning
 
@@ -97,10 +103,9 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
