@@ -10,4 +10,4 @@ eval "use Pod::Coverage::TrustPod";
 plan skip_all => "Pod::Coverage::TrustPod required for testing POD coverage"
   if $@;
 
-all_pod_coverage_ok( { coverage_class => 'Pod::Coverage::TrustPod' } );
+all_pod_coverage_ok({ coverage_class => 'Pod::Coverage::TrustPod' });

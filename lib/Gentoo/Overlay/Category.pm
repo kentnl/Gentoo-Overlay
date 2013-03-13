@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Category;
-
 BEGIN {
   $Gentoo::Overlay::Category::AUTHORITY = 'cpan:KENTNL';
 }
@@ -12,6 +11,7 @@ BEGIN {
 
 # ABSTRACT: A singular category in a repository;
 
+
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
@@ -19,6 +19,9 @@ use MooseX::Types::Path::Tiny qw( File Dir Path );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
+
+
+
 
 has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
 has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
@@ -29,6 +32,11 @@ has path => ( lazy, ro,
     return $self->overlay->default_path( category => $self->name );
   },
 );
+
+
+
+
+
 
 has _packages => (
   isa => HashRef [Gentoo__Overlay_Package],
@@ -42,6 +50,7 @@ has _packages => (
     get_package   => get      =>,
   },
 );
+
 
 sub _build__packages {
   my ($self) = shift;
@@ -61,6 +70,8 @@ sub _build__packages {
   return \%out;
 }
 
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -72,6 +83,7 @@ class_has _scan_blacklist => (
   },
 );
 
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -79,6 +91,7 @@ sub exists {
   return if not -d $self->path;
   return 1;
 }
+
 
 sub is_blacklisted {
   my ( $self, $name ) = @_;
@@ -88,10 +101,12 @@ sub is_blacklisted {
   return $self->_scan_blacklisted($name);
 }
 
+
 sub pretty_name {
   my $self = shift;
   return $self->name . '/::' . $self->overlay->name;
 }
+
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
@@ -108,6 +123,7 @@ sub iterate {
     payload => { what_method => $what, },
   );
 }
+
 
 # packages = { /packages }
 sub _iterate_packages {
@@ -132,6 +148,7 @@ sub _iterate_packages {
   return;
 
 }
+
 
 # ebuilds = { /packages/ebuilds }
 sub _iterate_ebuilds {

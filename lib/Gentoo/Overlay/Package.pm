@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Package;
-
 BEGIN {
   $Gentoo::Overlay::Package::AUTHORITY = 'cpan:KENTNL';
 }
@@ -20,6 +19,11 @@ use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all  );
 use namespace::autoclean;
 
+
+
+
+
+
 has name => ( isa => Gentoo__Overlay_PackageName, required, ro, );
 has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )], );
 has path => (
@@ -32,6 +36,8 @@ has path => (
   },
 );
 
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -42,6 +48,11 @@ class_has _scan_blacklist => (
     return { map { $_ => 1 } qw( . .. metadata.xml ) };
   },
 );
+
+
+
+
+
 
 has _ebuilds => (
   isa => HashRef [Gentoo__Overlay_Ebuild],
@@ -55,6 +66,7 @@ has _ebuilds => (
     get_ebuild   => get      =>,
   },
 );
+
 
 sub _build__ebuilds {
   my ($self) = shift;
@@ -76,6 +88,7 @@ sub _build__ebuilds {
   return \%out;
 }
 
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -86,6 +99,7 @@ sub exists {
   return 1;
 }
 
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -94,10 +108,12 @@ sub is_blacklisted {
   return $self->_scan_blacklisted($name);
 }
 
+
 sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
+
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
@@ -111,6 +127,7 @@ sub iterate {
     payload => { what_method => $what },
   );
 }
+
 
 # ebuilds = {/ebuilds }
 sub _iterate_ebuilds {

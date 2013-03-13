@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Exceptions;
-
 BEGIN {
   $Gentoo::Overlay::Exceptions::AUTHORITY = 'cpan:KENTNL';
 }
@@ -22,6 +21,7 @@ Readonly our $W_WARNING => 'warning';
 Readonly our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
+
 
 has 'payload' => (
   is       => 'ro',

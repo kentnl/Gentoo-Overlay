@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay;
-
 BEGIN {
   $Gentoo::Overlay::AUTHORITY = 'cpan:KENTNL';
 }
@@ -24,6 +23,8 @@ use Gentoo::Overlay::Category;
 use Gentoo::Overlay::Types qw( :all );
 use Gentoo::Overlay::Exceptions qw( :all );
 
+
+
 has 'path' => (
   ro, coerce,
   isa     => Dir,
@@ -36,7 +37,9 @@ has 'path' => (
   },
 );
 
+
 has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
+
 
 sub _build_name {
   my ($self) = shift;
@@ -55,7 +58,9 @@ sub _build_name {
 
 }
 
+
 has _profile_dir => ( isa => Dir, ro, lazy_build, );
+
 
 sub _build__profile_dir {
   my ($self) = shift;
@@ -73,6 +78,11 @@ sub _build__profile_dir {
   return $pd->absolute;
 }
 
+
+
+
+
+
 has _categories => (
   lazy_build,
   ro,
@@ -85,6 +95,7 @@ has _categories => (
     get_category   => get      =>,
   },
 );
+
 
 sub _build__categories {
   my ($self) = @_;
@@ -103,6 +114,7 @@ sub _build__categories {
   goto $self->can('_build___categories_file');
 }
 
+
 class_has _default_paths => (
   ro, lazy,
   isa => HashRef [CodeRef],
@@ -118,6 +130,7 @@ class_has _default_paths => (
   },
 );
 
+
 sub default_path {
   my ( $self, $name, @args ) = @_;
   if ( !exists $self->_default_paths->{$name} ) {
@@ -129,6 +142,7 @@ sub default_path {
   }
   return $self->_default_paths->{$name}->( $self, @args );
 }
+
 
 sub _build___categories_file {
   my ($self) = shift;
@@ -155,6 +169,7 @@ sub _build___categories_file {
   return \%out;
 }
 
+
 sub _build___categories_scan {
   my ($self) = shift;
   my %out;
@@ -174,6 +189,7 @@ sub _build___categories_scan {
 
 }
 
+
 sub iterate {
   my ( $self, $what, $callback ) = @_;
   my %method_map = (
@@ -190,6 +206,7 @@ sub iterate {
     payload => { what_method => $what, },
   );
 }
+
 
 # ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
@@ -208,6 +225,7 @@ sub _iterate_ebuilds {
   return;
 
 }
+
 
 # categories = { /categories }
 sub _iterate_categories {
@@ -231,6 +249,7 @@ sub _iterate_categories {
   }
   return;
 }
+
 
 # packages = { /categories/packages }
 sub _iterate_packages {

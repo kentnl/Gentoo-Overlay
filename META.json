@@ -449,11 +449,6 @@
             "version" : "4.300031"
          },
          {
-            "class" : "Dist::Zilla::Plugin::PerlTidy",
-            "name" : "PerlTidy",
-            "version" : "0.13"
-         },
-         {
             "class" : "Dist::Zilla::Plugin::FinderCode",
             "name" : ":InstallModules",
             "version" : "4.300031"

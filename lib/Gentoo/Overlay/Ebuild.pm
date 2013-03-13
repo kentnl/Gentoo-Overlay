@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Ebuild;
-
 BEGIN {
   $Gentoo::Overlay::Ebuild::AUTHORITY = 'cpan:KENTNL';
 }
@@ -22,6 +21,11 @@ use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
 
+
+
+
+
+
 has name => ( isa => Gentoo__Overlay_EbuildName, required, ro );
 has package => (
   isa => Gentoo__Overlay_Package,
@@ -39,6 +43,8 @@ has path => (
   },
 );
 
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -50,6 +56,7 @@ class_has _scan_blacklist => (
   },
 );
 
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -60,6 +67,7 @@ sub exists {
   return 1;
 }
 
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -67,6 +75,7 @@ sub is_blacklisted {
   }
   return $self->_scan_blacklisted($name);
 }
+
 
 sub pretty_name {
   my $self     = shift;
