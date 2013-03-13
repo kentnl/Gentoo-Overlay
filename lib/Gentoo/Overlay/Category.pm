@@ -2,33 +2,41 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Category;
-
 BEGIN {
   $Gentoo::Overlay::Category::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Category::VERSION = '1.0.2';
+  $Gentoo::Overlay::Category::VERSION = '1.0.3';
 }
 
 # ABSTRACT: A singular category in a repository;
 
+
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( File Dir );
+use MooseX::Types::Path::Tiny qw( File Dir Path );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
 
+
+
+
 has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
 has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
 has path => ( lazy, ro,
-  isa     => Dir,
+  isa     => Path,
   default => sub {
     my ($self) = shift;
     return $self->overlay->default_path( category => $self->name );
   },
 );
+
+
+
+
+
 
 has _packages => (
   isa => HashRef [Gentoo__Overlay_Package],
@@ -43,16 +51,17 @@ has _packages => (
   },
 );
 
+
 sub _build__packages {
   my ($self) = shift;
   require Gentoo::Overlay::Package;
 
-  my $dir = $self->path->open();
+  my $it = $self->path->iterator();
   my %out;
-  while ( defined( my $entry = $dir->read() ) ) {
-    next if Gentoo::Overlay::Package->is_blacklisted($entry);
+  while ( defined( my $entry = $it->() ) ) {
+    next if Gentoo::Overlay::Package->is_blacklisted( $entry->basename );
     my $p = Gentoo::Overlay::Package->new(
-      name     => $entry,
+      name     => $entry->basename,
       category => $self,
     );
     next unless $p->exists;
@@ -60,6 +69,8 @@ sub _build__packages {
   }
   return \%out;
 }
+
+
 
 class_has _scan_blacklist => (
   isa => HashRef [Str],
@@ -72,6 +83,7 @@ class_has _scan_blacklist => (
   },
 );
 
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -79,6 +91,7 @@ sub exists {
   return if not -d $self->path;
   return 1;
 }
+
 
 sub is_blacklisted {
   my ( $self, $name ) = @_;
@@ -88,10 +101,12 @@ sub is_blacklisted {
   return $self->_scan_blacklisted($name);
 }
 
+
 sub pretty_name {
   my $self = shift;
   return $self->name . '/::' . $self->overlay->name;
 }
+
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
@@ -108,6 +123,7 @@ sub iterate {
     payload => { what_method => $what, },
   );
 }
+
 
 # packages = { /packages }
 sub _iterate_packages {
@@ -132,6 +148,7 @@ sub _iterate_packages {
   return;
 
 }
+
 
 # ebuilds = { /packages/ebuilds }
 sub _iterate_ebuilds {
@@ -163,7 +180,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 SYNOPSIS
 
@@ -272,7 +289,7 @@ The full path to the category
 
     isa => Dir, lazy, ro
 
-L<MooseX::Types::Path::Class/Dir>
+L<MooseX::Types::Path::Tiny/Dir>
 
 =head1 ATTRIBUTE ACCESSORS
 
@@ -377,7 +394,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

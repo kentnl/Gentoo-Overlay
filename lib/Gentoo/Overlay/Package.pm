@@ -2,12 +2,11 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Package;
-
 BEGIN {
   $Gentoo::Overlay::Package::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Package::VERSION = '1.0.2';
+  $Gentoo::Overlay::Package::VERSION = '1.0.3';
 }
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
@@ -15,15 +14,20 @@ BEGIN {
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( :all );
+use MooseX::Types::Path::Tiny qw( :all );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all  );
 use namespace::autoclean;
 
+
+
+
+
+
 has name => ( isa => Gentoo__Overlay_PackageName, required, ro, );
 has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )], );
 has path => (
-  isa => Dir,
+  isa => Path,
   ro,
   lazy,
   default => sub {
@@ -31,6 +35,8 @@ has path => (
     return $self->overlay->default_path( 'package', $self->category->name, $self->name );
   },
 );
+
+
 
 class_has _scan_blacklist => (
   isa => HashRef [Str],
@@ -42,6 +48,11 @@ class_has _scan_blacklist => (
     return { map { $_ => 1 } qw( . .. metadata.xml ) };
   },
 );
+
+
+
+
+
 
 has _ebuilds => (
   isa => HashRef [Gentoo__Overlay_Ebuild],
@@ -55,6 +66,7 @@ has _ebuilds => (
     get_ebuild   => get      =>,
   },
 );
+
 
 sub _build__ebuilds {
   my ($self) = shift;
@@ -76,6 +88,7 @@ sub _build__ebuilds {
   return \%out;
 }
 
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -86,6 +99,7 @@ sub exists {
   return 1;
 }
 
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -94,10 +108,12 @@ sub is_blacklisted {
   return $self->_scan_blacklisted($name);
 }
 
+
 sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
+
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
@@ -111,6 +127,7 @@ sub iterate {
     payload => { what_method => $what },
   );
 }
+
 
 # ebuilds = {/ebuilds }
 sub _iterate_ebuilds {
@@ -149,7 +166,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 SYNOPSIS
 
@@ -239,7 +256,7 @@ The full path to the package.
 
     isa => Dir, lazy, ro
 
-L<MooseX::Types::Path::Class/Dir>
+L<MooseX::Types::Path::Tiny/Dir>
 
 =head1 ATTRIBUTE ACCESSORS
 
@@ -344,7 +361,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

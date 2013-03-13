@@ -2,12 +2,11 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Ebuild;
-
 BEGIN {
   $Gentoo::Overlay::Ebuild::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Ebuild::VERSION = '1.0.2';
+  $Gentoo::Overlay::Ebuild::VERSION = '1.0.3';
 }
 
 # FILENAME: Ebuild.pm
@@ -17,10 +16,15 @@ BEGIN {
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( File Dir );
+use MooseX::Types::Path::Tiny qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
+
+
+
+
+
 
 has name => ( isa => Gentoo__Overlay_EbuildName, required, ro );
 has package => (
@@ -39,6 +43,8 @@ has path => (
   },
 );
 
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -50,6 +56,7 @@ class_has _scan_blacklist => (
   },
 );
 
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -60,6 +67,7 @@ sub exists {
   return 1;
 }
 
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -67,6 +75,7 @@ sub is_blacklisted {
   }
   return $self->_scan_blacklisted($name);
 }
+
 
 sub pretty_name {
   my $self     = shift;
@@ -90,7 +99,7 @@ Gentoo::Overlay::Ebuild - A Class for Ebuilds in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 SYNOPSIS
 
@@ -155,7 +164,7 @@ The full path to the ebuild.
 
     isa => File, lazy, ro
 
-L<MooseX::Types::Path::Class/File>
+L<MooseX::Types::Path::Tiny/File>
 
 =head1 ATTRIBUTE ACCESSORS
 
@@ -207,7 +216,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

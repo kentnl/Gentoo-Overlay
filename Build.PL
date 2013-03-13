@@ -10,20 +10,20 @@ my %module_build_args = (
     "File::Find" => 0,
     "File::Temp" => 0,
     "FindBin" => 0,
-    "Module::Build" => "0.3601",
+    "Module::Build" => "0.4003",
     "Test::Fatal" => 0,
-    "Test::More" => "0.96",
+    "Test::More" => "0.98",
     "Test::Output" => 0
   },
   "configure_requires" => {
-    "Module::Build" => "0.3601"
+    "Module::Build" => "0.4003"
   },
   "dist_abstract" => "Tools for working with Gentoo Overlays",
   "dist_author" => [
     "Kent Fredric <kentnl\@cpan.org>"
   ],
   "dist_name" => "Gentoo-Overlay",
-  "dist_version" => "1.0.2",
+  "dist_version" => "1.0.3",
   "license" => "perl",
   "module_name" => "Gentoo::Overlay",
   "recommends" => {},
@@ -37,7 +37,7 @@ my %module_build_args = (
     "MooseX::OneArgNew" => 0,
     "MooseX::Types" => 0,
     "MooseX::Types::Moose" => 0,
-    "MooseX::Types::Path::Class" => 0,
+    "MooseX::Types::Path::Tiny" => 0,
     "Readonly" => 0,
     "Role::HasMessage::Errf" => 0,
     "Role::Identifiable::HasIdent" => 0,

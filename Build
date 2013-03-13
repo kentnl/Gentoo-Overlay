@@ -1,4 +1,4 @@
-#! /usr/bin/perl5.16.0
+#! /home/kent/perl5/perlbrew/perls/perl-blead/bin/perl5.17.9
 
 use strict;
 use Cwd;
@@ -11,7 +11,7 @@ sub magic_number_matches {
   open FH, '_build/magicnum' or return 0;
   my $filenum = <FH>;
   close FH;
-  return $filenum == 978443;
+  return $filenum == 51470;
 }
 
 my $progname;
@@ -20,7 +20,7 @@ BEGIN {
   $^W = 1;  # Use warnings
   $progname = basename($0);
   $orig_dir = Cwd::cwd();
-  my $base_dir = '/home/kent/perl/Gentoo-Overlay/Gentoo-Overlay-1.0.2';
+  my $base_dir = '/home/kent/perl/Gentoo-Overlay/Gentoo-Overlay-1.0.3';
   if (!magic_number_matches()) {
     unless (chdir($base_dir)) {
       die ("Couldn't chdir($base_dir), aborting\n");
@@ -31,16 +31,14 @@ BEGIN {
   }
   unshift @INC,
     (
-     '/home/kent/.perl/lib/perl5/x86_64-linux-thread-multi',
-     '/home/kent/.perl/lib/perl5',
-     '/home/kent/.perl/lib/perl5/x86_64-linux'
+
     );
 }
 
 close(*DATA) unless eof(*DATA); # ensure no open handles to this script
 
 use Module::Build;
-Module::Build->VERSION(q{0.3601});
+Module::Build->VERSION(q{0.4003});
 
 # Some platforms have problems setting $^X in shebang contexts, fix it up here
 $^X = Module::Build->find_perl_interpreter;

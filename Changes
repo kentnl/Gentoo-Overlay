@@ -1,4 +1,40 @@
-Revision history for Gentoo-Overlay
+﻿Revision history for Gentoo-Overlay
+
+1.0.3 2013-03-13T06:58:04Z
+ [!Notable Changes]
+ - Move to Path::Tiny
+
+ [Dependencies::Changed / build requires]
+ - Module::Build 0.3601 → 0.4003
+
+ [Dependencies::Changed / configure requires]
+ - Module::Build 0.3601 → 0.4003
+
+ [Dependencies::Changed / develop suggests]
+ - Dist::Zilla::PluginBundle::Author::KENTNL v1.3.0 → v1.7.0
+
+ [Dependencies::Changed / test requires]
+ - Test::More 0.96 → 0.98
+
+ [Dependencies::New / develop requires]
+ - Pod::Coverage::TrustPod
+ - Test::CPAN::Meta
+ - Test::Pod
+ - Test::Pod::Coverage
+ - version
+
+ [Dependencies::New / runtime requires]
+ - MooseX::Types::Path::Tiny
+
+ [Dependencies::Removed / runtime requires]
+ - MooseX::Types::Path::Class
+
+ [Documentation]
+ - Update copyright year
+ - Add README.mkdn
+
+ [Meta]
+ - Bugtracker to github
 
 1.0.2 2012-06-21T11:34:49Z
  [Internals]

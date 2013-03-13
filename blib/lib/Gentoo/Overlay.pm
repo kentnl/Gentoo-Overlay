@@ -2,12 +2,11 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay;
-
 BEGIN {
   $Gentoo::Overlay::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::VERSION = '1.0.2';
+  $Gentoo::Overlay::VERSION = '1.0.3';
 }
 
 # ABSTRACT: Tools for working with Gentoo Overlays
@@ -16,13 +15,15 @@ use Moose;
 
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( File Dir );
+use MooseX::Types::Path::Tiny qw( File Dir );
 use MooseX::ClassAttribute;
 use namespace::autoclean;
 use Carp qw();
 use Gentoo::Overlay::Category;
 use Gentoo::Overlay::Types qw( :all );
 use Gentoo::Overlay::Exceptions qw( :all );
+
+
 
 has 'path' => (
   ro, coerce,
@@ -36,7 +37,9 @@ has 'path' => (
   },
 );
 
+
 has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
+
 
 sub _build_name {
   my ($self) = shift;
@@ -51,10 +54,13 @@ sub _build_name {
       }
     );
   }
-  return scalar $f->slurp( chomp => 1, iomode => '<:raw' );
+  return [ $f->lines_raw( { chomp => 1 } ) ]->[0];
+
 }
 
+
 has _profile_dir => ( isa => Dir, ro, lazy_build, );
+
 
 sub _build__profile_dir {
   my ($self) = shift;
@@ -72,6 +78,11 @@ sub _build__profile_dir {
   return $pd->absolute;
 }
 
+
+
+
+
+
 has _categories => (
   lazy_build,
   ro,
@@ -84,6 +95,7 @@ has _categories => (
     get_category   => get      =>,
   },
 );
+
 
 sub _build__categories {
   my ($self) = @_;
@@ -102,20 +114,22 @@ sub _build__categories {
   goto $self->can('_build___categories_file');
 }
 
+
 class_has _default_paths => (
   ro, lazy,
   isa => HashRef [CodeRef],
   default => sub {
     return {
-      'profiles'  => sub { shift->path->subdir('profiles') },
-      'repo_name' => sub { shift->_profile_dir->file('repo_name') },
-      'catfile'   => sub { shift->_profile_dir->file('categories') },
-      'category'  => sub { shift->path->subdir(shift) },
-      'package'   => sub { shift->default_path( 'category', shift )->subdir(shift) },
-      'ebuild'    => sub { shift->default_path( 'package', shift, shift )->file(shift) },
+      'profiles'  => sub { shift->path->child('profiles') },
+      'repo_name' => sub { shift->_profile_dir->child('repo_name') },
+      'catfile'   => sub { shift->_profile_dir->child('categories') },
+      'category'  => sub { shift->path->child(shift) },
+      'package'   => sub { shift->default_path( 'category', shift )->child(shift) },
+      'ebuild'    => sub { shift->default_path( 'package', shift, shift )->child(shift) },
     };
   },
 );
+
 
 sub default_path {
   my ( $self, $name, @args ) = @_;
@@ -129,10 +143,11 @@ sub default_path {
   return $self->_default_paths->{$name}->( $self, @args );
 }
 
+
 sub _build___categories_file {
   my ($self) = shift;
   my %out;
-  for my $cat ( $self->default_path('catfile')->slurp( chomp => 1, iomode => '<:raw' ) ) {
+  for my $cat ( $self->default_path('catfile')->lines_raw( { chomp => 1 } ) ) {
     my $category = Gentoo::Overlay::Category->new(
       name    => $cat,
       overlay => $self,
@@ -154,12 +169,13 @@ sub _build___categories_file {
   return \%out;
 }
 
+
 sub _build___categories_scan {
   my ($self) = shift;
   my %out;
-  my $dir = $self->path->absolute->open();
-  while ( defined( my $entry = $dir->read() ) ) {
-    my $cat = $entry;
+  my $it = $self->path->absolute->iterator();
+  while ( my $entry = $it->() ) {
+    my $cat = $entry->basename;
     next if Gentoo::Overlay::Category->is_blacklisted($cat);
 
     my $category = Gentoo::Overlay::Category->new(
@@ -172,6 +188,7 @@ sub _build___categories_scan {
   return \%out;
 
 }
+
 
 sub iterate {
   my ( $self, $what, $callback ) = @_;
@@ -190,6 +207,7 @@ sub iterate {
   );
 }
 
+
 # ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
   my ( $self, $what, $callback ) = @_;
@@ -207,6 +225,7 @@ sub _iterate_ebuilds {
   return;
 
 }
+
 
 # categories = { /categories }
 sub _iterate_categories {
@@ -230,6 +249,7 @@ sub _iterate_categories {
   }
   return;
 }
+
 
 # packages = { /categories/packages }
 sub _iterate_packages {
@@ -260,7 +280,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =head1 SYNOPSIS
 
@@ -374,7 +394,7 @@ Path to repository.
 
     isa => Dir, ro, required, coerce
 
-L<MooseX::Types::Path::Class/Dir>
+L<MooseX::Types::Path::Tiny/Dir>
 
 =head2 name
 
@@ -421,7 +441,7 @@ Path to the profile sub-directory.
 
     isa => Dir, ro, lazy_build
 
-L<MooseX::Types::Path::Class/Dir>
+L<MooseX::Types::Path::Tiny/Dir>
 
 L</_build__profile_dir>
 
@@ -540,7 +560,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

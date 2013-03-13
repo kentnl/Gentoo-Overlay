@@ -2,7 +2,7 @@ NAME
     Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 VERSION
-    version 1.0.2
+    version 1.0.3
 
 SYNOPSIS
       my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
@@ -109,7 +109,7 @@ ATTRIBUTES
 
         isa => Dir, ro, required, coerce
 
-    "Dir" in MooseX::Types::Path::Class
+    "Dir" in MooseX::Types::Path::Tiny
 
   name
     Repository name.
@@ -149,7 +149,7 @@ PRIVATE ATTRIBUTES
 
         isa => Dir, ro, lazy_build
 
-    "Dir" in MooseX::Types::Path::Class
+    "Dir" in MooseX::Types::Path::Tiny
 
     "_build__profile_dir"
 
@@ -255,7 +255,7 @@ AUTHOR
     Kent Fredric <kentnl@cpan.org>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+    This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

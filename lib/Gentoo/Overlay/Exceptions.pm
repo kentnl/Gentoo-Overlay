@@ -2,12 +2,11 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Exceptions;
-
 BEGIN {
   $Gentoo::Overlay::Exceptions::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Exceptions::VERSION = '1.0.2';
+  $Gentoo::Overlay::Exceptions::VERSION = '1.0.3';
 }
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
@@ -22,6 +21,7 @@ Readonly our $W_WARNING => 'warning';
 Readonly our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
+
 
 has 'payload' => (
   is       => 'ro',
@@ -93,7 +93,7 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 
 =head1 VERSION
 
-version 1.0.2
+version 1.0.3
 
 =for Pod::Coverage as_string exception warning
 
@@ -103,7 +103,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
