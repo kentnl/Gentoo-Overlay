@@ -33,7 +33,7 @@ Still limited functionality, more to come.
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( File Dir );
+use MooseX::Types::Path::Tiny qw( File Dir Path );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
@@ -64,14 +64,14 @@ The full path to the category
 
     isa => Dir, lazy, ro
 
-L<MooseX::Types::Path::Class/Dir>
+L<MooseX::Types::Path::Tiny/Dir>
 
 =cut
 
 has name => ( isa => Gentoo__Overlay_CategoryName, required, ro );
 has overlay => ( isa => Gentoo__Overlay_Overlay, required, ro, coerce );
 has path => ( lazy, ro,
-  isa     => Dir,
+  isa     => Path,
   default => sub {
     my ($self) = shift;
     return $self->overlay->default_path( category => $self->name );
@@ -154,12 +154,12 @@ sub _build__packages {
   my ($self) = shift;
   require Gentoo::Overlay::Package;
 
-  my $dir = $self->path->open();
+  my $it = $self->path->iterator();
   my %out;
-  while ( defined( my $entry = $dir->read() ) ) {
-    next if Gentoo::Overlay::Package->is_blacklisted($entry);
+  while ( defined( my $entry = $it->() ) ) {
+    next if Gentoo::Overlay::Package->is_blacklisted( $entry->basename );
     my $p = Gentoo::Overlay::Package->new(
-      name     => $entry,
+      name     => $entry->basename,
       category => $self,
     );
     next unless $p->exists;

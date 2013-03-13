@@ -8,7 +8,7 @@ package Gentoo::Overlay::Package;
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( :all );
+use MooseX::Types::Path::Tiny qw( :all );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all  );
 use namespace::autoclean;
@@ -71,14 +71,14 @@ The full path to the package.
 
     isa => Dir, lazy, ro
 
-L<MooseX::Types::Path::Class/Dir>
+L<MooseX::Types::Path::Tiny/Dir>
 
 =cut
 
 has name => ( isa => Gentoo__Overlay_PackageName, required, ro, );
 has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )], );
 has path => (
-  isa => Dir,
+  isa => Path,
   ro,
   lazy,
   default => sub {

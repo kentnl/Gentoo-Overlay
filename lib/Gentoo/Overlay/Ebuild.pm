@@ -10,7 +10,7 @@ package Gentoo::Overlay::Ebuild;
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Class qw( File Dir );
+use MooseX::Types::Path::Tiny qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
@@ -80,7 +80,7 @@ The full path to the ebuild.
 
     isa => File, lazy, ro
 
-L<MooseX::Types::Path::Class/File>
+L<MooseX::Types::Path::Tiny/File>
 
 =cut
 
