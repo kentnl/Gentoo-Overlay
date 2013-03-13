@@ -138,3 +138,4 @@ is( $stderr, '', 'No output was made to stderr' );
 is_deeply( [ sort keys %cats ], [ sort qw( fake-category fake-category-2) ], 'Good discovered categories' );
 
 done_testing;
+
