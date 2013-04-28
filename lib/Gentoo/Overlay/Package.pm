@@ -200,15 +200,15 @@ L</_packages>
 sub _build__ebuilds {
   my ($self) = shift;
   require Gentoo::Overlay::Ebuild;
-  my $dir = $self->path->open();
+  my $it = $self->path->iterator();
   my %out;
-  while ( defined( my $entry = $dir->read() ) ) {
+  while ( defined( my $entry = $it->() ) ) {
     next if Gentoo::Overlay::Ebuild->is_blacklisted($entry);
     next if -d $entry;
     ## no critic ( RegularExpressions )
     next if $entry !~ /\.ebuild$/;
     my $e = Gentoo::Overlay::Ebuild->new(
-      name    => $entry,
+      name    => $entry->basename,
       package => $self,
     );
     next unless $e->exists;
