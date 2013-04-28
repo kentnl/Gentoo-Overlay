@@ -6,7 +6,7 @@ BEGIN {
   $Gentoo::Overlay::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::VERSION = '1.0.3';
+  $Gentoo::Overlay::VERSION = '1.0.4';
 }
 
 # ABSTRACT: Tools for working with Gentoo Overlays
@@ -280,7 +280,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 SYNOPSIS
 

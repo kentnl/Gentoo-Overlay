@@ -7,23 +7,17 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
-    "File::Find" => 0,
-    "File::Temp" => 0,
-    "FindBin" => 0,
-    "Module::Build" => "0.4003",
-    "Test::Fatal" => 0,
-    "Test::More" => "0.98",
-    "Test::Output" => 0
+    "Module::Build" => "0.4004"
   },
   "configure_requires" => {
-    "Module::Build" => "0.4003"
+    "Module::Build" => "0.4004"
   },
   "dist_abstract" => "Tools for working with Gentoo Overlays",
   "dist_author" => [
     "Kent Fredric <kentnl\@cpan.org>"
   ],
   "dist_name" => "Gentoo-Overlay",
-  "dist_version" => "1.0.3",
+  "dist_version" => "1.0.4",
   "license" => "perl",
   "module_name" => "Gentoo::Overlay",
   "recommends" => {},
@@ -51,9 +45,30 @@ my %module_build_args = (
     "strict" => 0,
     "warnings" => 0
   },
-  "script_files" => []
+  "script_files" => [],
+  "test_requires" => {
+    "File::Find" => 0,
+    "File::Temp" => 0,
+    "FindBin" => 0,
+    "Test::Fatal" => 0,
+    "Test::More" => "0.98",
+    "Test::Output" => 0
+  }
 );
 
+
+unless ( eval { Module::Build->VERSION(0.4004) } ) {
+  my $tr = delete $module_build_args{test_requires};
+  my $br = $module_build_args{build_requires};
+  for my $mod ( keys %$tr ) {
+    if ( exists $br->{$mod} ) {
+      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
+    }
+    else {
+      $br->{$mod} = $tr->{$mod};
+    }
+  }
+}
 
 my $build = Module::Build->new(%module_build_args);
 
