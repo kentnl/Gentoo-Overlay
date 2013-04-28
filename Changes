@@ -180,7 +180,7 @@
  - Documentation on steroids.
 
  [Dependencies::Added / runtime requires]
- - MooseX::Type
+ - MooseX::Types
 
 0.01000015 2010-11-21T03:17:46Z
  - First version.
