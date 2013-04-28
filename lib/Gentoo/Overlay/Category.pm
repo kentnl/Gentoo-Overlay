@@ -6,7 +6,7 @@ BEGIN {
   $Gentoo::Overlay::Category::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Category::VERSION = '1.0.3';
+  $Gentoo::Overlay::Category::VERSION = '1.0.4';
 }
 
 # ABSTRACT: A singular category in a repository;
@@ -180,7 +180,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 SYNOPSIS
 

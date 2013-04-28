@@ -50,12 +50,12 @@ sub pmver {
 
 eval { $v .= pmver('Carp','any version') };
 eval { $v .= pmver('Data::Dump','any version') };
-eval { $v .= pmver('Dist::Zilla::PluginBundle::Author::KENTNL','v1.7.0') };
+eval { $v .= pmver('Dist::Zilla::PluginBundle::Author::KENTNL','v1.7.3') };
 eval { $v .= pmver('Dist::Zilla::PluginBundle::Author::KENTNL::Lite','v1.3.0') };
 eval { $v .= pmver('File::Find','any version') };
 eval { $v .= pmver('File::Temp','any version') };
 eval { $v .= pmver('FindBin','any version') };
-eval { $v .= pmver('Module::Build','0.4003') };
+eval { $v .= pmver('Module::Build','0.4004') };
 eval { $v .= pmver('Moose','any version') };
 eval { $v .= pmver('MooseX::ClassAttribute','any version') };
 eval { $v .= pmver('MooseX::Has::Sugar','any version') };
@@ -70,6 +70,7 @@ eval { $v .= pmver('Role::Identifiable::HasIdent','any version') };
 eval { $v .= pmver('Role::Identifiable::HasTags','any version') };
 eval { $v .= pmver('StackTrace::Auto','any version') };
 eval { $v .= pmver('Sub::Exporter','any version') };
+eval { $v .= pmver('Test::CPAN::Changes','0.19') };
 eval { $v .= pmver('Test::CPAN::Meta','any version') };
 eval { $v .= pmver('Test::Fatal','any version') };
 eval { $v .= pmver('Test::More','0.98') };

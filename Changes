@@ -1,8 +1,36 @@
 ﻿Revision history for Gentoo-Overlay
 
+1.0.4 2013-04-28T20:24:18Z
+ - Bugfix release to iron out some residual Path::Tiny quirks
+
+ [Dependencies::Added / develop requires]
+ - Test::CPAN::Changes 0.19
+
+ [Dependencies::Changed / build requires]
+ - Module::Build 0.4003 → 0.4004
+
+ [Dependencies::Changed / configure requires]
+ - Module::Build 0.4003 → 0.4004
+
+ [Dependencies::Changed / develop suggests]
+ - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.0 → v1.7.3
+
+ [Packaging]
+ - use test_requires in Module::Build
+
 1.0.3 2013-03-13T06:58:04Z
  [!Notable Changes]
  - Move to Path::Tiny
+
+ [Dependencies::Added / develop requires]
+ - Pod::Coverage::TrustPod
+ - Test::CPAN::Meta
+ - Test::Pod 1.41
+ - Test::Pod::Coverage 1.08
+ - version 0.9901
+
+ [Dependencies::Added / runtime requires]
+ - MooseX::Types::Path::Tiny
 
  [Dependencies::Changed / build requires]
  - Module::Build 0.3601 → 0.4003
@@ -15,16 +43,6 @@
 
  [Dependencies::Changed / test requires]
  - Test::More 0.96 → 0.98
-
- [Dependencies::New / develop requires]
- - Pod::Coverage::TrustPod
- - Test::CPAN::Meta
- - Test::Pod
- - Test::Pod::Coverage
- - version
-
- [Dependencies::New / runtime requires]
- - MooseX::Types::Path::Tiny
 
  [Dependencies::Removed / runtime requires]
  - MooseX::Types::Path::Class
@@ -45,19 +63,19 @@
 1.0.1 2012-03-17T05:14:32Z
  - Minor Maintenance release
 
- [Dependencies::Changed]
- - develop recommends : Dist::Zilla::PluginBundle::Author::KENTNL::Lite
-   0.01009803 -> v1.3.0
- - develop suggests : Dist::Zilla::PluginBundle::Author::KENTNL
-   v1.0.0 -> v1.3.0
+ [Dependencies::Added / runtime requires]
+ - perl 5.006
+ - strict
+ - warnings
 
- [Dependencies::New]
- - runtime requires : strict
- - runtime requires : warnings
- - runtime requires : perl
+ [Dependencies::Changed / develop recommends]
+ - Dist::Zilla::PluginBundle::Author::KENTNL::Lite 0.01009803 → v1.3.0
 
- [Dependencies::Removed]
- - test requires : English
+ [Dependencies::Changed / develop suggests]
+ - Dist::Zilla::PluginBundle::Author::KENTNL v1.0.0 → v1.3.0
+
+ [Dependencies::Removed / test requires]
+ - English
 
  [Internals]
  - Move Version Declaration out of BEGIN
@@ -107,6 +125,42 @@
    local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
  - Added an ( currently undocumented ) iteration interface.
 
+ [Dependencies::Added / develop recommends]
+ - Dist::Zilla::PluginBundle::Author::KENTNL::Lite 0.01009803
+
+ [Dependencies::Added / develop requires]
+ - Dist::Zilla::PluginBundle::Author::KENTNL::Lite
+
+ [Dependencies::Added / develop suggests]
+ - Dist::Zilla::PluginBundle::Author::KENTNL v1.0.0
+
+ [Dependencies::Added / runtime requires]
+ - Data::Dump
+ - MooseX::OneArgNew
+ - Readonly
+ - Role::HasMessage::Errf
+ - Role::Identifiable::HasIdent
+ - Role::Identifiable::HasTags
+ - StackTrace::Auto
+ - Sub::Exporter
+ - Throwable
+ - overload
+
+ [Dependencies::Changed / test requires]
+ - Test::More 0.88 → 0.96
+
+ [Dependencies::Removed / develop recommends]
+ - Dist::Zilla::PluginBundle::KENTNL::Lite 0.01009803
+
+ [Dependencies::Removed / develop requires]
+ - Dist::Zilla::PluginBundle::KENTNL::Lite
+
+ [Dependencies::Removed / develop suggests]
+ - Dist::Zilla::PluginBundle::KENTNL 0.01017119
+
+ [Dependencies::Removed / runtime requires]
+ - IO::Dir
+
 0.02004319 2011-01-04T12:25:26Z
  - Added a Package class.
  - Removed lots of the builders and docs in favour of simple defaults.
@@ -122,6 +176,9 @@
  - Refactored to create a Category Package
  - Added a type Package.
  - Documentation on steroids.
+
+ [Dependencies::Added / runtime requires]
+ - MooseX::Type
 
 0.01000015 2010-11-21T03:17:46Z
  - First version.

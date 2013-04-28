@@ -6,7 +6,7 @@ BEGIN {
   $Gentoo::Overlay::Exceptions::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Exceptions::VERSION = '1.0.3';
+  $Gentoo::Overlay::Exceptions::VERSION = '1.0.4';
 }
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
@@ -93,7 +93,7 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =for Pod::Coverage as_string exception warning
 

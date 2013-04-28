@@ -6,7 +6,7 @@ BEGIN {
   $Gentoo::Overlay::Types::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Types::VERSION = '1.0.3';
+  $Gentoo::Overlay::Types::VERSION = '1.0.4';
 }
 
 # ABSTRACT: Gentoo Overlay types.
@@ -86,7 +86,7 @@ Gentoo::Overlay::Types - Gentoo Overlay types.
 
 =head1 VERSION
 
-version 1.0.3
+version 1.0.4
 
 =head1 TYPES
 
