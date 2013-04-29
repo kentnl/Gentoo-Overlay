@@ -1,6 +1,8 @@
 ﻿Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ - Bugfix: package_name and ebuild_name were paths instead of basenames,
+   but no tests revealed this. Now have tests, and bug is fixed.
 
 1.0.4 2013-04-28T20:24:18Z
  - Bugfix release to iron out some residual Path::Tiny quirks
