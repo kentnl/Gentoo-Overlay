@@ -17,7 +17,7 @@ my %module_build_args = (
     "Kent Fredric <kentnl\@cpan.org>"
   ],
   "dist_name" => "Gentoo-Overlay",
-  "dist_version" => "1.0.4",
+  "dist_version" => "1.0.5",
   "license" => "perl",
   "module_name" => "Gentoo::Overlay",
   "recommends" => {},

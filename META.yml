@@ -26,22 +26,22 @@ no_index:
 provides:
   Gentoo::Overlay:
     file: lib/Gentoo/Overlay.pm
-    version: v1.0.4
+    version: v1.0.5
   Gentoo::Overlay::Category:
     file: lib/Gentoo/Overlay/Category.pm
-    version: v1.0.4
+    version: v1.0.5
   Gentoo::Overlay::Ebuild:
     file: lib/Gentoo/Overlay/Ebuild.pm
-    version: v1.0.4
+    version: v1.0.5
   Gentoo::Overlay::Exceptions:
     file: lib/Gentoo/Overlay/Exceptions.pm
-    version: v1.0.4
+    version: v1.0.5
   Gentoo::Overlay::Package:
     file: lib/Gentoo/Overlay/Package.pm
-    version: v1.0.4
+    version: v1.0.5
   Gentoo::Overlay::Types:
     file: lib/Gentoo/Overlay/Types.pm
-    version: v1.0.4
+    version: v1.0.5
 requires:
   Carp: 0
   Data::Dump: 0
@@ -68,7 +68,7 @@ resources:
   bugtracker: https://github.com/kentfredric/Gentoo-Overlay/issues
   homepage: https://github.com/kentfredric/Gentoo-Overlay
   repository: https://github.com/kentfredric/Gentoo-Overlay.git
-version: 1.0.4
+version: 1.0.5
 x_BuiltWith:
   modules:
     Carp: 1.28

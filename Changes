@@ -1,5 +1,7 @@
 ﻿Revision history for Gentoo-Overlay
 
+1.0.5 2013-04-29T00:29:12Z
+
 1.0.4 2013-04-28T20:24:18Z
  - Bugfix release to iron out some residual Path::Tiny quirks
 
@@ -178,7 +180,7 @@
  - Documentation on steroids.
 
  [Dependencies::Added / runtime requires]
- - MooseX::Type
+ - MooseX::Types
 
 0.01000015 2010-11-21T03:17:46Z
  - First version.
