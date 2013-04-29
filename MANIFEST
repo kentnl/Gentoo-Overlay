@@ -22,6 +22,12 @@ corpus/overlay_4/fake-category/keepdir
 corpus/overlay_4/metadata/keepdir
 corpus/overlay_4/profiles/categories
 corpus/overlay_4/profiles/repo_name
+corpus/overlay_5/fake-category-2/fake-package/fake-package-1.0.0.ebuild
+corpus/overlay_5/fake-category-2/keepdir
+corpus/overlay_5/fake-category/keepdir
+corpus/overlay_5/metadata/keepdir
+corpus/overlay_5/profiles/categories
+corpus/overlay_5/profiles/repo_name
 dist.ini
 examples/portage.pl
 lib/Gentoo/Overlay.pm
@@ -34,6 +40,7 @@ perlcritic.rc
 t/00-compile.t
 t/000-report-versions-tiny.t
 t/basic.t
+t/ebuild.t
 t/iterate.t
 weaver.ini
 xt/author/critic.t

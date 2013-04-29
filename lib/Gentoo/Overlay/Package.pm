@@ -6,7 +6,7 @@ BEGIN {
   $Gentoo::Overlay::Package::AUTHORITY = 'cpan:KENTNL';
 }
 {
-  $Gentoo::Overlay::Package::VERSION = '1.0.4';
+  $Gentoo::Overlay::Package::VERSION = '1.0.5';
 }
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
@@ -74,16 +74,17 @@ sub _build__ebuilds {
   my $it = $self->path->iterator();
   my %out;
   while ( defined( my $entry = $it->() ) ) {
-    next if Gentoo::Overlay::Ebuild->is_blacklisted($entry);
+    my $ebuild = $entry->basename;
+    next if Gentoo::Overlay::Ebuild->is_blacklisted($ebuild);
     next if -d $entry;
     ## no critic ( RegularExpressions )
     next if $entry !~ /\.ebuild$/;
     my $e = Gentoo::Overlay::Ebuild->new(
-      name    => $entry->basename,
+      name    => $ebuild,
       package => $self,
     );
     next unless $e->exists;
-    $out{$entry} = $e;
+    $out{$ebuild} = $e;
   }
   return \%out;
 }
@@ -166,7 +167,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.4
+version 1.0.5
 
 =head1 SYNOPSIS
 
