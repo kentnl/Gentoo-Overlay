@@ -1,6 +1,6 @@
 ﻿Revision history for Gentoo-Overlay
 
-1.0.5 2013-04-29T00:31:12Z
+1.0.5 2013-04-29T00:31:41Z
  - Bugfix: package_name and ebuild_name were paths instead of basenames,
    but no tests revealed this. Now have tests, and bug is fixed.
 
