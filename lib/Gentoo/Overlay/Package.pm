@@ -203,16 +203,17 @@ sub _build__ebuilds {
   my $it = $self->path->iterator();
   my %out;
   while ( defined( my $entry = $it->() ) ) {
-    next if Gentoo::Overlay::Ebuild->is_blacklisted($entry);
+    my $ebuild = $entry->basename;
+    next if Gentoo::Overlay::Ebuild->is_blacklisted($ebuild);
     next if -d $entry;
     ## no critic ( RegularExpressions )
     next if $entry !~ /\.ebuild$/;
     my $e = Gentoo::Overlay::Ebuild->new(
-      name    => $entry->basename,
+      name    => $ebuild,
       package => $self,
     );
     next unless $e->exists;
-    $out{$entry} = $e;
+    $out{$ebuild} = $e;
   }
   return \%out;
 }

@@ -157,13 +157,14 @@ sub _build__packages {
   my $it = $self->path->iterator();
   my %out;
   while ( defined( my $entry = $it->() ) ) {
-    next if Gentoo::Overlay::Package->is_blacklisted( $entry->basename );
+    my $package = $entry->basename;
+    next if Gentoo::Overlay::Package->is_blacklisted($package);
     my $p = Gentoo::Overlay::Package->new(
-      name     => $entry->basename,
+      name     => $package,
       category => $self,
     );
     next unless $p->exists;
-    $out{$entry} = $p;
+    $out{$package} = $p;
   }
   return \%out;
 }
