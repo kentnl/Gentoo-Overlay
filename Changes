@@ -1,6 +1,8 @@
 ﻿Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+1.0.5 2013-04-29T00:32:53Z
  - Bugfix: package_name and ebuild_name were paths instead of basenames,
    but no tests revealed this. Now have tests, and bug is fixed.
 
