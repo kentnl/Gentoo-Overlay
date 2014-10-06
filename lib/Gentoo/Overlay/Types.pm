@@ -10,6 +10,7 @@ our $VERSION = '2.000000';
 
 # AUTHORITY
 
+use MooseX::Types qw( class_type coerce from via as where subtype );
 use MooseX::Types -declare => [
   qw(
     Gentoo__Overlay_Overlay
@@ -22,7 +23,7 @@ use MooseX::Types -declare => [
     Gentoo__Overlay_RepositoryName
     )
 ];
-use MooseX::Types::Moose qw( :all );
+use MooseX::Types::Moose qw( Str  );
 
 =type Gentoo__Overlay_Overlay
 
