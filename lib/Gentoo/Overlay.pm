@@ -451,7 +451,7 @@ sub _build___categories_scan {
 
 
 
-sub iterate {
+sub iterate {    ## no critic (Variables::ProhibitUnusedVarsStricter)
   my ( $self, $what, $callback ) = @_;
   my %method_map = (
     categories => _iterate_categories =>,
@@ -480,7 +480,7 @@ sub iterate {
 
 # ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
 
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
@@ -508,7 +508,7 @@ sub _iterate_ebuilds {
 
 # categories = { /categories }
 sub _iterate_categories {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %categories     = $self->categories();
   my $num_categories = scalar keys %categories;
   my $last_category  = $num_categories - 1;
@@ -541,7 +541,7 @@ sub _iterate_categories {
 
 # packages = { /categories/packages }
 sub _iterate_packages {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
 
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
