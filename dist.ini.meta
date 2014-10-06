@@ -13,6 +13,8 @@ git_versions      = 1
 twitter_hash_tags = #perl #cpan
 normal_form = numify
 mantissa    = 6
+toolkit     = eumm
+toolkit_hardness = soft
 
 [MetaNoIndex]
 directory = corpus
