@@ -6,12 +6,11 @@ build_requires:
   ExtUtils::MakeMaker: '0'
   File::Spec: '0'
   FindBin: '0'
-  Module::Build: '0.4210'
   Test::Fatal: '0'
-  Test::More: '1.001006'
+  Test::More: '0.96'
   Test::Output: '0'
 configure_requires:
-  Module::Build: '0.4210'
+  ExtUtils::MakeMaker: '0'
 dynamic_config: '0'
 generated_by: 'Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142690'
 license: perl
@@ -91,6 +90,7 @@ x_BuiltWith:
     Dist::Zilla::Plugin::Git::Tag: '2.024'
     Dist::Zilla::Plugin::GithubMeta: '0.46'
     Dist::Zilla::Plugin::License: '5.020'
+    Dist::Zilla::Plugin::MakeMaker: '5.020'
     Dist::Zilla::Plugin::Manifest: '5.020'
     Dist::Zilla::Plugin::ManifestSkip: '5.020'
     Dist::Zilla::Plugin::MetaConfig: '5.020'
@@ -101,14 +101,12 @@ x_BuiltWith:
     Dist::Zilla::Plugin::MetaTests: '5.020'
     Dist::Zilla::Plugin::MetaYAML: '5.020'
     Dist::Zilla::Plugin::MinimumPerl: '1.003'
-    Dist::Zilla::Plugin::ModuleBuild: '5.020'
     Dist::Zilla::Plugin::PkgVersion: '5.020'
     Dist::Zilla::Plugin::PodCoverageTests: '5.020'
     Dist::Zilla::Plugin::PodSyntaxTests: '5.020'
     Dist::Zilla::Plugin::PodWeaver: '4.006'
     Dist::Zilla::Plugin::Prereqs: '5.020'
     Dist::Zilla::Plugin::Prereqs::AuthorDeps: '0.003'
-    Dist::Zilla::Plugin::Prereqs::MatchInstalled: '1.001002'
     Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled: '0.003001'
     Dist::Zilla::Plugin::ReadmeAnyFromPod: '0.142470'
     Dist::Zilla::Plugin::ReadmeFromPod: '0.21'
@@ -126,7 +124,6 @@ x_BuiltWith:
     ExtUtils::MakeMaker: '6.98'
     File::Spec: '3.49'
     FindBin: '1.51'
-    Module::Build: '0.4210'
     Moose: '2.1213'
     MooseX::ClassAttribute: '0.27'
     MooseX::Has::Sugar: '1.000004'
@@ -451,11 +448,11 @@ x_Dist_Zilla:
       name: '@Author::KENTNL/Authority'
       version: '1.006'
     -
-      class: Dist::Zilla::Plugin::ModuleBuild
+      class: Dist::Zilla::Plugin::MakeMaker
       config:
         Dist::Zilla::Role::TestRunner:
           default_jobs: '10'
-      name: '@Author::KENTNL/ModuleBuild'
+      name: '@Author::KENTNL/MakeMaker'
       version: '5.020'
     -
       class: Dist::Zilla::Plugin::Author::KENTNL::RecommendFixes
@@ -593,40 +590,28 @@ x_Dist_Zilla:
       name: '@Author::KENTNL/Twitter'
       version: '0.026'
     -
-      class: Dist::Zilla::Plugin::Prereqs::MatchInstalled
+      class: Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
       config:
-        Dist::Zilla::Plugin::Prereqs::MatchInstalled:
-          applyto:
-            - build.requires
-            - build.recommends
-            - build.suggests
-            - test.requires
-            - test.recommends
-            - test.suggests
-            - runtime.requires
-            - runtime.recommends
-            - runtime.suggests
-            - configure.requires
-            - configure.recommends
-            - configure.suggests
-            - develop.requires
-            - develop.recommends
-            - develop.suggests
+        Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled:
+          applyto_map:
+            - 'build.requires = build.recommends'
+            - 'test.requires = test.recommends'
+            - 'runtime.requires = runtime.recommends'
+            - 'configure.requires = configure.recommends'
+            - 'develop.requires = develop.recommends'
           applyto_phase:
             - build
             - test
             - runtime
             - configure
             - develop
-          applyto_relation:
-            - requires
-            - recommends
-            - suggests
           modules:
-            - Module::Build
+            - ExtUtils::MakeMaker
             - Test::More
-      name: '@Author::KENTNL/Prereqs::MatchInstalled'
-      version: '1.001002'
+          source_relation: requires
+          target_relation: recommends
+      name: '@Author::KENTNL/Prereqs::Recommend::MatchInstalled'
+      version: '0.003001'
     -
       class: Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
       config:
