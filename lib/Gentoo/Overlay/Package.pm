@@ -300,7 +300,7 @@ The iterate method provides a handy way to do walking across the whole tree stop
 =cut
 
 sub iterate {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
   my %method_map = ( ebuilds => _iterate_ebuilds =>, );
   if ( exists $method_map{$what} ) {
     goto $self->can( $method_map{$what} );
@@ -324,7 +324,7 @@ Handles dispatch call for
 
 # ebuilds = {/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %ebuilds     = $self->ebuilds();
   my $num_ebuilds = scalar keys %ebuilds;
   my $last_ebuild = $num_ebuilds - 1;

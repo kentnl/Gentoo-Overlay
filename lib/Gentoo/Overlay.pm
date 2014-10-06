@@ -452,7 +452,8 @@ The iterate method provides a handy way to do walking across the whole tree stop
 =cut
 
 sub iterate {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
+
   my %method_map = (
     categories => _iterate_categories =>,
     packages   => _iterate_packages   =>,
@@ -480,7 +481,7 @@ Handles dispatch call for
 
 # ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
 
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
@@ -508,7 +509,7 @@ Handles dispatch call for
 
 # categories = { /categories }
 sub _iterate_categories {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %categories     = $self->categories();
   my $num_categories = scalar keys %categories;
   my $last_category  = $num_categories - 1;
@@ -541,7 +542,7 @@ Handles dispatch call for
 
 # packages = { /categories/packages }
 sub _iterate_packages {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
 
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
