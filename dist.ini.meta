@@ -10,7 +10,7 @@ copyright_holder = Kent Fredric <kentnl@cpan.org>
 [@Author::KENTNL]
 :version = 1.0.9
 bumpversions = 1
-twitter_hash_tags = #perl #cpan
+twitter_extra_hash_tags = #gentoo
 normal_form = numify
 mantissa    = 6
 toolkit     = eumm
