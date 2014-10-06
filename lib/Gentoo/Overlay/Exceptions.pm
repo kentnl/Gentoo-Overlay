@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Exceptions;
-$Gentoo::Overlay::Exceptions::VERSION = '1.0.6';
+$Gentoo::Overlay::Exceptions::VERSION = '1.000006';
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 #
 use Moose;
@@ -94,7 +94,7 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 
 =head1 VERSION
 
-version 1.0.6
+version 1.000006
 
 =for Pod::Coverage as_string exception warning
 

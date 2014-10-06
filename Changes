@@ -1,11 +1,11 @@
 ﻿Revision history for Gentoo-Overlay
 
-1.0.6 2014-10-06T14:59:21Z 51cea31
+1.000006 2014-10-06T15:00:06Z 3c4d984
  [Dependencies::Stats]
  - Dependencies changed since 1.0.5, see misc/*.deps* for details
  - build: ↑1
  - configure: ↑1
- - develop: +49 -2 (recommends: -1, suggests: +1 -1)
+ - develop: +48 -2 (recommends: -1, suggests: +1 ↑1)
  - test: +2 ↑1 -2 (recommends: +1)
 
  [Metadata]

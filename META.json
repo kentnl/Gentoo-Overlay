@@ -133,27 +133,27 @@
    "provides" : {
       "Gentoo::Overlay" : {
          "file" : "lib/Gentoo/Overlay.pm",
-         "version" : "v1.0.6"
+         "version" : "1.000006"
       },
       "Gentoo::Overlay::Category" : {
          "file" : "lib/Gentoo/Overlay/Category.pm",
-         "version" : "v1.0.6"
+         "version" : "1.000006"
       },
       "Gentoo::Overlay::Ebuild" : {
          "file" : "lib/Gentoo/Overlay/Ebuild.pm",
-         "version" : "v1.0.6"
+         "version" : "1.000006"
       },
       "Gentoo::Overlay::Exceptions" : {
          "file" : "lib/Gentoo/Overlay/Exceptions.pm",
-         "version" : "v1.0.6"
+         "version" : "1.000006"
       },
       "Gentoo::Overlay::Package" : {
          "file" : "lib/Gentoo/Overlay/Package.pm",
-         "version" : "v1.0.6"
+         "version" : "1.000006"
       },
       "Gentoo::Overlay::Types" : {
          "file" : "lib/Gentoo/Overlay/Types.pm",
-         "version" : "v1.0.6"
+         "version" : "1.000006"
       }
    },
    "release_status" : "stable",
@@ -168,7 +168,7 @@
          "web" : "https://github.com/kentnl/Gentoo-Overlay"
       }
    },
-   "version" : "1.0.6",
+   "version" : "1.000006",
    "x_BuiltWith" : {
       "modules" : {
          "CPAN::Meta" : "2.142690",
@@ -292,7 +292,7 @@
                },
                "Dist::Zilla::Role::Version::Sanitize" : {
                   "mantissa" : "6",
-                  "normal_form" : "normal_3"
+                  "normal_form" : "numify"
                }
             },
             "name" : "@Author::KENTNL/Git::NextVersion::Sanitized",
@@ -736,7 +736,7 @@
                "Dist::Zilla::Plugin::Git::Tag" : {
                   "branch" : null,
                   "signed" : 0,
-                  "tag" : "1.0.6-source",
+                  "tag" : "1.000006-source",
                   "tag_format" : "%v-source",
                   "tag_message" : "v%v",
                   "time_zone" : "local"
@@ -802,7 +802,7 @@
                "Dist::Zilla::Plugin::Git::Tag" : {
                   "branch" : "releases",
                   "signed" : 0,
-                  "tag" : "1.0.6",
+                  "tag" : "1.000006",
                   "tag_format" : "%v",
                   "tag_message" : "v%v",
                   "time_zone" : "local"

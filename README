@@ -2,7 +2,7 @@ NAME
     Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 VERSION
-    version 1.0.6
+    version 1.000006
 
 SYNOPSIS
       my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );

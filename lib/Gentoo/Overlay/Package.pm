@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Package;
-$Gentoo::Overlay::Package::VERSION = '1.0.6';
+$Gentoo::Overlay::Package::VERSION = '1.000006';
 # ABSTRACT: Class for Package's in Gentoo Overlays
 #
 use Moose;
@@ -352,7 +352,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.6
+version 1.000006
 
 =head1 SYNOPSIS
 

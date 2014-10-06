@@ -49,11 +49,10 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Dist::Zilla::Plugin::TestRelease
  - Dist::Zilla::Plugin::Twitter
  - Dist::Zilla::Plugin::UploadToCPAN
- - Dist::Zilla::PluginBundle::Author::KENTNL 2.021000
  - Test::Kwalitee 1.21
 
  [Added / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL::Lite v1.3.0
+ - Dist::Zilla::App::Command::bakeini 0.001002
 
  [Added / test recommends]
  - CPAN::Meta 2.120900
@@ -68,6 +67,9 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  [Changed / configure requires]
  - Module::Build 0.4004 → 0.4210
 
+ [Changed / develop suggests]
+ - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.3 → 2.021000
+
  [Changed / test requires]
  - Test::More 0.98 → 1.001006
 
@@ -77,9 +79,6 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  [Removed / develop requires]
  - Dist::Zilla::PluginBundle::Author::KENTNL::Lite
  - version 0.9901
-
- [Removed / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.3
 
  [Removed / test requires]
  - File::Find

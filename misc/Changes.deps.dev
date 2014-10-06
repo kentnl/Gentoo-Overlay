@@ -49,11 +49,13 @@ This file contains changes to DEVELOPMENT dependencies only ( both REQUIRED and 
  - Dist::Zilla::Plugin::TestRelease
  - Dist::Zilla::Plugin::Twitter
  - Dist::Zilla::Plugin::UploadToCPAN
- - Dist::Zilla::PluginBundle::Author::KENTNL 2.021000
  - Test::Kwalitee 1.21
 
  [Added / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL::Lite v1.3.0
+ - Dist::Zilla::App::Command::bakeini 0.001002
+
+ [Changed / develop suggests]
+ - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.3 → 2.021000
 
  [Removed / develop recommends]
  - Dist::Zilla::PluginBundle::Author::KENTNL::Lite v1.3.0
@@ -61,9 +63,6 @@ This file contains changes to DEVELOPMENT dependencies only ( both REQUIRED and 
  [Removed / develop requires]
  - Dist::Zilla::PluginBundle::Author::KENTNL::Lite
  - version 0.9901
-
- [Removed / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.3
 
 1.0.5 2013-04-29T00:32:53Z
 
