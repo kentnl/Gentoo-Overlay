@@ -41,10 +41,12 @@ lib/Gentoo/Overlay/Ebuild.pm
 lib/Gentoo/Overlay/Exceptions.pm
 lib/Gentoo/Overlay/Package.pm
 lib/Gentoo/Overlay/Types.pm
+maint/perlcritic.rc.gen.pl
 misc/Changes.deps
 misc/Changes.deps.all
 misc/Changes.deps.dev
 misc/Changes.deps.opt
+misc/perlcritic.deps
 perlcritic.rc
 t/00-compile/lib_Gentoo_Overlay_Category_pm.t
 t/00-compile/lib_Gentoo_Overlay_Ebuild_pm.t
