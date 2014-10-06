@@ -15,6 +15,7 @@ normal_form = numify
 mantissa    = 6
 toolkit     = eumm
 toolkit_hardness = soft
+copyfiles        = LICENSE
 
 [MetaNoIndex]
 directory = corpus
