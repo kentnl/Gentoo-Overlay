@@ -6,7 +6,9 @@ package Gentoo::Overlay::Exceptions;
 our $VERSION = '2.000000';
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
-#
+
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
 use Moose;
 use MooseX::Types::Moose qw( :all );
 use Sub::Exporter ();

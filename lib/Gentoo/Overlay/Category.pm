@@ -7,6 +7,8 @@ our $VERSION = '2.000000';
 
 # ABSTRACT: A singular category in a repository;
 
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
 
 
 

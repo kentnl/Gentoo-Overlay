@@ -6,7 +6,9 @@ package Gentoo::Overlay::Package;
 our $VERSION = '2.000000';
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
-#
+
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw( :all );
