@@ -4,7 +4,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 # VERSION
 
-version 1.0.5
+version 1.0.6
 
 # SYNOPSIS
 
@@ -36,7 +36,6 @@ Useful function to easily wrap the class-wide method with a per-object sugar.
     ::Overlay->_default_paths->{'profiles'}->($overlay);
     ->
     $overlay->path->subdir('profiles')
-
 
 
     $overlay->default_path('category','foo');
@@ -72,6 +71,7 @@ The iterate method provides a handy way to do walking across the whole tree stop
             # $c->{last_category}  # Index ID of the last category.
             # $c->{category_num}   # Index ID of the current category.
         } );
+
 - `$what = 'packages'`
 
         $overlay->iterate( packages => sub {
@@ -86,6 +86,7 @@ The iterate method provides a handy way to do walking across the whole tree stop
             # See ::Category for the rest of the fields provided by the package Iterator.
             # Very similar though.
         } );
+
 - `$what = 'ebuilds'`
 
         $overlay->iterate( ebuilds => sub {
@@ -113,7 +114,7 @@ Path to repository.
 
     isa => Dir, ro, required, coerce
 
-["Dir" in MooseX::Types::Path::Tiny](http://search.cpan.org/perldoc?MooseX::Types::Path::Tiny#Dir)
+["Dir" in MooseX::Types::Path::Tiny](https://metacpan.org/pod/MooseX::Types::Path::Tiny#Dir)
 
 ## name
 
@@ -121,9 +122,9 @@ Repository name.
 
     isa => Gentoo__Overlay_RepositoryName, ro, lazy_build
 
-[`RepositoryName`](http://search.cpan.org/perldoc?Gentoo::Overlay::Types#Gentoo\_\_Overlay\_RepositoryName)
+[`RepositoryName`](https://metacpan.org/pod/Gentoo::Overlay::Types#Gentoo__Overlay_RepositoryName)
 
-["\_build\_name"](#\_build\_name)
+["\_build\_name"](#_build_name)
 
 # ATTRIBUTE ACCESSORS
 
@@ -133,16 +134,16 @@ Returns a list of the names of all the categories.
 
     my @list = sort $overlay->category_names();
 
-["\_categories"](#\_categories)
+["\_categories"](#_categories)
 
 ## categories
 
-Returns a hash of [`Category`](http://search.cpan.org/perldoc?Gentoo::Overlay::Category) objects.
+Returns a hash of [`Category`](https://metacpan.org/pod/Gentoo::Overlay::Category) objects.
 
     my %hash = $overlay->categories;
     print $hash{dev-perl}->pretty_name; # dev-perl/::gentoo
 
-["\_categories"](#\_categories)
+["\_categories"](#_categories)
 
 ## get\_category
 
@@ -150,7 +151,7 @@ Returns a Category Object for a given category name
 
     my $cat = $overlay->get_category('dev-perl');
 
-["\_categories"](#\_categories)
+["\_categories"](#_categories)
 
 # PRIVATE ATTRIBUTES
 
@@ -160,9 +161,9 @@ Path to the profile sub-directory.
 
     isa => Dir, ro, lazy_build
 
-["Dir" in MooseX::Types::Path::Tiny](http://search.cpan.org/perldoc?MooseX::Types::Path::Tiny#Dir)
+["Dir" in MooseX::Types::Path::Tiny](https://metacpan.org/pod/MooseX::Types::Path::Tiny#Dir)
 
-["\_build\_\_profile\_dir"](#\_build\_\_profile\_dir)
+["\_build\_\_profile\_dir"](#_build__profile_dir)
 
 ## \_categories
 
@@ -170,19 +171,19 @@ The auto-generating category hash backing
 
     isa => HashRef[ Gentoo__Overlay_Category ], ro, lazy_build
 
-["\_build\_\_categories"](#\_build\_\_categories)
+["\_build\_\_categories"](#_build__categories)
 
-["\_has\_category"](#\_has\_category)
+["\_has\_category"](#_has_category)
 
-["category\_names"](#category\_names)
+["category\_names"](#category_names)
 
 ["categories"](#categories)
 
-["get\_category"](#get\_category)
+["get\_category"](#get_category)
 
-["Gentoo\_\_Overlay\_Category" in Gentoo::Overlay::Types](http://search.cpan.org/perldoc?Gentoo::Overlay::Types#Gentoo\_\_Overlay\_Category)
+["Gentoo\_\_Overlay\_Category" in Gentoo::Overlay::Types](https://metacpan.org/pod/Gentoo::Overlay::Types#Gentoo__Overlay_Category)
 
-[`MooseX::Types::Moose`](http://search.cpan.org/perldoc?MooseX::Types::Moose)
+[`MooseX::Types::Moose`](https://metacpan.org/pod/MooseX::Types::Moose)
 
 # PRIVATE ATTRIBUTE ACCESSORS
 
@@ -192,7 +193,7 @@ Returns if a named category exists
 
     $overlay->_has_category("dev-perl");
 
-["\_categories"](#\_categories)
+["\_categories"](#_categories)
 
 # PRIVATE CLASS ATTRIBUTES
 
@@ -202,7 +203,7 @@ Class-wide list of path generators.
 
     isa => HashRef[ CodeRef ], ro, lazy_build
 
-["\_build\_\_default\_paths"](#\_build\_\_default\_paths)
+["\_build\_\_default\_paths"](#_build__default_paths)
 
 # PRIVATE METHODS
 
@@ -221,7 +222,7 @@ Verifies the existence of the profile directory, and returns the path to it.
 
     $overlay->_build__profile_dir
 
-["\_profile\_dir"](#\_profile\_dir)
+["\_profile\_dir"](#_profile_dir)
 
 ## \_build\_\_categories
 
@@ -230,11 +231,11 @@ or by traversing the directory ( old, discouraged )
 
     $category->_build_categories;
 
-["\_categories"](#\_categories)
+["\_categories"](#_categories)
 
-["\_build\_\_\_categories\_scan"](#\_build\_\_\_categories\_scan)
+["\_build\_\_\_categories\_scan"](#_build___categories_scan)
 
-["\_build\_\_\_categories\_file"](#\_build\_\_\_categories\_file)
+["\_build\_\_\_categories\_file"](#_build___categories_file)
 
 ## \_build\_\_\_categories\_file
 
@@ -279,7 +280,7 @@ Kent Fredric <kentnl@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
