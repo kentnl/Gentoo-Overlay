@@ -10,7 +10,6 @@ our $VERSION = '2.000000';
 
 # AUTHORITY
 
-use MooseX::Types qw( class_type coerce from via as where subtype );
 use MooseX::Types -declare => [
   qw(
     Gentoo__Overlay_Overlay

@@ -31,6 +31,11 @@ for my $type (qw( Overlay Category Ebuild Package CategoryName EbuildName Packag
     'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'MooseX::Types::Gentoo__Overlay_' . $type, ), );
 
 }
+for my $mxtype (qw( class_type coerce from via as where subtype )) {
+  $bundle->add_or_append_policy_field(
+    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'MooseX::Types::' . $mxtype, ), );
+
+}
 
 $bundle->remove_policy('ErrorHandling::RequireUseOfExceptions');
 $bundle->remove_policy('CodeLayout::RequireUseUTF8');
