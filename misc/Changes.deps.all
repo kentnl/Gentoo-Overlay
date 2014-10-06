@@ -92,6 +92,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - version 0.9901
 
  [Removed / runtime requires]
+ - Data::Dump
  - Sub::Exporter
 
  [Removed / test requires]

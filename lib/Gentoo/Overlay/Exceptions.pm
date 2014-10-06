@@ -67,7 +67,6 @@ sub warning {
   return __PACKAGE__->throw(@_);
 }
 
-use Data::Dump qw( dump );
 with(
   'Throwable',
   'Role::Identifiable::HasIdent',
