@@ -1,6 +1,12 @@
 ﻿Revision history for {{$dist->name}}
 
 {{$NEXT}}
+ [00 Major - Version Scheme]
+ - Use x.yyyzzz instead of x.y.z
+ - This may affect hand-operated downstreams
+ - https://questhub.io/realm/perl/quest/5388d3a9bbd0be2224000129
+ - This is a primary reason for the 2.x on the box.
+
  [Dependencies::Stats]
  - Dependencies changed since 1.0.5, see misc/*.deps* for details
  - build: ↑1
