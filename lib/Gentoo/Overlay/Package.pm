@@ -2,7 +2,9 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Package;
-$Gentoo::Overlay::Package::VERSION = '2.000000';
+
+our $VERSION = '2.000000';
+
 # ABSTRACT: Class for Package's in Gentoo Overlays
 #
 use Moose;

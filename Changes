@@ -1,6 +1,6 @@
 ﻿Revision history for Gentoo-Overlay
 
-2.000000 2014-10-06T15:06:02Z 094c28f
+2.000000 2014-10-06T15:09:35Z 32e62b1
  [00 Major - Version Scheme]
  - Use x.yyyzzz instead of x.y.z
  - This may affect hand-operated downstreams
@@ -9,7 +9,8 @@
 
  [01 Major - Tooling]
  - Shipping installer is now ExtUtils::MakeMaker instead of Module::Build
- - Version requirements on tooling and test dependencies now only upgraded to "latest" via recommendation, not requirements.
+ - Version requirements on tooling and test dependencies now only upgraded to "latest" via recommendation, not
+   requirements.
  - https://questhub.io/realm/perl/quest/5388cc12bbd0be5b2500011f
 
  [Dependencies::Stats]

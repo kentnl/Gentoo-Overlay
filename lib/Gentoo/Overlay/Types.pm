@@ -2,7 +2,9 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Types;
-$Gentoo::Overlay::Types::VERSION = '2.000000';
+
+our $VERSION = '2.000000';
+
 # ABSTRACT: Gentoo Overlay types.
 
 use MooseX::Types -declare => [
