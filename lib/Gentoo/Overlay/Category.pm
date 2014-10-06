@@ -303,7 +303,7 @@ sub pretty_name {
 
 
 sub iterate {
-  my ( $self, $what, $callback ) = @_; ## no critic (Variables::ProhibitUnusedVarsStricter)
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
   my %method_map = (
     packages => _iterate_packages =>,
     ebuilds  => _iterate_ebuilds  =>,
