@@ -36,6 +36,7 @@
             "Dist::Zilla::Plugin::AutoPrereqs" : "0",
             "Dist::Zilla::Plugin::BumpVersionAfterRelease" : "0",
             "Dist::Zilla::Plugin::ConfirmRelease" : "0",
+            "Dist::Zilla::Plugin::CopyFilesFromBuild" : "0",
             "Dist::Zilla::Plugin::EOLTests" : "0",
             "Dist::Zilla::Plugin::Git::Check" : "0",
             "Dist::Zilla::Plugin::Git::Commit" : "0",
@@ -180,6 +181,7 @@
          "Dist::Zilla::Plugin::AutoPrereqs" : "5.020",
          "Dist::Zilla::Plugin::BumpVersionAfterRelease" : "0.003",
          "Dist::Zilla::Plugin::ConfirmRelease" : "5.020",
+         "Dist::Zilla::Plugin::CopyFilesFromBuild" : "0.103510",
          "Dist::Zilla::Plugin::EOLTests" : "0.02",
          "Dist::Zilla::Plugin::Git::Check" : "2.024",
          "Dist::Zilla::Plugin::Git::Commit" : "2.024",
@@ -374,6 +376,11 @@
             "class" : "Dist::Zilla::Plugin::Manifest",
             "name" : "@Author::KENTNL/Manifest",
             "version" : "5.020"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::CopyFilesFromBuild",
+            "name" : "@Author::KENTNL/CopyXBuild",
+            "version" : "0.103510"
          },
          {
             "class" : "Dist::Zilla::Plugin::MetaTests",
