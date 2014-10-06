@@ -21,7 +21,8 @@ use MooseX::Types -declare => [
     Gentoo__Overlay_PackageName
     Gentoo__Overlay_RepositoryName
     )
-];
+  ],
+  qw( class_type coerce from );
 use MooseX::Types::Moose qw( :all );
 
 
