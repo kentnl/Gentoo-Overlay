@@ -14,6 +14,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Dist::Zilla::Plugin::AutoPrereqs
  - Dist::Zilla::Plugin::BumpVersionAfterRelease
  - Dist::Zilla::Plugin::ConfirmRelease
+ - Dist::Zilla::Plugin::CopyFilesFromBuild
  - Dist::Zilla::Plugin::EOLTests
  - Dist::Zilla::Plugin::Git::Check
  - Dist::Zilla::Plugin::Git::Commit
