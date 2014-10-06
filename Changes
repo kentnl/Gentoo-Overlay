@@ -1,6 +1,15 @@
 ﻿Revision history for Gentoo-Overlay
 
-1.0.6 2014-10-06T14:56:50Z e78070f
+1.0.6 2014-10-06T14:59:21Z 51cea31
+ [Dependencies::Stats]
+ - Dependencies changed since 1.0.5, see misc/*.deps* for details
+ - build: ↑1
+ - configure: ↑1
+ - develop: +49 -2 (recommends: -1, suggests: +1 -1)
+ - test: +2 ↑1 -2 (recommends: +1)
+
+ [Metadata]
+ - move to kentnl org
 
 1.0.5 2013-04-29T00:32:53Z
  - Bugfix: package_name and ebuild_name were paths instead of basenames, but no tests revealed this. Now have tests,
