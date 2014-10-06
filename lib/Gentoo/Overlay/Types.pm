@@ -10,7 +10,7 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use MooseX::Types qw( class_type coerce from via as where );
+use MooseX::Types qw( class_type coerce from via as where subtype );
 use MooseX::Types -declare => [
   qw(
     Gentoo__Overlay_Overlay
