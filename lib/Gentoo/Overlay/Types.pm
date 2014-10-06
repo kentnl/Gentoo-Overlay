@@ -7,6 +7,8 @@ our $VERSION = '2.000000';
 
 # ABSTRACT: Gentoo Overlay types.
 
+# AUTHORITY
+
 use MooseX::Types -declare => [
   qw(
     Gentoo__Overlay_Overlay

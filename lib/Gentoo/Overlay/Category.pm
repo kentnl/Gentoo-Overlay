@@ -7,6 +7,8 @@ our $VERSION = '2.000000';
 
 # ABSTRACT: A singular category in a repository;
 
+# AUTHORITY
+
 =head1 SYNOPSIS
 
 Still limited functionality, more to come.

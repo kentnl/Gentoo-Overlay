@@ -7,6 +7,8 @@ our $VERSION = '2.000000';
 
 # ABSTRACT: Tools for working with Gentoo Overlays
 
+# AUTHORITY
+
 use Moose;
 
 use MooseX::Has::Sugar;
