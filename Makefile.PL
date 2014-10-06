@@ -21,7 +21,6 @@ my %WriteMakefileArgs = (
   "NAME" => "Gentoo::Overlay",
   "PREREQ_PM" => {
     "Carp" => 0,
-    "Data::Dump" => 0,
     "Moose" => 0,
     "MooseX::ClassAttribute" => 0,
     "MooseX::Has::Sugar" => 0,
@@ -58,7 +57,6 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Carp" => 0,
-  "Data::Dump" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "FindBin" => 0,

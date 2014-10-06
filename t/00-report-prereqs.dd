@@ -71,7 +71,6 @@ do { my $x = {
        'runtime' => {
                       'requires' => {
                                       'Carp' => '0',
-                                      'Data::Dump' => '0',
                                       'Moose' => '0',
                                       'MooseX::ClassAttribute' => '0',
                                       'MooseX::Has::Sugar' => '0',
