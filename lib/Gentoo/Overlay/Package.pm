@@ -237,8 +237,8 @@ sub _build__ebuilds {
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
-  return if $self->name eq q{.};
-  return if $self->name eq q{..};
+  return if q{.} eq $self->name;
+  return if q{..} eq $self->name;
   return if not -e $self->path;
   return if not -d $self->path;
   return 1;

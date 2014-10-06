@@ -154,8 +154,8 @@ class_has _scan_blacklist => (
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
-  return if $self->name eq q{.};
-  return if $self->name eq q{..};
+  return if q{.} eq $self->name;
+  return if q{..} eq $self->name;
   return if not -e $self->path;
   return if not -f $self->path;
   return 1;
