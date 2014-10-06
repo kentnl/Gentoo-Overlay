@@ -1,6 +1,12 @@
 ﻿Revision history for Gentoo-Overlay
 
-1.000006 2014-10-06T15:00:06Z 3c4d984
+2.000000 2014-10-06T15:04:56Z 592366c
+ [00 Major - Version Scheme]
+ - Use x.yyyzzz instead of x.y.z
+ - This may affect hand-operated downstreams
+ - https://questhub.io/realm/perl/quest/5388d3a9bbd0be2224000129
+ - This is a primary reason for the 2.x on the box.
+
  [Dependencies::Stats]
  - Dependencies changed since 1.0.5, see misc/*.deps* for details
  - build: ↑1

@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Ebuild;
-$Gentoo::Overlay::Ebuild::VERSION = '1.000006';
+$Gentoo::Overlay::Ebuild::VERSION = '2.000000';
 # FILENAME: Ebuild.pm
 # CREATED: 02/08/11 18:38:11 by Kent Fredric (kentnl) <kentfredric@gmail.com>
 # ABSTRACT: A Class for Ebuilds in Gentoo Overlays
@@ -204,7 +204,7 @@ Gentoo::Overlay::Ebuild - A Class for Ebuilds in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.000006
+version 2.000000
 
 =head1 SYNOPSIS
 

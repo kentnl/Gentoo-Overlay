@@ -31,6 +31,7 @@ corpus/overlay_5/metadata/keepdir
 corpus/overlay_5/profiles/categories
 corpus/overlay_5/profiles/repo_name
 dist.ini
+dist.ini.meta
 examples/portage.pl
 lib/Gentoo/Overlay.pm
 lib/Gentoo/Overlay/Category.pm
