@@ -74,7 +74,7 @@ with(
   'Role::Identifiable::HasTags',
   'Role::HasMessage::Errf' => {
     lazy    => 1,
-    default => sub { shift->ident }
+    default => sub { shift->ident },
   },
   'StackTrace::Auto',
   'MooseX::OneArgNew' => {
