@@ -35,11 +35,12 @@ Still limited functionality, more to come.
 
 =cut
 
-use Moose qw( has );
+use Moo qw( has );
 use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
-use MooseX::Types::Moose qw( HashRef Str );
-use MooseX::Types::Path::Tiny qw( File Dir Path );
-use MooseX::ClassAttribute qw( class_has );
+use Types::Standard qw( HashRef Str );
+use Types::Path::Tiny qw( File Dir Path );
+use MooX::ClassAttribute qw( class_has );
+use MooX::HandlesVia;
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_CategoryName Gentoo__Overlay_Package Gentoo__Overlay_Overlay );
 use Gentoo::Overlay::Exceptions qw( exception );
 use namespace::autoclean;
@@ -137,10 +138,11 @@ L</_packages>
 
 has _packages => (
   isa => HashRef [Gentoo__Overlay_Package],
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_package  => exists   =>,
     package_names => keys     =>,
     packages      => elements =>,
@@ -206,12 +208,15 @@ class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
   lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
   },
 );
+
+sub _scan_blacklisted {
+  my ( $self, $what ) = @_;
+  return exists $self->_scan_blacklist->{$what};
+}
 
 =method exists
 
@@ -378,6 +383,6 @@ sub _iterate_ebuilds {
   return;
 
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
+

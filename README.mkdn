@@ -112,9 +112,9 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 Path to repository.
 
-    isa => Dir, ro, required, coerce
+    isa => File, ro, required, coerce
 
-["Dir" in MooseX::Types::Path::Tiny](https://metacpan.org/pod/MooseX::Types::Path::Tiny#Dir)
+["File" in Types::Path::Tiny](https://metacpan.org/pod/Types::Path::Tiny#File)
 
 ## name
 

@@ -10,9 +10,11 @@ our $VERSION = '2.000000';
 
 # AUTHORITY
 
-use Moose qw( has with );
-use MooseX::Types::Moose qw( HashRef Str );
+use Moo qw( has with );
+use Try::Tiny qw( try catch );
+use Types::Standard qw( HashRef Str );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
+use String::Errf qw( errf );
 
 use Readonly qw( Readonly );
 
@@ -67,23 +69,36 @@ sub warning {
   return __PACKAGE__->throw(@_);
 }
 
-with(
-  'Throwable',
-  'Role::Identifiable::HasIdent',
-  'Role::Identifiable::HasTags',
-  'Role::HasMessage::Errf' => {
-    lazy    => 1,
-    default => sub { shift->ident },
-  },
-  'StackTrace::Auto',
-  'MooseX::OneArgNew' => {
-    type     => Str,
-    init_arg => 'ident',
-  },
+sub BUILDARGS {
+  my ( undef, @args ) = @_;
+  if ( 1 == scalar @args ) {
+    if ( not ref $args[0] ) {
+      return { ident => $args[0] };
+    }
+    return $args[0];
+  }
+  return {@args};
+}
+has 'message_fmt' => (
+  is       => 'ro',
+  isa      => Str,
+  lazy     => 1,
+  required => 1,
+  init_arg => 'message',
+  default  => sub { shift->ident },
 );
+with( 'Throwable', 'Role::Identifiable::HasIdent', 'Role::Identifiable::HasTags', 'Role::HasMessage', 'StackTrace::Auto', );
 
-__PACKAGE__->meta->make_immutable( inline_constructor => 0 );    # Mx::OneArg's fault.
+sub message {
+  my ($self) = @_;
+  return try {
+    errf( $self->message_fmt, $self->payload )
+  }
+  catch {
+    sprintf '%s (error during formatting)', $self->message_fmt;
+  },;
+}
 
-no Moose;
+no Moo;
 
 1;

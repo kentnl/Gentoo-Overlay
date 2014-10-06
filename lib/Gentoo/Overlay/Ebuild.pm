@@ -10,11 +10,11 @@ our $VERSION = '2.000000';
 
 # AUTHORITY
 
-use Moose qw( has );
+use Moo qw( has );
 use MooseX::Has::Sugar qw( required ro lazy );
-use MooseX::Types::Moose qw( HashRef Str );
-use MooseX::Types::Path::Tiny qw( File Dir );
-use MooseX::ClassAttribute qw( class_has );
+use Types::Standard qw( HashRef Str );
+use Types::Path::Tiny qw( File Dir );
+use MooX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_EbuildName Gentoo__Overlay_Package );
 use namespace::autoclean;
 
@@ -135,12 +135,15 @@ class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
   lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( . .. ChangeLog Manifest metadata.xml ) };
   },
 );
+
+sub _scan_blacklisted {
+  my ( $self, $what ) = @_;
+  return exists $self->_scan_blacklist->{$what};
+}
 
 =method exists
 
@@ -193,7 +196,6 @@ sub pretty_name {
   return q{=} . $self->category->name . q{/} . $filename . q{::} . $self->overlay->name;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 

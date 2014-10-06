@@ -10,12 +10,12 @@ our $VERSION = '2.000000';
 
 # AUTHORITY
 
-use Moose qw( has );
-
+use Moo qw( has );
+use MooX::HandlesVia;
 use MooseX::Has::Sugar qw( ro coerce lazy_build lazy );
-use MooseX::Types::Moose qw( HashRef CodeRef );
-use MooseX::Types::Path::Tiny qw( File Dir );
-use MooseX::ClassAttribute qw( class_has );
+use Types::Standard qw( HashRef CodeRef );
+use Types::Path::Tiny qw( File Dir );
+use MooX::ClassAttribute qw( class_has );
 use namespace::autoclean;
 use Carp qw();
 use Gentoo::Overlay::Category;
@@ -47,9 +47,9 @@ There will be more features eventually, this is just a first release.
 
 Path to repository.
 
-    isa => Dir, ro, required, coerce
+    isa => File, ro, required, coerce
 
-L<MooseX::Types::Path::Tiny/Dir>
+L<Types::Path::Tiny/File>
 
 =cut
 
@@ -77,7 +77,7 @@ L</_build_name>
 
 =cut
 
-has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
+has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy, builder => 1, );
 
 =p_method _build_name
 
@@ -122,7 +122,7 @@ L</_build__profile_dir>
 
 =cut
 
-has _profile_dir => ( isa => Dir, ro, lazy_build, );
+has _profile_dir => ( isa => Dir, ro, lazy, builder => 1 );
 
 =p_method _build__profile_dir
 
@@ -137,7 +137,7 @@ L</_profile_dir>
 sub _build__profile_dir {
   my ($self) = shift;
   my $pd = $self->default_path( profiles => );
-  if ( ( !-e $pd ) or ( !-d $pd ) ) {
+  if ( not $pd->exists or not $pd->is_dir ) {
     exception(
       ident   => 'no profile directory',
       message => <<'EOF',
@@ -217,11 +217,12 @@ L</_categories>
 =cut
 
 has _categories => (
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
   isa => HashRef [Gentoo__Overlay_Category],
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_category  => exists   =>,
     category_names => keys     =>,
     categories     => elements =>,
@@ -555,7 +556,6 @@ sub _iterate_packages {
   $self->_iterate_categories( 'categories' => $real_callback );
   return;
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
