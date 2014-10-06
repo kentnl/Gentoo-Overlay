@@ -21,7 +21,7 @@ use MooseX::Types -declare => [
     Gentoo__Overlay_EbuildName
     Gentoo__Overlay_PackageName
     Gentoo__Overlay_RepositoryName
-    )
+    ),
 ];
 use MooseX::Types::Moose qw( Str  );
 

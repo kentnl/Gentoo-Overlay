@@ -60,7 +60,7 @@ has 'path' => (
     exception(
       ident   => 'path parameter required',
       message => '%{package}s requires the \'path\' attribute passed during construction',
-      payload => { package => __PACKAGE__ }
+      payload => { package => __PACKAGE__ },
     );
   },
 );
@@ -96,11 +96,14 @@ sub _build_name {
   if ( ( !-e $f ) or ( !-f $f ) ) {
     exception(
       ident   => 'no repo_name',
-      message => qq[No repo_name file for overlay at: %{overlay_path}s\n Expects:%{expected_path}s}],
+      message => <<'EOF',
+No repo_name file for overlay at: %{overlay_path}s
+ Expects:%{expected_path}s
+EOF
       payload => {
         overlay_path  => $self->path->stringify,
         expected_path => $f->stringify,
-      }
+      },
     );
   }
   return [ $f->lines_raw( { chomp => 1 } ) ]->[0];
@@ -137,11 +140,14 @@ sub _build__profile_dir {
   if ( ( !-e $pd ) or ( !-d $pd ) ) {
     exception(
       ident   => 'no profile directory',
-      message => qq[No profile directory for overlay at: %{overlay_path}s\n  Expects:%{expected_path}s],
+      message => <<'EOF',
+No profile directory for overlay at: %{overlay_path}s
+  Expects:%{expected_path}s
+EOF
       payload => {
         overlay_path  => $self->path->stringify,
         expected_path => $pd->stringify,
-      }
+      },
     );
   }
   return $pd->absolute;
@@ -244,11 +250,14 @@ sub _build__categories {
   if ( ( !-e $cf ) or ( !-f $cf ) ) {
     warning(
       ident   => 'no category file',
-      message => "No category file for overlay %{name}s, expected: %{category_file}s. \n Falling back to scanning",
+      message => <<'EOF',
+No category file for overlay %{name}s, expected: %{category_file}s.
+ Falling back to scanning
+EOF
       payload => {
         name          => $self->name,
-        category_file => $cf->stringify
-      }
+        category_file => $cf->stringify,
+      },
     );
     goto $self->can('_build___categories_scan');
   }
@@ -312,7 +321,7 @@ sub default_path {
     exception(
       ident   => 'no default path',
       message => q[No default path '%{name}s'],
-      payload => { path => $name }
+      payload => { path => $name },
     );
   }
   return $self->_default_paths->{$name}->( $self, @args );
@@ -337,12 +346,14 @@ sub _build___categories_file {
     if ( !$category->exists ) {
       exception(
         ident   => 'missing category',
-        message => q[category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s ],
+        message => <<'EOF',
+category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s
+EOF
         payload => {
           category_name => $category->name,
           expected_path => $category->path->stringify,
           overlay_name  => $self->name,
-        }
+        },
       );
       next;
     }
