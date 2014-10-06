@@ -1,6 +1,12 @@
 This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL dependencies for all phases (configure/build/runtime/test/develop)
 
 2.000000
+ [Added / configure recommends]
+ - ExtUtils::MakeMaker 6.98
+
+ [Added / configure requires]
+ - ExtUtils::MakeMaker
+
  [Added / develop requires]
  - Dist::Zilla 5
  - Dist::Zilla::Plugin::Author::KENTNL::RecommendFixes 0.001001
@@ -18,6 +24,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Dist::Zilla::Plugin::Git::Tag
  - Dist::Zilla::Plugin::GithubMeta
  - Dist::Zilla::Plugin::License
+ - Dist::Zilla::Plugin::MakeMaker
  - Dist::Zilla::Plugin::Manifest
  - Dist::Zilla::Plugin::ManifestSkip
  - Dist::Zilla::Plugin::MetaConfig
@@ -28,14 +35,12 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Dist::Zilla::Plugin::MetaTests
  - Dist::Zilla::Plugin::MetaYAML
  - Dist::Zilla::Plugin::MinimumPerl
- - Dist::Zilla::Plugin::ModuleBuild
  - Dist::Zilla::Plugin::PkgVersion
  - Dist::Zilla::Plugin::PodCoverageTests
  - Dist::Zilla::Plugin::PodSyntaxTests
  - Dist::Zilla::Plugin::PodWeaver
  - Dist::Zilla::Plugin::Prereqs
  - Dist::Zilla::Plugin::Prereqs::AuthorDeps
- - Dist::Zilla::Plugin::Prereqs::MatchInstalled
  - Dist::Zilla::Plugin::Prereqs::Recommend::MatchInstalled
  - Dist::Zilla::Plugin::ReadmeAnyFromPod
  - Dist::Zilla::Plugin::ReadmeFromPod
@@ -56,22 +61,24 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
 
  [Added / test recommends]
  - CPAN::Meta 2.120900
+ - ExtUtils::MakeMaker 6.98
+ - Test::More 1.001006
 
  [Added / test requires]
  - ExtUtils::MakeMaker
  - File::Spec
 
- [Changed / build requires]
- - Module::Build 0.4004 → 0.4210
-
- [Changed / configure requires]
- - Module::Build 0.4004 → 0.4210
-
  [Changed / develop suggests]
  - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.3 → 2.021000
 
  [Changed / test requires]
- - Test::More 0.98 → 1.001006
+ - Test::More 0.98 → 0.96
+
+ [Removed / build requires]
+ - Module::Build 0.4004
+
+ [Removed / configure requires]
+ - Module::Build 0.4004
 
  [Removed / develop recommends]
  - Dist::Zilla::PluginBundle::Author::KENTNL::Lite v1.3.0
