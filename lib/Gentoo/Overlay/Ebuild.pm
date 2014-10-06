@@ -2,13 +2,7 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Ebuild;
-BEGIN {
-  $Gentoo::Overlay::Ebuild::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Ebuild::VERSION = '1.0.5';
-}
-
+$Gentoo::Overlay::Ebuild::VERSION = '1.0.6';
 # FILENAME: Ebuild.pm
 # CREATED: 02/08/11 18:38:11 by Kent Fredric (kentnl) <kentfredric@gmail.com>
 # ABSTRACT: A Class for Ebuilds in Gentoo Overlays
@@ -20,6 +14,70 @@ use MooseX::Types::Path::Tiny qw( File Dir );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -45,6 +103,31 @@ has path => (
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -55,6 +138,14 @@ class_has _scan_blacklist => (
     return { map { $_ => 1 } qw( . .. ChangeLog Manifest metadata.xml ) };
   },
 );
+
+
+
+
+
+
+
+
 
 
 ## no critic ( ProhibitBuiltinHomonyms )
@@ -68,6 +159,13 @@ sub exists {
 }
 
 
+
+
+
+
+
+
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -75,6 +173,13 @@ sub is_blacklisted {
   }
   return $self->_scan_blacklisted($name);
 }
+
+
+
+
+
+
+
 
 
 sub pretty_name {
@@ -99,7 +204,7 @@ Gentoo::Overlay::Ebuild - A Class for Ebuilds in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.5
+version 1.0.6
 
 =head1 SYNOPSIS
 
@@ -216,7 +321,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

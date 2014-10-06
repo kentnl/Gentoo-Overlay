@@ -2,13 +2,7 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay;
-BEGIN {
-  $Gentoo::Overlay::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::VERSION = '1.0.5';
-}
-
+$Gentoo::Overlay::VERSION = '1.0.6';
 # ABSTRACT: Tools for working with Gentoo Overlays
 
 use Moose;
@@ -25,6 +19,35 @@ use Gentoo::Overlay::Exceptions qw( :all );
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 has 'path' => (
   ro, coerce,
   isa     => Dir,
@@ -38,7 +61,28 @@ has 'path' => (
 );
 
 
+
+
+
+
+
+
+
+
+
+
+
 has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
+
+
+
+
+
+
+
+
+
+
 
 
 sub _build_name {
@@ -59,7 +103,27 @@ sub _build_name {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 has _profile_dir => ( isa => Dir, ro, lazy_build, );
+
+
+
+
+
+
+
+
+
 
 
 sub _build__profile_dir {
@@ -83,6 +147,64 @@ sub _build__profile_dir {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 has _categories => (
   lazy_build,
   ro,
@@ -95,6 +217,20 @@ has _categories => (
     get_category   => get      =>,
   },
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 sub _build__categories {
@@ -115,6 +251,14 @@ sub _build__categories {
 }
 
 
+
+
+
+
+
+
+
+
 class_has _default_paths => (
   ro, lazy,
   isa => HashRef [CodeRef],
@@ -131,6 +275,32 @@ class_has _default_paths => (
 );
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub default_path {
   my ( $self, $name, @args ) = @_;
   if ( !exists $self->_default_paths->{$name} ) {
@@ -142,6 +312,13 @@ sub default_path {
   }
   return $self->_default_paths->{$name}->( $self, @args );
 }
+
+
+
+
+
+
+
 
 
 sub _build___categories_file {
@@ -170,6 +347,14 @@ sub _build___categories_file {
 }
 
 
+
+
+
+
+
+
+
+
 sub _build___categories_scan {
   my ($self) = shift;
   my %out;
@@ -190,6 +375,66 @@ sub _build___categories_scan {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub iterate {
   my ( $self, $what, $callback ) = @_;
   my %method_map = (
@@ -206,6 +451,15 @@ sub iterate {
     payload => { what_method => $what, },
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 # ebuilds = { /categories/packages/ebuilds }
@@ -225,6 +479,15 @@ sub _iterate_ebuilds {
   return;
 
 }
+
+
+
+
+
+
+
+
+
 
 
 # categories = { /categories }
@@ -249,6 +512,15 @@ sub _iterate_categories {
   }
   return;
 }
+
+
+
+
+
+
+
+
+
 
 
 # packages = { /categories/packages }
@@ -280,7 +552,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.5
+version 1.0.6
 
 =head1 SYNOPSIS
 
@@ -560,7 +832,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

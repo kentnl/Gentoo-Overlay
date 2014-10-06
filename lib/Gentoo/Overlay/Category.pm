@@ -2,14 +2,32 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Category;
-BEGIN {
-  $Gentoo::Overlay::Category::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Category::VERSION = '1.0.5';
-}
-
+$Gentoo::Overlay::Category::VERSION = '1.0.6';
 # ABSTRACT: A singular category in a repository;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 use Moose;
@@ -19,6 +37,33 @@ use MooseX::Types::Path::Tiny qw( File Dir Path );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all );
 use namespace::autoclean;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,6 +83,52 @@ has path => ( lazy, ro,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 has _packages => (
   isa => HashRef [Gentoo__Overlay_Package],
   lazy_build,
@@ -50,6 +141,13 @@ has _packages => (
     get_package   => get      =>,
   },
 );
+
+
+
+
+
+
+
 
 
 sub _build__packages {
@@ -73,6 +171,31 @@ sub _build__packages {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -85,6 +208,13 @@ class_has _scan_blacklist => (
 );
 
 
+
+
+
+
+
+
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -92,6 +222,15 @@ sub exists {
   return if not -d $self->path;
   return 1;
 }
+
+
+
+
+
+
+
+
+
 
 
 sub is_blacklisted {
@@ -103,10 +242,58 @@ sub is_blacklisted {
 }
 
 
+
+
+
+
+
+
+
 sub pretty_name {
   my $self = shift;
   return $self->name . '/::' . $self->overlay->name;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 sub iterate {
@@ -124,6 +311,15 @@ sub iterate {
     payload => { what_method => $what, },
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 # packages = { /packages }
@@ -149,6 +345,15 @@ sub _iterate_packages {
   return;
 
 }
+
+
+
+
+
+
+
+
+
 
 
 # ebuilds = { /packages/ebuilds }
@@ -181,7 +386,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 1.0.5
+version 1.0.6
 
 =head1 SYNOPSIS
 
@@ -395,7 +600,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

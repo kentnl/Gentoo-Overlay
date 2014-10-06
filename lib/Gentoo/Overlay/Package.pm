@@ -2,13 +2,7 @@ use strict;
 use warnings;
 
 package Gentoo::Overlay::Package;
-BEGIN {
-  $Gentoo::Overlay::Package::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Package::VERSION = '1.0.5';
-}
-
+$Gentoo::Overlay::Package::VERSION = '1.0.6';
 # ABSTRACT: Class for Package's in Gentoo Overlays
 #
 use Moose;
@@ -18,6 +12,63 @@ use MooseX::Types::Path::Tiny qw( :all );
 use MooseX::ClassAttribute;
 use Gentoo::Overlay::Types qw( :all  );
 use namespace::autoclean;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,6 +89,31 @@ has path => (
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
@@ -48,6 +124,52 @@ class_has _scan_blacklist => (
     return { map { $_ => 1 } qw( . .. metadata.xml ) };
   },
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -66,6 +188,13 @@ has _ebuilds => (
     get_ebuild   => get      =>,
   },
 );
+
+
+
+
+
+
+
 
 
 sub _build__ebuilds {
@@ -90,6 +219,14 @@ sub _build__ebuilds {
 }
 
 
+
+
+
+
+
+
+
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
@@ -101,6 +238,13 @@ sub exists {
 }
 
 
+
+
+
+
+
+
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -110,10 +254,42 @@ sub is_blacklisted {
 }
 
 
+
+
+
+
+
+
+
 sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 sub iterate {
@@ -128,6 +304,15 @@ sub iterate {
     payload => { what_method => $what },
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 # ebuilds = {/ebuilds }
@@ -167,7 +352,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.5
+version 1.0.6
 
 =head1 SYNOPSIS
 
@@ -362,7 +547,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
