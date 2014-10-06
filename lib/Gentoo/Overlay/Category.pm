@@ -35,12 +35,13 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 
 
-use Moose;
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
+use Moose qw( has );
+use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
+use MooseX::Types::Moose qw( HashRef Str );
 use MooseX::Types::Path::Tiny qw( File Dir Path );
-use MooseX::ClassAttribute;
-use Gentoo::Overlay::Types qw( :all );
+use MooseX::ClassAttribute qw( class_has );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_CategoryName Gentoo__Overlay_Package );
+use Gentoo::Overlay::Exceptions qw( exception );
 use namespace::autoclean;
 
 
