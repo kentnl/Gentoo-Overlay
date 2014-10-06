@@ -12,7 +12,8 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moose qw( has with );
 use MooseX::Types::Moose qw( HashRef Str );
-use Sub::Exporter ();
+use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
+
 use Readonly qw( Readonly );
 
 Readonly our $W_SILENT  => 'silent';
@@ -66,7 +67,6 @@ sub warning {
   return __PACKAGE__->throw(@_);
 }
 
-Sub::Exporter::setup_exporter( { exports => [ 'exception', 'warning', ] } );
 use Data::Dump qw( dump );
 with(
   'Throwable',
