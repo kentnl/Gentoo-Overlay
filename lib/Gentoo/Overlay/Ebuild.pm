@@ -286,7 +286,7 @@ L<Gentoo::Overlay::Package/overlay>
 
 L</package>
 
-=head2 overlay
+=head2 category
 
   $ebuild->category -> Gentoo::Overlay::Package->category
 
