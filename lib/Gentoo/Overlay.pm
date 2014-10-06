@@ -93,7 +93,7 @@ has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
 sub _build_name {
   my ($self) = shift;
   my $f = $self->default_path( repo_name => );
-  if ( ( !-e $f ) or ( !-f $f ) ) {
+  if ( not $f->exists or $f->is_dir ) {
     exception(
       ident   => 'no repo_name',
       message => <<'EOF',
