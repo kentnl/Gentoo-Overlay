@@ -3,6 +3,8 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 
+our $VERSION = '2.000000';
+
 # ABSTRACT: A singular category in a repository;
 
 =head1 SYNOPSIS

@@ -3,6 +3,8 @@ use warnings;
 
 package Gentoo::Overlay::Exceptions;
 
+our $VERSION = '2.000000';
+
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 #
 use Moose;

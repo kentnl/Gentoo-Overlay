@@ -3,6 +3,8 @@ use warnings;
 
 package Gentoo::Overlay::Ebuild;
 
+our $VERSION = '2.000000';
+
 # FILENAME: Ebuild.pm
 # CREATED: 02/08/11 18:38:11 by Kent Fredric (kentnl) <kentfredric@gmail.com>
 # ABSTRACT: A Class for Ebuilds in Gentoo Overlays

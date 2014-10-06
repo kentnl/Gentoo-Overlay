@@ -3,6 +3,8 @@ use warnings;
 
 package Gentoo::Overlay::Package;
 
+our $VERSION = '2.000000';
+
 # ABSTRACT: Class for Package's in Gentoo Overlays
 #
 use Moose;
