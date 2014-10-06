@@ -247,7 +247,7 @@ has _categories => (
 sub _build__categories {
   my ($self) = @_;
   my $cf = $self->default_path('catfile');
-  if ( ( !-e $cf ) or ( !-f $cf ) ) {
+  if ( not $cf->exists or $cf->is_dir ) {
     warning(
       ident   => 'no category file',
       message => <<'EOF',
