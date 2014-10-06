@@ -200,6 +200,8 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Gentoo::Overlay::Ebuild - A Class for Ebuilds in Gentoo Overlays

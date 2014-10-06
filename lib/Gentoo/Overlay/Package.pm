@@ -348,6 +348,8 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
