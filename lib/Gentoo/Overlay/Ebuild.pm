@@ -156,8 +156,8 @@ sub exists {
   my $self = shift;
   return if q{.} eq $self->name;
   return if q{..} eq $self->name;
-  return if not -e $self->path;
-  return if not -f $self->path;
+  return unless $self->path->exists;
+  return if $self->path->is_dir;
   return 1;
 }
 
