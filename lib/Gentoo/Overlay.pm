@@ -93,7 +93,7 @@ L</name>
 sub _build_name {
   my ($self) = shift;
   my $f = $self->default_path( repo_name => );
-  if ( ( !-e $f ) or ( !-f $f ) ) {
+  if ( not $f->exists or $f->is_dir ) {
     exception(
       ident   => 'no repo_name',
       message => <<'EOF',
@@ -247,7 +247,7 @@ L</_build___categories_file>
 sub _build__categories {
   my ($self) = @_;
   my $cf = $self->default_path('catfile');
-  if ( ( !-e $cf ) or ( !-f $cf ) ) {
+  if ( not $cf->exists or $cf->is_dir ) {
     warning(
       ident   => 'no category file',
       message => <<'EOF',
