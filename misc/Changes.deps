@@ -21,6 +21,7 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
  - Module::Build 0.4004
 
  [Removed / runtime requires]
+ - Data::Dump
  - Sub::Exporter
 
  [Removed / test requires]
