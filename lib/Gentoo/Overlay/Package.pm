@@ -11,11 +11,13 @@ our $VERSION = '2.000000';
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moose qw( has );
-use MooseX::Has::Sugar qw( ro required lazy );
+use MooseX::Has::Sugar qw( ro required lazy lazy_build);
 use MooseX::Types::Moose qw( HashRef Str );
 use MooseX::Types::Path::Tiny qw( Path );
 use MooseX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_PackageName Gentoo__Overlay_Category );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Category Gentoo__Overlay_Ebuild );
+use Gentoo::Overlay::Exceptions qw( exception);
 use namespace::autoclean;
 
 
