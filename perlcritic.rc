@@ -311,6 +311,7 @@ allowed_pragmata = diagnostics feature perlversion strict warnings utf8
 [Subroutines::ProhibitBuiltinHomonyms]
 
 [Subroutines::ProhibitCallsToUndeclaredSubs]
+exempt_subs = MooseX::Types::Gentoo__OverlayOverlay MooseX::Types::Gentoo__OverlayCategory MooseX::Types::Gentoo__OverlayEbuild MooseX::Types::Gentoo__OverlayPackage MooseX::Types::Gentoo__OverlayCategoryName MooseX::Types::Gentoo__OverlayEbuildName MooseX::Types::Gentoo__OverlayPackageName MooseX::Types::Gentoo__OverlayRepositoryName
 
 [Subroutines::ProhibitCallsToUnexportedSubs]
 
