@@ -451,8 +451,9 @@ sub _build___categories_scan {
 
 
 
-sub iterate {    ## no critic (Variables::ProhibitUnusedVarsStricter)
-  my ( $self, $what, $callback ) = @_;
+sub iterate {
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
+
   my %method_map = (
     categories => _iterate_categories =>,
     packages   => _iterate_packages   =>,

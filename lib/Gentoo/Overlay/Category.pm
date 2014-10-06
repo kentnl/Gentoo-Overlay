@@ -303,7 +303,7 @@ sub pretty_name {
 
 
 sub iterate {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, $what, $callback ) = @_; ## no critic (Variables::ProhibitUnusedVarsStricter)
   my %method_map = (
     packages => _iterate_packages =>,
     ebuilds  => _iterate_ebuilds  =>,
@@ -330,7 +330,7 @@ sub iterate {
 
 # packages = { /packages }
 sub _iterate_packages {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %packages     = $self->packages();
   my $num_packages = scalar keys %packages;
   my $last_package = $num_packages - 1;
@@ -364,7 +364,7 @@ sub _iterate_packages {
 
 # ebuilds = { /packages/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my $real_callback = sub {
 
     my (%pconfig) = %{ $_[1] };
