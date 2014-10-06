@@ -67,7 +67,7 @@ L</package>
 
 =cut
 
-=attr_acc overlay
+=attr_acc category
 
   $ebuild->category -> Gentoo::Overlay::Package->category
 
