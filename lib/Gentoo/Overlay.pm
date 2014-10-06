@@ -10,12 +10,12 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moose qw( has );
-
+use Moo qw( has );
+use MooX::HandlesVia;
 use MooseX::Has::Sugar qw( ro coerce lazy_build lazy );
-use MooseX::Types::Moose qw( HashRef CodeRef );
-use MooseX::Types::Path::Tiny qw( File Dir );
-use MooseX::ClassAttribute qw( class_has );
+use Types::Standard qw( HashRef CodeRef );
+use Types::Path::Tiny qw( File Dir );
+use MooX::ClassAttribute qw( class_has );
 use namespace::autoclean;
 use Carp qw();
 use Gentoo::Overlay::Category;
@@ -77,7 +77,7 @@ has 'path' => (
 
 
 
-has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
+has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy, builder => 1, );
 
 
 
@@ -122,7 +122,7 @@ EOF
 
 
 
-has _profile_dir => ( isa => Dir, ro, lazy_build, );
+has _profile_dir => ( isa => Dir, ro, lazy, builder => 1 );
 
 
 
@@ -137,7 +137,7 @@ has _profile_dir => ( isa => Dir, ro, lazy_build, );
 sub _build__profile_dir {
   my ($self) = shift;
   my $pd = $self->default_path( profiles => );
-  if ( ( !-e $pd ) or ( !-d $pd ) ) {
+  if ( not $pd->exists or not $pd->is_dir ) {
     exception(
       ident   => 'no profile directory',
       message => <<'EOF',
@@ -217,11 +217,12 @@ EOF
 
 
 has _categories => (
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
   isa => HashRef [Gentoo__Overlay_Category],
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_category  => exists   =>,
     category_names => keys     =>,
     categories     => elements =>,
@@ -683,9 +684,9 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 Path to repository.
 
-    isa => Dir, ro, required, coerce
+    isa => File, ro, required, coerce
 
-L<MooseX::Types::Path::Tiny/Dir>
+L<Types::Path::Tiny/File>
 
 =head2 name
 

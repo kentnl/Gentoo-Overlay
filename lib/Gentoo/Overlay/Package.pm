@@ -10,11 +10,12 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moose qw( has );
+use Moo qw( has );
+use MooX::HandlesVia;
 use MooseX::Has::Sugar qw( ro required lazy lazy_build);
-use MooseX::Types::Moose qw( HashRef Str );
-use MooseX::Types::Path::Tiny qw( Path );
-use MooseX::ClassAttribute qw( class_has );
+use Types::Standard qw( HashRef Str );
+use Types::Path::Tiny qw( Path );
+use MooX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_PackageName Gentoo__Overlay_Category );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Category Gentoo__Overlay_Ebuild );
 use Gentoo::Overlay::Exceptions qw( exception);
@@ -125,12 +126,15 @@ class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
   lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( . .. metadata.xml ) };
   },
 );
+
+sub _scan_blacklisted {
+  my ( $self, $what ) = @_;
+  return exists $self->_scan_blacklist->{$what};
+}
 
 
 
@@ -185,10 +189,11 @@ class_has _scan_blacklist => (
 
 has _ebuilds => (
   isa => HashRef [Gentoo__Overlay_Ebuild],
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_ebuild  => exists   =>,
     ebuild_names => keys     =>,
     ebuilds      => elements =>,
