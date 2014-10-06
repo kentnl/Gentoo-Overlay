@@ -126,6 +126,7 @@ allow_includes = 1
 
 [Documentation::PodSpelling]
 spell_command = aspell list --lang en_US
+stop_words = ACCESSORS Ebuilds ebuild Ebuild
 
 [Documentation::ProhibitAdjacentLinks]
 
