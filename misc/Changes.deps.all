@@ -60,6 +60,9 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  [Added / develop suggests]
  - Dist::Zilla::App::Command::bakeini 0.001002
 
+ [Added / runtime requires]
+ - Sub::Exporter::Progressive
+
  [Added / test recommends]
  - CPAN::Meta 2.120900
  - ExtUtils::MakeMaker 6.98
@@ -87,6 +90,9 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  [Removed / develop requires]
  - Dist::Zilla::PluginBundle::Author::KENTNL::Lite
  - version 0.9901
+
+ [Removed / runtime requires]
+ - Sub::Exporter
 
  [Removed / test requires]
  - File::Find
