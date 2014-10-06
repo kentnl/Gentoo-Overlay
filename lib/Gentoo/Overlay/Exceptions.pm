@@ -10,10 +10,10 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moose;
-use MooseX::Types::Moose qw( :all );
+use Moose qw( has with );
+use MooseX::Types::Moose qw( HashRef Str );
 use Sub::Exporter ();
-use Readonly;
+use Readonly qw( Readonly );
 
 Readonly our $W_SILENT  => 'silent';
 Readonly our $W_WARNING => 'warning';

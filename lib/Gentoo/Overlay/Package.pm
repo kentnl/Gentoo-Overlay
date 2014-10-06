@@ -10,12 +10,12 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moose;
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Tiny qw( :all );
-use MooseX::ClassAttribute;
-use Gentoo::Overlay::Types qw( :all  );
+use Moose qw( has );
+use MooseX::Has::Sugar qw( ro required lazy );
+use MooseX::Types::Moose qw( HashRef Str );
+use MooseX::Types::Path::Tiny qw( Path );
+use MooseX::ClassAttribute qw( class_has );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_PackageName Gentoo__Overlay_Category );
 use namespace::autoclean;
 
 

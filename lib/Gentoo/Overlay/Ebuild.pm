@@ -12,7 +12,7 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moose qw( has );
 use MooseX::Has::Sugar qw( required ro lazy );
-use MooseX::Types::Moose qw( HashRef );
+use MooseX::Types::Moose qw( HashRef Str );
 use MooseX::Types::Path::Tiny qw( File Dir );
 use MooseX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_EbuildName Gentoo__Overlay_Package );
