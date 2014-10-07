@@ -133,4 +133,4 @@ no Moo;
 
 1;
 
-=for Pod::Coverage ident message payload as_string exception warning
+=for Pod::Coverage ident message payload as_string exception warning has_tag tags
