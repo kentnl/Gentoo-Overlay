@@ -68,6 +68,10 @@ sub warning {
   return __PACKAGE__->throw(@_);
 }
 
+
+
+
+
 sub BUILDARGS {
   my ( $self, @args ) = @_;
   if ( scalar @args == 1 ) {
@@ -119,6 +123,10 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 version 2.000000
 
 =for Pod::Coverage as_string exception warning
+
+=for Pod::Coverage BUILDARGS
+
+=for Pod::Coverage ident message payload
 
 =head1 AUTHOR
 
