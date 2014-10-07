@@ -10,6 +10,7 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
  - MooX::ClassAttribute
  - MooX::HandlesVia
  - Role::HasMessage
+ - String::Errf
  - Sub::Exporter::Progressive
  - Try::Tiny
  - Type::Library 0.008
