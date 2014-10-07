@@ -27,7 +27,7 @@ our $WARNINGS_ARE = $W_WARNING;
 
 has ident => (
   is       => 'ro',
-  isa      => ( declare as Str, where { length && /\A\S/ && /\S\z/ } ),
+  isa      => ( declare as Str, where { length && /\A\S/msx && /\S\z/msx } ),
   required => 1,
 );
 
