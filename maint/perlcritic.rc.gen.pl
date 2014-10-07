@@ -33,7 +33,7 @@ for my $type (qw( Overlay Category Ebuild Package CategoryName EbuildName Packag
 }
 for my $mxtype (qw( class_type coerce from via as where subtype )) {
   $bundle->add_or_append_policy_field(
-    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'MooseX::Types::' . $mxtype, ), );
+    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'Type::Utils' . $mxtype, ), );
 
 }
 
