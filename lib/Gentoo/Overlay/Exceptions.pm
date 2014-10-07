@@ -117,7 +117,7 @@ has 'message_fmt' => (
   init_arg => 'message',
   default  => sub { shift->ident },
 );
-with( 'Throwable', 'Role::HasMessage', 'StackTrace::Auto', );
+with( 'Throwable', 'StackTrace::Auto', );
 
 sub message {
   my ($self) = @_;

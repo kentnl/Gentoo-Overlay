@@ -2,6 +2,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
 
 2.001000
  [Removed / runtime requires]
+ - Role::HasMessage
  - Role::Identifiable::HasIdent
  - Role::Identifiable::HasTags
 
