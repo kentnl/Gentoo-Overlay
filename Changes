@@ -1,6 +1,6 @@
 ﻿Revision history for Gentoo-Overlay
 
-2.000000 2014-10-07T05:55:30Z 4d8ee6e
+2.000000 2014-10-07T06:12:41Z c0ad077
  [00 Major - Version Scheme]
  - Use x.yyyzzz instead of x.y.z
  - This may affect hand-operated downstreams
