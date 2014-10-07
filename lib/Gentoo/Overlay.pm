@@ -1,27 +1,34 @@
+use 5.006;
 use strict;
 use warnings;
 
 package Gentoo::Overlay;
-BEGIN {
-  $Gentoo::Overlay::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::VERSION = '1.0.5';
-}
+
+our $VERSION = '2.000000';
 
 # ABSTRACT: Tools for working with Gentoo Overlays
 
-use Moose;
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Tiny qw( File Dir );
-use MooseX::ClassAttribute;
-use namespace::autoclean;
+use Moo qw( has );
+use MooX::HandlesVia;
+use MooseX::Has::Sugar qw( ro coerce lazy_build lazy );
+use Types::Standard qw( HashRef CodeRef );
+use Types::Path::Tiny qw( File Dir );
+use MooX::ClassAttribute qw( class_has );
 use Carp qw();
 use Gentoo::Overlay::Category;
-use Gentoo::Overlay::Types qw( :all );
-use Gentoo::Overlay::Exceptions qw( :all );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Category );
+use Gentoo::Overlay::Exceptions qw( exception warning );
+use namespace::clean -except => 'meta';
+
+
+
+
+
+
+
+
 
 
 
@@ -32,26 +39,50 @@ has 'path' => (
     exception(
       ident   => 'path parameter required',
       message => '%{package}s requires the \'path\' attribute passed during construction',
-      payload => { package => __PACKAGE__ }
+      payload => { package => __PACKAGE__ },
     );
   },
 );
 
 
-has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy_build, );
+
+
+
+
+
+
+
+
+
+
+
+has 'name' => ( isa => Gentoo__Overlay_RepositoryName, ro, lazy, builder => 1, );
+
+
+
+
+
+
+
+
+
+
 
 
 sub _build_name {
   my ($self) = shift;
   my $f = $self->default_path( repo_name => );
-  if ( ( !-e $f ) or ( !-f $f ) ) {
+  if ( not $f->exists or $f->is_dir ) {
     exception(
       ident   => 'no repo_name',
-      message => qq[No repo_name file for overlay at: %{overlay_path}s\n Expects:%{expected_path}s}],
+      message => <<'EOF',
+No repo_name file for overlay at: %{overlay_path}s
+ Expects:%{expected_path}s
+EOF
       payload => {
         overlay_path  => $self->path->stringify,
         expected_path => $f->stringify,
-      }
+      },
     );
   }
   return [ $f->lines_raw( { chomp => 1 } ) ]->[0];
@@ -59,20 +90,43 @@ sub _build_name {
 }
 
 
-has _profile_dir => ( isa => Dir, ro, lazy_build, );
+
+
+
+
+
+
+
+
+
+
+
+has _profile_dir => ( isa => Dir, ro, lazy, builder => 1 );
+
+
+
+
+
+
+
+
+
 
 
 sub _build__profile_dir {
   my ($self) = shift;
   my $pd = $self->default_path( profiles => );
-  if ( ( !-e $pd ) or ( !-d $pd ) ) {
+  if ( not $pd->exists or not $pd->is_dir ) {
     exception(
       ident   => 'no profile directory',
-      message => qq[No profile directory for overlay at: %{overlay_path}s\n  Expects:%{expected_path}s],
+      message => <<'EOF',
+No profile directory for overlay at: %{overlay_path}s
+  Expects:%{expected_path}s
+EOF
       payload => {
         overlay_path  => $self->path->stringify,
         expected_path => $pd->stringify,
-      }
+      },
     );
   }
   return $pd->absolute;
@@ -83,12 +137,71 @@ sub _build__profile_dir {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 has _categories => (
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
   isa => HashRef [Gentoo__Overlay_Category],
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_category  => exists   =>,
     category_names => keys     =>,
     categories     => elements =>,
@@ -97,22 +210,47 @@ has _categories => (
 );
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub _build__categories {
   my ($self) = @_;
   my $cf = $self->default_path('catfile');
-  if ( ( !-e $cf ) or ( !-f $cf ) ) {
+  if ( not $cf->exists or $cf->is_dir ) {
     warning(
       ident   => 'no category file',
-      message => "No category file for overlay %{name}s, expected: %{category_file}s. \n Falling back to scanning",
+      message => <<'EOF',
+No category file for overlay %{name}s, expected: %{category_file}s.
+ Falling back to scanning
+EOF
       payload => {
         name          => $self->name,
-        category_file => $cf->stringify
-      }
+        category_file => $cf->stringify,
+      },
     );
     goto $self->can('_build___categories_scan');
   }
   goto $self->can('_build___categories_file');
 }
+
+
+
+
+
+
+
+
 
 
 class_has _default_paths => (
@@ -131,17 +269,50 @@ class_has _default_paths => (
 );
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub default_path {
   my ( $self, $name, @args ) = @_;
   if ( !exists $self->_default_paths->{$name} ) {
     exception(
       ident   => 'no default path',
       message => q[No default path '%{name}s'],
-      payload => { path => $name }
+      payload => { path => $name },
     );
   }
   return $self->_default_paths->{$name}->( $self, @args );
 }
+
+
+
+
+
+
+
 
 
 sub _build___categories_file {
@@ -155,12 +326,14 @@ sub _build___categories_file {
     if ( !$category->exists ) {
       exception(
         ident   => 'missing category',
-        message => q[category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s ],
+        message => <<'EOF',
+category %{category_name}s is not an existing directory (%{expected_path}s) for overlay %{overlay_name}s
+EOF
         payload => {
           category_name => $category->name,
           expected_path => $category->path->stringify,
           overlay_name  => $self->name,
-        }
+        },
       );
       next;
     }
@@ -168,6 +341,14 @@ sub _build___categories_file {
   }
   return \%out;
 }
+
+
+
+
+
+
+
+
 
 
 sub _build___categories_scan {
@@ -190,8 +371,69 @@ sub _build___categories_scan {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub iterate {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
+
   my %method_map = (
     categories => _iterate_categories =>,
     packages   => _iterate_packages   =>,
@@ -208,9 +450,18 @@ sub iterate {
 }
 
 
+
+
+
+
+
+
+
+
+
 # ebuilds = { /categories/packages/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
 
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
@@ -227,9 +478,18 @@ sub _iterate_ebuilds {
 }
 
 
+
+
+
+
+
+
+
+
+
 # categories = { /categories }
 sub _iterate_categories {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %categories     = $self->categories();
   my $num_categories = scalar keys %categories;
   my $last_category  = $num_categories - 1;
@@ -251,9 +511,18 @@ sub _iterate_categories {
 }
 
 
+
+
+
+
+
+
+
+
+
 # packages = { /categories/packages }
 sub _iterate_packages {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
 
   my $real_callback = sub {
     my (%cconfig) = %{ $_[1] };
@@ -266,13 +535,14 @@ sub _iterate_packages {
   $self->_iterate_categories( 'categories' => $real_callback );
   return;
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__
 
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -280,7 +550,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.5
+version 2.000000
 
 =head1 SYNOPSIS
 
@@ -392,9 +662,9 @@ The iterate method provides a handy way to do walking across the whole tree stop
 
 Path to repository.
 
-    isa => Dir, ro, required, coerce
+    isa => File, ro, required, coerce
 
-L<MooseX::Types::Path::Tiny/Dir>
+L<Types::Path::Tiny/File>
 
 =head2 name
 
@@ -560,7 +830,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

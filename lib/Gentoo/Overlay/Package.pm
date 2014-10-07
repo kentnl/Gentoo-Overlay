@@ -1,23 +1,64 @@
+use 5.006;
 use strict;
 use warnings;
 
 package Gentoo::Overlay::Package;
-BEGIN {
-  $Gentoo::Overlay::Package::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Package::VERSION = '1.0.5';
-}
+
+our $VERSION = '2.000000';
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
-#
-use Moose;
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Tiny qw( :all );
-use MooseX::ClassAttribute;
-use Gentoo::Overlay::Types qw( :all  );
-use namespace::autoclean;
+
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
+use Moo qw( has );
+use MooX::HandlesVia;
+use MooseX::Has::Sugar qw( ro required lazy lazy_build);
+use Types::Standard qw( HashRef Str );
+use Types::Path::Tiny qw( Path );
+use MooX::ClassAttribute qw( class_has );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_PackageName Gentoo__Overlay_Category );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Category Gentoo__Overlay_Ebuild );
+use Gentoo::Overlay::Exceptions qw( exception);
+use namespace::clean -except => 'meta';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,16 +79,90 @@ has path => (
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
   lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( . .. metadata.xml ) };
   },
 );
+
+sub _scan_blacklisted {
+  my ( $self, $what ) = @_;
+  return exists $self->_scan_blacklist->{$what};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -56,16 +171,24 @@ class_has _scan_blacklist => (
 
 has _ebuilds => (
   isa => HashRef [Gentoo__Overlay_Ebuild],
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_ebuild  => exists   =>,
     ebuild_names => keys     =>,
     ebuilds      => elements =>,
     get_ebuild   => get      =>,
   },
 );
+
+
+
+
+
+
+
 
 
 sub _build__ebuilds {
@@ -90,15 +213,30 @@ sub _build__ebuilds {
 }
 
 
+
+
+
+
+
+
+
+
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
-  return if $self->name eq q{.};
-  return if $self->name eq q{..};
+  return if q{.} eq $self->name;
+  return if q{..} eq $self->name;
   return if not -e $self->path;
   return if not -d $self->path;
   return 1;
 }
+
+
+
+
+
+
+
 
 
 sub is_blacklisted {
@@ -110,14 +248,46 @@ sub is_blacklisted {
 }
 
 
+
+
+
+
+
+
+
 sub pretty_name {
   my $self = shift;
   return $self->category->name . q{/} . $self->name . q{::} . $self->overlay->name;
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub iterate {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
   my %method_map = ( ebuilds => _iterate_ebuilds =>, );
   if ( exists $method_map{$what} ) {
     goto $self->can( $method_map{$what} );
@@ -130,9 +300,18 @@ sub iterate {
 }
 
 
+
+
+
+
+
+
+
+
+
 # ebuilds = {/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %ebuilds     = $self->ebuilds();
   my $num_ebuilds = scalar keys %ebuilds;
   my $last_ebuild = $num_ebuilds - 1;
@@ -153,13 +332,14 @@ sub _iterate_ebuilds {
   return;
 
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__
 
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -167,7 +347,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.5
+version 2.000000
 
 =head1 SYNOPSIS
 
@@ -362,7 +542,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

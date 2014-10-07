@@ -1,23 +1,49 @@
 ﻿Revision history for Gentoo-Overlay
 
+2.000000 2014-10-07T06:27:58Z 8d98894
+ [00 Major - Version Scheme]
+ - Use x.yyyzzz instead of x.y.z
+ - This may affect hand-operated downstreams
+ - https://questhub.io/realm/perl/quest/5388d3a9bbd0be2224000129
+ - This is a primary reason for the 2.x on the box.
+
+ [01 Major - Tooling]
+ - Shipping installer is now ExtUtils::MakeMaker instead of Module::Build
+ - Version requirements on tooling and test dependencies now only upgraded to "latest" via recommendation, not
+   requirements.
+ - https://questhub.io/realm/perl/quest/5388cc12bbd0be5b2500011f
+
+ [02 Major - Reimplementation]
+ - Whole stack reimplemented in Moo based tooling.
+
+ [Dependencies::Stats]
+ - Dependencies changed since 1.0.5, see misc/*.deps* for details
+ - build: -1
+ - configure: +1 -1 (recommends: +1)
+ - develop: +48 -2 (recommends: -1, suggests: +1 ↑1)
+ - runtime: +13 -11
+ - test: +2 ↓1 -2 (recommends: +3)
+
+ [Internals]
+ - use Sub::Exporter::Progressive instead of Sub::Exporter
+ - use Const::Fast instead of Readonly
+ - use namespace::clean instead of namespace::autoclean
+
+ [Metadata]
+ - move to kentnl org
+
 1.0.5 2013-04-29T00:32:53Z
- - Bugfix: package_name and ebuild_name were paths instead of basenames,
-   but no tests revealed this. Now have tests, and bug is fixed.
+ - Bugfix: package_name and ebuild_name were paths instead of basenames, but no tests revealed this. Now have tests,
+   and bug is fixed.
 
 1.0.4 2013-04-28T20:24:18Z
  - Bugfix release to iron out some residual Path::Tiny quirks
 
- [Dependencies::Added / develop requires]
- - Test::CPAN::Changes 0.19
-
- [Dependencies::Changed / build requires]
- - Module::Build 0.4003 → 0.4004
-
- [Dependencies::Changed / configure requires]
- - Module::Build 0.4003 → 0.4004
-
- [Dependencies::Changed / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL v1.7.0 → v1.7.3
+ [Dependencies::Stats]
+ - Dependencies changed since 1.0.3, see misc/*.deps* for details
+ - build: ↑1
+ - configure: ↑1
+ - develop: +1 (suggests: ↑1)
 
  [Packaging]
  - use test_requires in Module::Build
@@ -26,30 +52,13 @@
  [!Notable Changes]
  - Move to Path::Tiny
 
- [Dependencies::Added / develop requires]
- - Pod::Coverage::TrustPod
- - Test::CPAN::Meta
- - Test::Pod 1.41
- - Test::Pod::Coverage 1.08
- - version 0.9901
-
- [Dependencies::Added / runtime requires]
- - MooseX::Types::Path::Tiny
-
- [Dependencies::Changed / build requires]
- - Module::Build 0.3601 → 0.4003
-
- [Dependencies::Changed / configure requires]
- - Module::Build 0.3601 → 0.4003
-
- [Dependencies::Changed / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL v1.3.0 → v1.7.0
-
- [Dependencies::Changed / test requires]
- - Test::More 0.96 → 0.98
-
- [Dependencies::Removed / runtime requires]
- - MooseX::Types::Path::Class
+ [Dependencies::Stats]
+ - Dependencies changed since 1.0.2, see misc/*.deps* for details
+ - build: ↑1
+ - configure: ↑1
+ - develop: +5 (suggests: ↑1)
+ - runtime: +1 -1
+ - test: ↑1
 
  [Documentation]
  - Update copyright year
@@ -60,26 +69,17 @@
 
 1.0.2 2012-06-21T11:34:49Z
  [Internals]
- - Refactor iteration logic to use a dispatch table depending on what you
-   want to iterate, instead of using a big mesy conditional. This will make
-   internal calling code faster and cleaner.
+ - Refactor iteration logic to use a dispatch table depending on what you want to iterate, instead of using a big mesy
+   conditional. This will make internal calling code faster and cleaner.
 
 1.0.1 2012-03-17T05:14:32Z
  - Minor Maintenance release
 
- [Dependencies::Added / runtime requires]
- - perl 5.006
- - strict
- - warnings
-
- [Dependencies::Changed / develop recommends]
- - Dist::Zilla::PluginBundle::Author::KENTNL::Lite 0.01009803 → v1.3.0
-
- [Dependencies::Changed / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL v1.0.0 → v1.3.0
-
- [Dependencies::Removed / test requires]
- - English
+ [Dependencies::Stats]
+ - Dependencies changed since 1.0.0, see misc/*.deps* for details
+ - develop: (recommends: ↑1, suggests: ↑1)
+ - runtime: +3
+ - test: -1
 
  [Internals]
  - Move Version Declaration out of BEGIN
@@ -93,13 +93,11 @@
 
 1.0.0 2011-08-02T10:24:40Z
  [Features]
- - Have a new iteration interface for easy overlay walking. ( Partially
-   Existed in code but was undocumented )
+ - Have a new iteration interface for easy overlay walking. ( Partially Existed in code but was undocumented )
  - Can now iterate by 'ebuilds'.
 
  [Internals]
- - Restyled a lot of the internals because the 'has' form I was using was
-   ugly and buggy.
+ - Restyled a lot of the internals because the 'has' form I was using was ugly and buggy.
 
  [Meta]
  - resource URI's moved to https:// only.
@@ -124,46 +122,15 @@
 
 0.03000000 2011-02-10T22:15:53Z
  - Eliminate 'tie' in favour of ->open + ->read
- - Throw Exceptions. Even warnings are exceptions now. You can't catch
-   them, but you can toggle a switch to make them die() instead of warn. (
-   local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
+ - Throw Exceptions. Even warnings are exceptions now. You can't catch them, but you can toggle a switch to make them
+   die() instead of warn. ( local $Gentoo::Overlay::Exceptions::WARNINGS_ARE='fatal'; )
  - Added an ( currently undocumented ) iteration interface.
 
- [Dependencies::Added / develop recommends]
- - Dist::Zilla::PluginBundle::Author::KENTNL::Lite 0.01009803
-
- [Dependencies::Added / develop requires]
- - Dist::Zilla::PluginBundle::Author::KENTNL::Lite
-
- [Dependencies::Added / develop suggests]
- - Dist::Zilla::PluginBundle::Author::KENTNL v1.0.0
-
- [Dependencies::Added / runtime requires]
- - Data::Dump
- - MooseX::OneArgNew
- - Readonly
- - Role::HasMessage::Errf
- - Role::Identifiable::HasIdent
- - Role::Identifiable::HasTags
- - StackTrace::Auto
- - Sub::Exporter
- - Throwable
- - overload
-
- [Dependencies::Changed / test requires]
- - Test::More 0.88 → 0.96
-
- [Dependencies::Removed / develop recommends]
- - Dist::Zilla::PluginBundle::KENTNL::Lite 0.01009803
-
- [Dependencies::Removed / develop requires]
- - Dist::Zilla::PluginBundle::KENTNL::Lite
-
- [Dependencies::Removed / develop suggests]
- - Dist::Zilla::PluginBundle::KENTNL 0.01017119
-
- [Dependencies::Removed / runtime requires]
- - IO::Dir
+ [Dependencies::Stats]
+ - Dependencies changed since 0.02004319, see misc/*.deps* for details
+ - develop: +1 -1 (recommends: +1 -1, suggests: +1 -1)
+ - runtime: +10 -1
+ - test: ↑1
 
 0.02004319 2011-01-04T12:25:26Z
  - Added a Package class.
@@ -171,10 +138,8 @@
  - Replaced some Strs with EAPI constraints.
  - Rearranged 'blacklist' behaviour, it was stupid.
  - Extended the example to handle packages.
- - category objects now have a ->packages, ->_has_package, ->package_names,
-   ->get_package
- - 3 New Types, _CategoryName, _PackageName, _RepositoryName, all EAPI2
-   compliant.
+ - category objects now have a ->packages, ->_has_package, ->package_names, ->get_package
+ - 3 New Types, _CategoryName, _PackageName, _RepositoryName, all EAPI2 compliant.
 
 0.01000020 2010-11-21T08:17:06Z
  - Refactored to create a Category Package
@@ -183,6 +148,10 @@
 
  [Dependencies::Added / runtime requires]
  - MooseX::Types
+
+ [Dependencies::Stats]
+ - Dependencies changed since 0.01000015, see misc/*.deps* for details
+ - runtime: +1
 
 0.01000015 2010-11-21T03:17:46Z
  - First version.

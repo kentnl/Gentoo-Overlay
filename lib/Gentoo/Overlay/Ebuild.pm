@@ -1,25 +1,73 @@
+use 5.006;
 use strict;
 use warnings;
 
 package Gentoo::Overlay::Ebuild;
-BEGIN {
-  $Gentoo::Overlay::Ebuild::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Ebuild::VERSION = '1.0.5';
-}
 
-# FILENAME: Ebuild.pm
-# CREATED: 02/08/11 18:38:11 by Kent Fredric (kentnl) <kentfredric@gmail.com>
+our $VERSION = '2.000000';
+
 # ABSTRACT: A Class for Ebuilds in Gentoo Overlays
 
-use Moose;
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Tiny qw( File Dir );
-use MooseX::ClassAttribute;
-use Gentoo::Overlay::Types qw( :all );
-use namespace::autoclean;
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
+use Moo qw( has );
+use MooseX::Has::Sugar qw( required ro lazy );
+use Types::Standard qw( HashRef Str );
+use Types::Path::Tiny qw( File Dir );
+use MooX::ClassAttribute qw( class_has );
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_EbuildName Gentoo__Overlay_Package );
+use namespace::clean -except => 'meta';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -45,27 +93,70 @@ has path => (
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
   lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( . .. ChangeLog Manifest metadata.xml ) };
   },
 );
 
+sub _scan_blacklisted {
+  my ( $self, $what ) = @_;
+  return exists $self->_scan_blacklist->{$what};
+}
+
+
+
+
+
+
+
+
+
 
 ## no critic ( ProhibitBuiltinHomonyms )
 sub exists {
   my $self = shift;
-  return if $self->name eq q{.};
-  return if $self->name eq q{..};
-  return if not -e $self->path;
-  return if not -f $self->path;
+  return if q{.} eq $self->name;
+  return if q{..} eq $self->name;
+  return unless $self->path->exists;
+  return if $self->path->is_dir;
   return 1;
 }
+
+
+
+
+
+
+
 
 
 sub is_blacklisted {
@@ -77,6 +168,13 @@ sub is_blacklisted {
 }
 
 
+
+
+
+
+
+
+
 sub pretty_name {
   my $self     = shift;
   my $filename = $self->name;
@@ -85,13 +183,14 @@ sub pretty_name {
   return q{=} . $self->category->name . q{/} . $filename . q{::} . $self->overlay->name;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__
 
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -99,7 +198,7 @@ Gentoo::Overlay::Ebuild - A Class for Ebuilds in Gentoo Overlays
 
 =head1 VERSION
 
-version 1.0.5
+version 2.000000
 
 =head1 SYNOPSIS
 
@@ -176,7 +275,7 @@ L<Gentoo::Overlay::Package/overlay>
 
 L</package>
 
-=head2 overlay
+=head2 category
 
   $ebuild->category -> Gentoo::Overlay::Package->category
 
@@ -216,7 +315,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

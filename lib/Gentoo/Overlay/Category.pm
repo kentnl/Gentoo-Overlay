@@ -1,24 +1,51 @@
+use 5.006;
 use strict;
 use warnings;
 
 package Gentoo::Overlay::Category;
-BEGIN {
-  $Gentoo::Overlay::Category::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Category::VERSION = '1.0.5';
-}
+
+our $VERSION = '2.000000';
 
 # ABSTRACT: A singular category in a repository;
 
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moose;
-use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw( :all );
-use MooseX::Types::Path::Tiny qw( File Dir Path );
-use MooseX::ClassAttribute;
-use Gentoo::Overlay::Types qw( :all );
-use namespace::autoclean;
+use Moo qw( has );
+use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
+use Types::Standard qw( HashRef Str );
+use Types::Path::Tiny qw( File Dir Path );
+use MooX::ClassAttribute qw( class_has );
+use MooX::HandlesVia;
+use Gentoo::Overlay::Types qw( Gentoo__Overlay_CategoryName Gentoo__Overlay_Package Gentoo__Overlay_Overlay );
+use Gentoo::Overlay::Exceptions qw( exception );
+use namespace::clean -except => 'meta';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,18 +65,72 @@ has path => ( lazy, ro,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 has _packages => (
   isa => HashRef [Gentoo__Overlay_Package],
-  lazy_build,
+  lazy,
+  builder => 1,
   ro,
-  traits  => [qw( Hash )],
-  handles => {
+  handles_via => 'Hash',
+  handles     => {
     _has_package  => exists   =>,
     package_names => keys     =>,
     packages      => elements =>,
     get_package   => get      =>,
   },
 );
+
+
+
+
+
+
+
 
 
 sub _build__packages {
@@ -73,16 +154,51 @@ sub _build__packages {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class_has _scan_blacklist => (
   isa => HashRef [Str],
   ro,
   lazy,
-  traits  => [qw( Hash )],
-  handles => { _scan_blacklisted => exists =>, },
   default => sub {
     return { map { $_ => 1 } qw( metadata profiles distfiles eclass licenses packages scripts . .. ) };
   },
 );
+
+sub _scan_blacklisted {
+  my ( $self, $what ) = @_;
+  return exists $self->_scan_blacklist->{$what};
+}
+
+
+
+
+
+
+
 
 
 ## no critic ( ProhibitBuiltinHomonyms )
@@ -94,6 +210,15 @@ sub exists {
 }
 
 
+
+
+
+
+
+
+
+
+
 sub is_blacklisted {
   my ( $self, $name ) = @_;
   if ( not defined $name ) {
@@ -103,14 +228,62 @@ sub is_blacklisted {
 }
 
 
+
+
+
+
+
+
+
 sub pretty_name {
   my $self = shift;
   return $self->name . '/::' . $self->overlay->name;
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sub iterate {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, $what, $callback ) = @_;    ## no critic (Variables::ProhibitUnusedVarsStricter)
   my %method_map = (
     packages => _iterate_packages =>,
     ebuilds  => _iterate_ebuilds  =>,
@@ -126,9 +299,18 @@ sub iterate {
 }
 
 
+
+
+
+
+
+
+
+
+
 # packages = { /packages }
 sub _iterate_packages {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my %packages     = $self->packages();
   my $num_packages = scalar keys %packages;
   my $last_package = $num_packages - 1;
@@ -151,9 +333,18 @@ sub _iterate_packages {
 }
 
 
+
+
+
+
+
+
+
+
+
 # ebuilds = { /packages/ebuilds }
 sub _iterate_ebuilds {
-  my ( $self, $what, $callback ) = @_;
+  my ( $self, undef, $callback ) = @_;
   my $real_callback = sub {
 
     my (%pconfig) = %{ $_[1] };
@@ -167,13 +358,14 @@ sub _iterate_ebuilds {
   return;
 
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__
 
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -181,7 +373,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 1.0.5
+version 2.000000
 
 =head1 SYNOPSIS
 
@@ -395,7 +587,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

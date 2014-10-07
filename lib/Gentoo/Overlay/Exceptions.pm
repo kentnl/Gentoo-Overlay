@@ -1,27 +1,28 @@
+use 5.006;
 use strict;
 use warnings;
 
 package Gentoo::Overlay::Exceptions;
-BEGIN {
-  $Gentoo::Overlay::Exceptions::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Exceptions::VERSION = '1.0.5';
-}
+
+our $VERSION = '2.000000';
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
-#
-use Moose;
-use MooseX::Types::Moose qw( :all );
-use Sub::Exporter ();
-use Readonly;
 
-Readonly our $W_SILENT  => 'silent';
-Readonly our $W_WARNING => 'warning';
-Readonly our $W_FATAL   => 'fatal';
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
+use Moo qw( has with );
+use Try::Tiny qw( try catch );
+use Types::Standard qw( HashRef Str );
+use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
+use String::Errf qw( errf );
+use Const::Fast qw( const );
+use namespace::clean -except => [ 'meta', 'import' ];
+
+const our $W_SILENT  => 'silent';
+const our $W_WARNING => 'warning';
+const our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
-
 
 has 'payload' => (
   is       => 'ro',
@@ -60,26 +61,41 @@ sub warning {
   return __PACKAGE__->throw(@_);
 }
 
-Sub::Exporter::setup_exporter( { exports => [ 'exception', 'warning', ] } );
-use Data::Dump qw( dump );
-with(
-  'Throwable',
-  'Role::Identifiable::HasIdent',
-  'Role::Identifiable::HasTags',
-  'Role::HasMessage::Errf' => {
-    lazy    => 1,
-    default => sub { shift->ident }
-  },
-  'StackTrace::Auto',
-  'MooseX::OneArgNew' => {
-    type     => Str,
-    init_arg => 'ident',
-  },
+
+
+
+
+sub BUILDARGS {
+  my ( undef, @args ) = @_;
+  if ( 1 == scalar @args ) {
+    if ( not ref $args[0] ) {
+      return { ident => $args[0] };
+    }
+    return $args[0];
+  }
+  return {@args};
+}
+has 'message_fmt' => (
+  is       => 'ro',
+  isa      => Str,
+  lazy     => 1,
+  required => 1,
+  init_arg => 'message',
+  default  => sub { shift->ident },
 );
+with( 'Throwable', 'Role::Identifiable::HasIdent', 'Role::Identifiable::HasTags', 'Role::HasMessage', 'StackTrace::Auto', );
 
-__PACKAGE__->meta->make_immutable( inline_constructor => 0 );    # Mx::OneArg's fault.
+sub message {
+  my ($self) = @_;
+  return try {
+    errf( $self->message_fmt, $self->payload )
+  }
+  catch {
+    sprintf '%s (error during formatting)', $self->message_fmt;
+  },;
+}
 
-no Moose;
+no Moo;
 
 1;
 
@@ -87,15 +103,19 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 
 =head1 VERSION
 
-version 1.0.5
+version 2.000000
 
-=for Pod::Coverage as_string exception warning
+=for Pod::Coverage BUILDARGS
+
+=for Pod::Coverage ident message payload as_string exception warning
 
 =head1 AUTHOR
 
@@ -103,7 +123,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

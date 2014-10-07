@@ -1,29 +1,34 @@
+use 5.006;
 use strict;
 use warnings;
 
 package Gentoo::Overlay::Types;
-BEGIN {
-  $Gentoo::Overlay::Types::AUTHORITY = 'cpan:KENTNL';
-}
-{
-  $Gentoo::Overlay::Types::VERSION = '1.0.5';
-}
+
+our $VERSION = '2.000000';
 
 # ABSTRACT: Gentoo Overlay types.
 
-use MooseX::Types -declare => [
-  qw(
-    Gentoo__Overlay_Overlay
-    Gentoo__Overlay_Category
-    Gentoo__Overlay_Ebuild
-    Gentoo__Overlay_Package
-    Gentoo__Overlay_CategoryName
-    Gentoo__Overlay_EbuildName
-    Gentoo__Overlay_PackageName
-    Gentoo__Overlay_RepositoryName
-    )
-];
-use MooseX::Types::Moose qw( :all );
+our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
+
+use Type::Library 0.008 '-base', -declare => qw(
+  Gentoo__Overlay_Overlay
+  Gentoo__Overlay_Category
+  Gentoo__Overlay_Ebuild
+  Gentoo__Overlay_Package
+  Gentoo__Overlay_CategoryName
+  Gentoo__Overlay_EbuildName
+  Gentoo__Overlay_PackageName
+  Gentoo__Overlay_RepositoryName
+);
+use Type::Utils;
+use Types::Standard qw( Str  );
+
+
+
+
+
+
+
 
 
 class_type Gentoo__Overlay_Overlay, { class => 'Gentoo::Overlay' };
@@ -33,23 +38,56 @@ coerce Gentoo__Overlay_Overlay, from Str, via {
 };
 
 
+
+
+
+
+
 class_type Gentoo__Overlay_Category, { class => 'Gentoo::Overlay::Category' };
+
+
+
+
+
 
 
 class_type Gentoo__Overlay_Ebuild, { class => 'Gentoo::Overlay::Ebuild' };
 
 
+
+
+
+
+
 class_type Gentoo__Overlay_Package, { class => 'Gentoo::Overlay::Package' };
 
 
-subtype Gentoo__Overlay_CategoryName, as Str, where {
+
+
+
+
+
+
+
+
+declare Gentoo__Overlay_CategoryName, as Str, where {
 ## no critic ( RegularExpressions )
   $_ =~ qr/^[a-zA-Z0-9+_.-]+$/
     && $_ !~ qr/^[-.]/;
 };
 
 
-subtype Gentoo__Overlay_EbuildName, as Str, where {
+
+
+
+
+
+
+
+
+
+
+declare Gentoo__Overlay_EbuildName, as Str, where {
   ## no critic ( RegularExpressions )
        $_ =~ qr/^[A-Za-z0-9+_.-]+$/
     && $_ !~ qr/^-/
@@ -58,7 +96,17 @@ subtype Gentoo__Overlay_EbuildName, as Str, where {
 };
 
 
-subtype Gentoo__Overlay_PackageName, as Str, where {
+
+
+
+
+
+
+
+
+
+
+declare Gentoo__Overlay_PackageName, as Str, where {
   ## no critic ( RegularExpressions )
        $_ =~ qr/^[A-Za-z0-9+_-]+$/
     && $_ !~ qr/^-/
@@ -67,7 +115,15 @@ subtype Gentoo__Overlay_PackageName, as Str, where {
 };
 
 
-subtype Gentoo__Overlay_RepositoryName, as Str, where {
+
+
+
+
+
+
+
+
+declare Gentoo__Overlay_RepositoryName, as Str, where {
 ## no critic ( RegularExpressions )
 
   $_ =~ qr/^[A-Za-z0-9_-]+$/
@@ -80,13 +136,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Gentoo::Overlay::Types - Gentoo Overlay types.
 
 =head1 VERSION
 
-version 1.0.5
+version 2.000000
 
 =head1 TYPES
 
@@ -146,7 +204,7 @@ Kent Fredric <kentnl@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Kent Fredric <kentnl@cpan.org>.
+This software is copyright (c) 2014 by Kent Fredric <kentnl@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
