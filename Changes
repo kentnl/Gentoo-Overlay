@@ -1,6 +1,8 @@
 ﻿Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.000000 2014-10-07T06:27:58Z 8d98894
  [00 Major - Version Scheme]
  - Use x.yyyzzz instead of x.y.z
  - This may affect hand-operated downstreams

@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Ebuild;
 
-our $VERSION = '2.000000';
+our $VERSION = '2.000001';
 
 # ABSTRACT: A Class for Ebuilds in Gentoo Overlays
 
