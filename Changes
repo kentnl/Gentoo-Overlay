@@ -1,6 +1,15 @@
 ﻿Revision history for Gentoo-Overlay
 
 2.001000 2014-10-07T06:34:45Z 18c7632
+ [00 Minor]
+ - Further refactoring work to remove Moose dependencies.
+
+ [Dependencies::Stats]
+ - Dependencies changed since 2.000000, see misc/*.deps* for details
+ - runtime: -1
+
+ [Internals]
+ - Removed Moose role HasIdent by hard-coding the same logic.
 
 2.000000 2014-10-07T06:27:58Z 8d98894
  [00 Major - Version Scheme]
