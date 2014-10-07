@@ -3,6 +3,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
 2.001000
  [Removed / runtime requires]
  - Role::Identifiable::HasIdent
+ - Role::Identifiable::HasTags
 
 2.000000 2014-10-07T06:27:58Z
  [Added / configure recommends]
