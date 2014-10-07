@@ -556,8 +556,7 @@ sub _iterate_packages {
   $self->_iterate_categories( 'categories' => $real_callback );
   return;
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__

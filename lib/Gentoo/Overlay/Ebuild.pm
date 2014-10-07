@@ -196,8 +196,7 @@ sub pretty_name {
   return q{=} . $self->category->name . q{/} . $filename . q{::} . $self->overlay->name;
 }
 
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__

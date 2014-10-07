@@ -350,8 +350,7 @@ sub _iterate_ebuilds {
   return;
 
 }
-no Moose;
-__PACKAGE__->meta->make_immutable;
+no Moo;
 1;
 
 __END__

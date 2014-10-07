@@ -102,9 +102,7 @@ sub message {
   }
 }
 
-__PACKAGE__->meta->make_immutable( inline_constructor => 0 );    # Mx::OneArg's fault.
-
-no Moose;
+no Moo;
 
 1;
 
