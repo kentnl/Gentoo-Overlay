@@ -10,31 +10,6 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 use Moo qw( has );
 use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
 use Types::Standard qw( HashRef Str );

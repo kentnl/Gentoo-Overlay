@@ -65,24 +65,6 @@ use namespace::clean -except => 'meta';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 has name => ( isa => Gentoo__Overlay_PackageName, required, ro, );
 has category => ( isa => Gentoo__Overlay_Category, required, ro, handles => [qw( overlay )], );
 has path => (

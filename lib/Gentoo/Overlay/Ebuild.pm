@@ -74,19 +74,6 @@ use namespace::clean -except => 'meta';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 has name => ( isa => Gentoo__Overlay_EbuildName, required, ro );
 has package => (
   isa => Gentoo__Overlay_Package,

@@ -23,14 +23,6 @@ const our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
 
-
-
-
-
-
-
-
-
 has 'payload' => (
   is       => 'ro',
   isa      => HashRef,
@@ -120,11 +112,9 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 
 version 2.000000
 
-=for Pod::Coverage as_string exception warning
-
 =for Pod::Coverage BUILDARGS
 
-=for Pod::Coverage ident message payload
+=for Pod::Coverage ident message payload as_string exception warning
 
 =head1 AUTHOR
 
