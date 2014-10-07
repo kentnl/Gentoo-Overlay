@@ -73,6 +73,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Type::Utils
  - Types::Path::Tiny
  - Types::Standard
+ - namespace::clean
 
  [Added / test recommends]
  - CPAN::Meta 2.120900
@@ -113,6 +114,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
  - Readonly
  - Role::HasMessage::Errf
  - Sub::Exporter
+ - namespace::autoclean
 
  [Removed / test requires]
  - File::Find
