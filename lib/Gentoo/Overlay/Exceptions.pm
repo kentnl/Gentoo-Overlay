@@ -12,7 +12,7 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moo qw( has with );
 use Try::Tiny qw( try catch );
-use Types::Standard qw( HashRef Str );
+use Types::Standard qw( HashRef Str ArrayRef );
 use Type::Utils qw( declare where as );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
 use String::Errf qw( errf );
@@ -29,6 +29,33 @@ has ident => (
   is       => 'ro',
   isa      => ( declare as Str, where { length && /\A\S/ && /\S\z/ } ),
   required => 1,
+);
+
+sub has_tag {
+  my ( $self, $tag ) = @_;
+
+  $_ eq $tag && return 1 for $self->tags;
+
+  return;
+}
+
+sub tags {
+  my ($self) = @_;
+
+  # Poor man's uniq:
+  my %tags = map { ; $_ => 1 } ( @{ $self->_instance_tags } );
+
+  return wantarray ? keys %tags : ( keys %tags )[0];
+}
+
+my $tag = declare Str, where { length };
+
+has instance_tags => (
+  is       => 'ro',
+  isa      => ArrayRef [$tag],
+  reader   => '_instance_tags',
+  init_arg => 'tags',
+  default  => sub { [] },
 );
 
 has 'payload' => (
@@ -90,7 +117,7 @@ has 'message_fmt' => (
   init_arg => 'message',
   default  => sub { shift->ident },
 );
-with( 'Throwable', 'Role::Identifiable::HasTags', 'Role::HasMessage', 'StackTrace::Auto', );
+with( 'Throwable', 'Role::HasMessage', 'StackTrace::Auto', );
 
 sub message {
   my ($self) = @_;

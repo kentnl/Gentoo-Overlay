@@ -1,6 +1,6 @@
 ﻿Revision history for Gentoo-Overlay
 
-2.001000 2014-10-07T06:34:45Z 18c7632
+2.001000 2014-10-07T06:47:09Z 4c22d42
  [00 Minor]
  - Further refactoring work to remove Moose dependencies.
 
