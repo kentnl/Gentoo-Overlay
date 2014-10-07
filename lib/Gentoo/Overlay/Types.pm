@@ -10,7 +10,7 @@ our $VERSION = '2.000000';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Type::Library 0.008 -base, -declare => qw(
+use Type::Library 0.008 '-base', -declare => qw(
   Gentoo__Overlay_Overlay
   Gentoo__Overlay_Category
   Gentoo__Overlay_Ebuild

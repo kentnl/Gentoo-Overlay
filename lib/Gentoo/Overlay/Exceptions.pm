@@ -15,6 +15,7 @@ use Try::Tiny qw( try catch );
 use Types::Standard qw( HashRef Str );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
 use Const::Fast qw( const );
+use String::Errf qw( errf );
 use namespace::clean -except => [ 'meta', 'import' ];
 
 const our $W_SILENT  => 'silent';
@@ -65,8 +66,8 @@ sub warning {
 
 
 sub BUILDARGS {
-  my ( $self, @args ) = @_;
-  if ( scalar @args == 1 ) {
+  my ( undef, @args ) = @_;
+  if ( 1 == scalar @args ) {
     if ( not ref $args[0] ) {
       return { ident => $args[0] };
     }
@@ -91,7 +92,7 @@ sub message {
   }
   catch {
     sprintf '%s (error during formatting)', $self->message_fmt;
-  }
+  },;
 }
 
 no Moo;
