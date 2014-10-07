@@ -21,24 +21,6 @@ use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Ca
 use Gentoo::Overlay::Exceptions qw( exception);
 use namespace::clean -except => 'meta';
 
-=head1 SYNOPSIS
-
-    my $package = Overlay::Package->new(
-        name => 'Moose',
-        category => $category_object,
-    );
-
-    $package->exists() # Moose exists
-
-    print $package->pretty_name() # dev-perl/Moose::gentoo
-
-    print $package->path() # /usr/portage/dev-perl/Moose
-
-    ::Package->is_blacklisted("..") # '..' is not a valid package name
-    ::Package->is_blacklisted('metadata.xml') # is not a valid directory
-
-=cut
-
 =attr name
 
 The packages Short name.
@@ -352,3 +334,21 @@ sub _iterate_ebuilds {
 }
 no Moo;
 1;
+
+=head1 SYNOPSIS
+
+    my $package = Overlay::Package->new(
+        name => 'Moose',
+        category => $category_object,
+    );
+
+    $package->exists() # Moose exists
+
+    print $package->pretty_name() # dev-perl/Moose::gentoo
+
+    print $package->path() # /usr/portage/dev-perl/Moose
+
+    ::Package->is_blacklisted("..") # '..' is not a valid package name
+    ::Package->is_blacklisted('metadata.xml') # is not a valid directory
+
+=cut

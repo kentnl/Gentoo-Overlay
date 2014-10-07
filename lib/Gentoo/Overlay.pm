@@ -22,27 +22,6 @@ use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Ca
 use Gentoo::Overlay::Exceptions qw( exception warning );
 use namespace::clean -except => 'meta';
 
-=head1 SYNOPSIS
-
-  my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
-
-  my $name       = $overlay->name();
-  my %categories = $overlay->categories();
-
-  print "Overlay $name 's categories:\n";
-  for( sort keys %categories ){
-    printf "%30s : %s", $_, $categories{$_};
-  }
-
-  # Overlay gentoo 's categories:
-  #  .....
-  #  dev-lang      : /usr/portage/dev-lang
-  #  .....
-
-There will be more features eventually, this is just a first release.
-
-=cut
-
 =attr path
 
 Path to repository.
@@ -559,3 +538,21 @@ sub _iterate_packages {
 no Moo;
 1;
 
+=head1 SYNOPSIS
+
+  my $overlay = Gentoo::Overlay->new( path => '/usr/portage' );
+
+  my $name       = $overlay->name();
+  my %categories = $overlay->categories();
+
+  print "Overlay $name 's categories:\n";
+  for( sort keys %categories ){
+    printf "%30s : %s", $_, $categories{$_};
+  }
+
+  # Overlay gentoo 's categories:
+  #  .....
+  #  dev-lang      : /usr/portage/dev-lang
+  #  .....
+
+There will be more features eventually, this is just a first release.

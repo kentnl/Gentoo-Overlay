@@ -24,14 +24,6 @@ const our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
 
-=begin Pod::Coverage
-
-as_string exception warning
-
-=end Pod::Coverage
-
-=cut
-
 has 'payload' => (
   is       => 'ro',
   isa      => HashRef,
@@ -107,4 +99,4 @@ no Moo;
 
 1;
 
-=for Pod::Coverage ident message payload
+=for Pod::Coverage ident message payload as_string exception warning

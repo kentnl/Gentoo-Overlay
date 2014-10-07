@@ -10,31 +10,6 @@ our $VERSION = '2.000000';
 
 # AUTHORITY
 
-=head1 SYNOPSIS
-
-Still limited functionality, more to come.
-
-    my $category = ::Overlay::Category->new(
-        name => 'dev-perl',
-        overlay => '/usr/portage' ,
-    );
-
-    my $category = ::Overlay::Category->new(
-        name => 'dev-perl',
-        overlay => $overlay_object ,
-    );
-
-    $category->exists()  # is the category there, is it a directory?
-
-    $category->pretty_name()  #  dev-perl/::gentoo
-
-    $category->path()  # /usr/portage/dev-perl
-
-    ::Overlay::Category->is_blacklisted('..') # is '..' a blacklisted category
-
-
-=cut
-
 use Moo qw( has );
 use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
 use Types::Standard qw( HashRef Str );
@@ -386,3 +361,26 @@ sub _iterate_ebuilds {
 no Moo;
 1;
 
+=head1 SYNOPSIS
+
+Still limited functionality, more to come.
+
+    my $category = ::Overlay::Category->new(
+        name => 'dev-perl',
+        overlay => '/usr/portage' ,
+    );
+
+    my $category = ::Overlay::Category->new(
+        name => 'dev-perl',
+        overlay => $overlay_object ,
+    );
+
+    $category->exists()  # is the category there, is it a directory?
+
+    $category->pretty_name()  #  dev-perl/::gentoo
+
+    $category->path()  # /usr/portage/dev-perl
+
+    ::Overlay::Category->is_blacklisted('..') # is '..' a blacklisted category
+
+=cut

@@ -18,19 +18,6 @@ use MooX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_EbuildName Gentoo__Overlay_Package );
 use namespace::clean -except => 'meta';
 
-=head1 SYNOPSIS
-
-  my $ebuild = Overlay::Ebuild->new(
-    name => 'Moose-2.0.0.ebuild',
-    package => $package_object,
-  );
-
-  $ebuild->exists();  #  Ebuild listed exists.
-
-  print $ebuild->pretty_name # =dev-perl/Moose-2.0.0::gentoo
-
-  print $ebuild->path # /usr/portage/dev-perl/Moose/Moose-2.0.0.ebuild
-
 =attr name
 
 The Ebuilds short name
@@ -198,4 +185,17 @@ sub pretty_name {
 
 no Moo;
 1;
+
+=head1 SYNOPSIS
+
+  my $ebuild = Overlay::Ebuild->new(
+    name => 'Moose-2.0.0.ebuild',
+    package => $package_object,
+  );
+
+  $ebuild->exists();  #  Ebuild listed exists.
+
+  print $ebuild->pretty_name # =dev-perl/Moose-2.0.0::gentoo
+
+  print $ebuild->path # /usr/portage/dev-perl/Moose/Moose-2.0.0.ebuild
 
