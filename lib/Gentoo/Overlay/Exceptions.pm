@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Exceptions;
 
-our $VERSION = '2.000001';
+our $VERSION = '2.001000';
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 
@@ -117,7 +117,7 @@ has 'message_fmt' => (
   init_arg => 'message',
   default  => sub { shift->ident },
 );
-with( 'Throwable', 'Role::HasMessage', 'StackTrace::Auto', );
+with( 'Throwable', 'StackTrace::Auto', );
 
 sub message {
   my ($self) = @_;
@@ -145,7 +145,7 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 
 =head1 VERSION
 
-version 2.000001
+version 2.001000
 
 =for Pod::Coverage BUILDARGS
 

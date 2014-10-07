@@ -26,7 +26,6 @@ my %WriteMakefileArgs = (
     "MooX::ClassAttribute" => 0,
     "MooX::HandlesVia" => 0,
     "MooseX::Has::Sugar" => 0,
-    "Role::HasMessage" => 0,
     "StackTrace::Auto" => 0,
     "String::Errf" => 0,
     "Sub::Exporter::Progressive" => 0,
@@ -49,7 +48,7 @@ my %WriteMakefileArgs = (
     "Test::More" => "0.96",
     "Test::Output" => 0
   },
-  "VERSION" => "2.000001",
+  "VERSION" => "2.001000",
   "test" => {
     "TESTS" => "t/*.t t/00-compile/*.t"
   }
@@ -66,7 +65,6 @@ my %FallbackPrereqs = (
   "MooX::ClassAttribute" => 0,
   "MooX::HandlesVia" => 0,
   "MooseX::Has::Sugar" => 0,
-  "Role::HasMessage" => 0,
   "StackTrace::Auto" => 0,
   "String::Errf" => 0,
   "Sub::Exporter::Progressive" => 0,
