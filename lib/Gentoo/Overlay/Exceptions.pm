@@ -69,6 +69,10 @@ sub warning {
   return __PACKAGE__->throw(@_);
 }
 
+=for Pod::Coverage BUILDARGS
+
+=cut
+
 sub BUILDARGS {
   my ( undef, @args ) = @_;
   if ( 1 == scalar @args ) {
@@ -102,3 +106,5 @@ sub message {
 no Moo;
 
 1;
+
+=for Pod::Coverage ident message payload
