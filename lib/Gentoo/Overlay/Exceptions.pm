@@ -14,12 +14,11 @@ use Moo qw( has with );
 use Try::Tiny qw( try catch );
 use Types::Standard qw( HashRef Str );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
+use Const::Fast qw( const );
 
-use Readonly qw( Readonly );
-
-Readonly our $W_SILENT  => 'silent';
-Readonly our $W_WARNING => 'warning';
-Readonly our $W_FATAL   => 'fatal';
+const our $W_SILENT  => 'silent';
+const our $W_WARNING => 'warning';
+const our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
 
