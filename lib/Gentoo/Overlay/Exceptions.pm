@@ -13,6 +13,7 @@ our $VERSION = '2.000001';
 use Moo qw( has with );
 use Try::Tiny qw( try catch );
 use Types::Standard qw( HashRef Str );
+use Type::Utils qw( declare where as );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
 use String::Errf qw( errf );
 use Const::Fast qw( const );
@@ -23,6 +24,12 @@ const our $W_WARNING => 'warning';
 const our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
+
+has ident => (
+  is       => 'ro',
+  isa      => ( declare as Str, where { length && /\A\S/ && /\S\z/ } ),
+  required => 1,
+);
 
 has 'payload' => (
   is       => 'ro',
@@ -83,7 +90,7 @@ has 'message_fmt' => (
   init_arg => 'message',
   default  => sub { shift->ident },
 );
-with( 'Throwable', 'Role::Identifiable::HasIdent', 'Role::Identifiable::HasTags', 'Role::HasMessage', 'StackTrace::Auto', );
+with( 'Throwable', 'Role::Identifiable::HasTags', 'Role::HasMessage', 'StackTrace::Auto', );
 
 sub message {
   my ($self) = @_;
