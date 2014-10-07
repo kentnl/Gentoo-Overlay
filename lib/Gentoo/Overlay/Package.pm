@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Package;
 
-our $VERSION = '2.000000';
+our $VERSION = '2.001000';
 
 # ABSTRACT: Class for Package's in Gentoo Overlays
 
@@ -347,7 +347,7 @@ Gentoo::Overlay::Package - Class for Package's in Gentoo Overlays
 
 =head1 VERSION
 
-version 2.000000
+version 2.001000
 
 =head1 SYNOPSIS
 

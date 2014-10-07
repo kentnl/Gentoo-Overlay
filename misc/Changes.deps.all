@@ -1,6 +1,12 @@
 This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL dependencies for all phases (configure/build/runtime/test/develop)
 
-2.000000
+2.001000
+ [Removed / runtime requires]
+ - Role::HasMessage
+ - Role::Identifiable::HasIdent
+ - Role::Identifiable::HasTags
+
+2.000000 2014-10-07T06:27:58Z
  [Added / configure recommends]
  - ExtUtils::MakeMaker 6.98
 

@@ -1,6 +1,12 @@
 This file contains changes in REQUIRED dependencies for standard CPAN phases (configure/build/runtime/test)
 
-2.000000
+2.001000
+ [Removed / runtime requires]
+ - Role::HasMessage
+ - Role::Identifiable::HasIdent
+ - Role::Identifiable::HasTags
+
+2.000000 2014-10-07T06:27:58Z
  [Added / configure requires]
  - ExtUtils::MakeMaker
 

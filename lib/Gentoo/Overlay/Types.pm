@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Types;
 
-our $VERSION = '2.000000';
+our $VERSION = '2.001000';
 
 # ABSTRACT: Gentoo Overlay types.
 
@@ -144,7 +144,7 @@ Gentoo::Overlay::Types - Gentoo Overlay types.
 
 =head1 VERSION
 
-version 2.000000
+version 2.001000
 
 =head1 TYPES
 

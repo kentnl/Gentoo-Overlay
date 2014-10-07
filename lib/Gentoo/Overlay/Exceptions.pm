@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Exceptions;
 
-our $VERSION = '2.000000';
+our $VERSION = '2.001000';
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 
@@ -12,7 +12,8 @@ our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
 use Moo qw( has with );
 use Try::Tiny qw( try catch );
-use Types::Standard qw( HashRef Str );
+use Types::Standard qw( HashRef Str ArrayRef );
+use Type::Utils qw( declare where as );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
 use String::Errf qw( errf );
 use Const::Fast qw( const );
@@ -23,6 +24,39 @@ const our $W_WARNING => 'warning';
 const our $W_FATAL   => 'fatal';
 
 our $WARNINGS_ARE = $W_WARNING;
+
+has ident => (
+  is       => 'ro',
+  isa      => ( declare as Str, where { length && /\A\S/msx && /\S\z/msx } ),
+  required => 1,
+);
+
+sub has_tag {
+  my ( $self, $tag ) = @_;
+
+  $_ eq $tag && return 1 for $self->tags;
+
+  return;
+}
+
+sub tags {
+  my ($self) = @_;
+
+  # Poor man's uniq:
+  my %tags = map { ; $_ => 1 } ( @{ $self->_instance_tags } );
+
+  return wantarray ? keys %tags : ( keys %tags )[0];
+}
+
+my $tag = declare Str, where { length };
+
+has instance_tags => (
+  is       => 'ro',
+  isa      => ArrayRef [$tag],
+  reader   => '_instance_tags',
+  init_arg => 'tags',
+  default  => sub { [] },
+);
 
 has 'payload' => (
   is       => 'ro',
@@ -83,7 +117,7 @@ has 'message_fmt' => (
   init_arg => 'message',
   default  => sub { shift->ident },
 );
-with( 'Throwable', 'Role::Identifiable::HasIdent', 'Role::Identifiable::HasTags', 'Role::HasMessage', 'StackTrace::Auto', );
+with( 'Throwable', 'StackTrace::Auto', );
 
 sub message {
   my ($self) = @_;
@@ -111,11 +145,11 @@ Gentoo::Overlay::Exceptions - A custom Exception class for Gentoo which also has
 
 =head1 VERSION
 
-version 2.000000
+version 2.001000
 
 =for Pod::Coverage BUILDARGS
 
-=for Pod::Coverage ident message payload as_string exception warning
+=for Pod::Coverage ident message payload as_string exception warning has_tag tags
 
 =head1 AUTHOR
 

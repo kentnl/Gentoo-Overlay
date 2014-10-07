@@ -97,9 +97,6 @@
             "MooX::ClassAttribute" : "0",
             "MooX::HandlesVia" : "0",
             "MooseX::Has::Sugar" : "0",
-            "Role::HasMessage" : "0",
-            "Role::Identifiable::HasIdent" : "0",
-            "Role::Identifiable::HasTags" : "0",
             "StackTrace::Auto" : "0",
             "String::Errf" : "0",
             "Sub::Exporter::Progressive" : "0",
@@ -135,27 +132,27 @@
    "provides" : {
       "Gentoo::Overlay" : {
          "file" : "lib/Gentoo/Overlay.pm",
-         "version" : "2.000000"
+         "version" : "2.001000"
       },
       "Gentoo::Overlay::Category" : {
          "file" : "lib/Gentoo/Overlay/Category.pm",
-         "version" : "2.000000"
+         "version" : "2.001000"
       },
       "Gentoo::Overlay::Ebuild" : {
          "file" : "lib/Gentoo/Overlay/Ebuild.pm",
-         "version" : "2.000000"
+         "version" : "2.001000"
       },
       "Gentoo::Overlay::Exceptions" : {
          "file" : "lib/Gentoo/Overlay/Exceptions.pm",
-         "version" : "2.000000"
+         "version" : "2.001000"
       },
       "Gentoo::Overlay::Package" : {
          "file" : "lib/Gentoo/Overlay/Package.pm",
-         "version" : "2.000000"
+         "version" : "2.001000"
       },
       "Gentoo::Overlay::Types" : {
          "file" : "lib/Gentoo/Overlay/Types.pm",
-         "version" : "2.000000"
+         "version" : "2.001000"
       }
    },
    "release_status" : "stable",
@@ -170,7 +167,7 @@
          "web" : "https://github.com/kentnl/Gentoo-Overlay"
       }
    },
-   "version" : "2.000000",
+   "version" : "2.001000",
    "x_BuiltWith" : {
       "modules" : {
          "CPAN::Meta" : "2.142690",
@@ -233,9 +230,6 @@
          "MooX::HandlesVia" : "0.001005",
          "MooseX::Has::Sugar" : "1.000004",
          "Pod::Coverage::TrustPod" : "0.100003",
-         "Role::HasMessage" : "0.006",
-         "Role::Identifiable::HasIdent" : "0.007",
-         "Role::Identifiable::HasTags" : "0.007",
          "StackTrace::Auto" : "0.200012",
          "String::Errf" : "0.007",
          "Sub::Exporter::Progressive" : "0.001011",
@@ -736,7 +730,7 @@
                "Dist::Zilla::Plugin::Git::Tag" : {
                   "branch" : null,
                   "signed" : 0,
-                  "tag" : "2.000000-source",
+                  "tag" : "2.001000-source",
                   "tag_format" : "%v-source",
                   "tag_message" : "v%v",
                   "time_zone" : "local"
@@ -807,7 +801,7 @@
                "Dist::Zilla::Plugin::Git::Tag" : {
                   "branch" : "releases",
                   "signed" : 0,
-                  "tag" : "2.000000",
+                  "tag" : "2.001000",
                   "tag_format" : "%v",
                   "tag_message" : "v%v",
                   "time_zone" : "local"
