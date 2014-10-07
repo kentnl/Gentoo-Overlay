@@ -5,7 +5,16 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
  - ExtUtils::MakeMaker
 
  [Added / runtime requires]
+ - Moo
+ - MooX::ClassAttribute
+ - MooX::HandlesVia
+ - Role::HasMessage
  - Sub::Exporter::Progressive
+ - Try::Tiny
+ - Type::Library 0.008
+ - Type::Utils
+ - Types::Path::Tiny
+ - Types::Standard
 
  [Added / test requires]
  - ExtUtils::MakeMaker
@@ -22,6 +31,12 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
 
  [Removed / runtime requires]
  - Data::Dump
+ - MooseX::ClassAttribute
+ - MooseX::OneArgNew
+ - MooseX::Types
+ - MooseX::Types::Moose
+ - MooseX::Types::Path::Tiny
+ - Role::HasMessage::Errf
  - Sub::Exporter
 
  [Removed / test requires]
