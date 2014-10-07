@@ -16,11 +16,11 @@ use MooseX::Has::Sugar qw( ro coerce lazy_build lazy );
 use Types::Standard qw( HashRef CodeRef );
 use Types::Path::Tiny qw( File Dir );
 use MooX::ClassAttribute qw( class_has );
-use namespace::autoclean;
 use Carp qw();
 use Gentoo::Overlay::Category;
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Category );
 use Gentoo::Overlay::Exceptions qw( exception warning );
+use namespace::clean -except => 'meta';
 
 
 

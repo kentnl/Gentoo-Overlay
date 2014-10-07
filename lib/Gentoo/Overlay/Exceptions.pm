@@ -15,6 +15,7 @@ use Try::Tiny qw( try catch );
 use Types::Standard qw( HashRef Str );
 use Sub::Exporter::Progressive -setup => { exports => [ 'exception', 'warning', ] };
 use Const::Fast qw( const );
+use namespace::clean -except => [ 'meta', 'import' ];
 
 const our $W_SILENT  => 'silent';
 const our $W_WARNING => 'warning';

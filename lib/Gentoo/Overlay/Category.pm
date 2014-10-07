@@ -43,7 +43,7 @@ use MooX::ClassAttribute qw( class_has );
 use MooX::HandlesVia;
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_CategoryName Gentoo__Overlay_Package Gentoo__Overlay_Overlay );
 use Gentoo::Overlay::Exceptions qw( exception );
-use namespace::autoclean;
+use namespace::clean -except => 'meta';
 
 
 

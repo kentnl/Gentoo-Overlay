@@ -19,7 +19,7 @@ use MooX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_PackageName Gentoo__Overlay_Category );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_RepositoryName Gentoo__Overlay_Category Gentoo__Overlay_Ebuild );
 use Gentoo::Overlay::Exceptions qw( exception);
-use namespace::autoclean;
+use namespace::clean -except => 'meta';
 
 
 

@@ -16,7 +16,7 @@ use Types::Standard qw( HashRef Str );
 use Types::Path::Tiny qw( File Dir );
 use MooX::ClassAttribute qw( class_has );
 use Gentoo::Overlay::Types qw( Gentoo__Overlay_EbuildName Gentoo__Overlay_Package );
-use namespace::autoclean;
+use namespace::clean -except => 'meta';
 
 
 

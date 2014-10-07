@@ -1,6 +1,6 @@
 ﻿Revision history for Gentoo-Overlay
 
-2.000000 2014-10-07T03:10:10Z 7eb3424
+2.000000 2014-10-07T03:25:53Z c36a2db
  [00 Major - Version Scheme]
  - Use x.yyyzzz instead of x.y.z
  - This may affect hand-operated downstreams
@@ -27,6 +27,7 @@
  [Internals]
  - use Sub::Exporter::Progressive instead of Sub::Exporter
  - use Const::Fast instead of Readonly
+ - use namespace::clean instead of namespace::autoclean
 
  [Metadata]
  - move to kentnl org
