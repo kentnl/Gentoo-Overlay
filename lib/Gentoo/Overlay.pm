@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay;
 
-our $VERSION = '2.000001';
+our $VERSION = '2.001001';
 
 # ABSTRACT: Tools for working with Gentoo Overlays
 
