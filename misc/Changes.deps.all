@@ -104,6 +104,7 @@ This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL depen
 
  [Removed / runtime requires]
  - Data::Dump
+ - Moose
  - MooseX::ClassAttribute
  - MooseX::OneArgNew
  - MooseX::Types

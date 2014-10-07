@@ -33,6 +33,7 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
 
  [Removed / runtime requires]
  - Data::Dump
+ - Moose
  - MooseX::ClassAttribute
  - MooseX::OneArgNew
  - MooseX::Types
