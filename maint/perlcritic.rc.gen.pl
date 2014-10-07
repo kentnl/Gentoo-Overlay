@@ -28,10 +28,10 @@ for my $wordlist (@stopwords) {
 }
 for my $type (qw( Overlay Category Ebuild Package CategoryName EbuildName PackageName RepositoryName )) {
   $bundle->add_or_append_policy_field(
-    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'MooseX::Types::Gentoo__Overlay_' . $type, ), );
+    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'Type::Library::Gentoo__Overlay_' . $type, ), );
 
 }
-for my $mxtype (qw( class_type coerce from via as where subtype )) {
+for my $mxtype (qw( class_type coerce from via as where subtype declare )) {
   $bundle->add_or_append_policy_field(
     'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'Type::Utils::' . $mxtype, ), );
 
