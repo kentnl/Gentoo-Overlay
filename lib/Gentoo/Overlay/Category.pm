@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 
-our $VERSION = '2.001000';
+our $VERSION = '2.001001';
 
 # ABSTRACT: A singular category in a repository;
 
@@ -373,7 +373,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 2.001000
+version 2.001001
 
 =head1 SYNOPSIS
 
