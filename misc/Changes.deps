@@ -2,6 +2,7 @@ This file contains changes in REQUIRED dependencies for standard CPAN phases (co
 
 2.001000
  [Removed / runtime requires]
+ - Role::HasMessage
  - Role::Identifiable::HasIdent
  - Role::Identifiable::HasTags
 
