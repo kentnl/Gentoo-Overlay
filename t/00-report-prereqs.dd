@@ -77,7 +77,6 @@ do { my $x = {
                                       'MooX::HandlesVia' => '0',
                                       'MooseX::Has::Sugar' => '0',
                                       'Role::HasMessage' => '0',
-                                      'Role::Identifiable::HasIdent' => '0',
                                       'Role::Identifiable::HasTags' => '0',
                                       'StackTrace::Auto' => '0',
                                       'String::Errf' => '0',
