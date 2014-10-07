@@ -312,7 +312,7 @@ allowed_pragmata = diagnostics feature perlversion strict warnings utf8
 [Subroutines::ProhibitBuiltinHomonyms]
 
 [Subroutines::ProhibitCallsToUndeclaredSubs]
-exempt_subs = Type::Library::Gentoo__Overlay_Overlay Type::Library::Gentoo__Overlay_Category Type::Library::Gentoo__Overlay_Ebuild Type::Library::Gentoo__Overlay_Package Type::Library::Gentoo__Overlay_CategoryName Type::Library::Gentoo__Overlay_EbuildName Type::Library::Gentoo__Overlay_PackageName Type::Library::Gentoo__Overlay_RepositoryName Type::Utils::class_type Type::Utils::coerce Type::Utils::from Type::Utils::via Type::Utils::as Type::Utils::where Type::Utils::subtype Type::Utils::declare
+exempt_subs = Type::Utils::class_type Type::Utils::coerce Type::Utils::from Type::Utils::via Type::Utils::as Type::Utils::where Type::Utils::subtype Type::Utils::declare
 
 [Subroutines::ProhibitCallsToUnexportedSubs]
 

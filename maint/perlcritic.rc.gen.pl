@@ -26,11 +26,12 @@ my @stopwords = (
 for my $wordlist (@stopwords) {
   $bundle->add_or_append_policy_field( 'Documentation::PodSpelling' => ( 'stop_words' => $wordlist ) );
 }
-for my $type (qw( Overlay Category Ebuild Package CategoryName EbuildName PackageName RepositoryName )) {
-  $bundle->add_or_append_policy_field(
-    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'Type::Library::Gentoo__Overlay_' . $type, ), );
 
-}
+#for my $type (qw( Overlay Category Ebuild Package CategoryName EbuildName PackageName RepositoryName )) {
+#  $bundle->add_or_append_policy_field(
+#    'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'Type::Library::Gentoo__Overlay_' . $type, ), );
+#
+#}
 for my $mxtype (qw( class_type coerce from via as where subtype declare )) {
   $bundle->add_or_append_policy_field(
     'Subroutines::ProhibitCallsToUndeclaredSubs' => ( 'exempt_subs' => 'Type::Utils::' . $mxtype, ), );
