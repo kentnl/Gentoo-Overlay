@@ -149,7 +149,7 @@ version 2.001000
 
 =for Pod::Coverage BUILDARGS
 
-=for Pod::Coverage ident message payload as_string exception warning
+=for Pod::Coverage ident message payload as_string exception warning has_tag tags
 
 =head1 AUTHOR
 
