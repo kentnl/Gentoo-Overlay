@@ -10,7 +10,7 @@ our $VERSION = '2.001001';
 
 # AUTHORITY
 
-use Moo qw( has );
+use Moo 1.006000 qw( has );
 use MooX::HandlesVia;
 use MooseX::Has::Sugar qw( ro coerce lazy_build lazy );
 use Types::Standard qw( HashRef CodeRef );
