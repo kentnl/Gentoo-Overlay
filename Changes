@@ -1,5 +1,7 @@
 ﻿Revision history for Gentoo-Overlay
 
+2.001002 2014-10-08T05:02:00Z cf263c4
+
 2.001001 2014-10-08T05:01:33Z bf1e27d
  [Bugfix]
  - Use a version of Moo that supports coerce => 1
