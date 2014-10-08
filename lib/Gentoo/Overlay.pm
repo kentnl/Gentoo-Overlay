@@ -4,13 +4,13 @@ use warnings;
 
 package Gentoo::Overlay;
 
-our $VERSION = '2.001000';
+our $VERSION = '2.001001';
 
 # ABSTRACT: Tools for working with Gentoo Overlays
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moo qw( has );
+use Moo 1.006000 qw( has );
 use MooX::HandlesVia;
 use MooseX::Has::Sugar qw( ro coerce lazy_build lazy );
 use Types::Standard qw( HashRef CodeRef );
@@ -550,7 +550,7 @@ Gentoo::Overlay - Tools for working with Gentoo Overlays
 
 =head1 VERSION
 
-version 2.001000
+version 2.001001
 
 =head1 SYNOPSIS
 

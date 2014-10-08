@@ -1,6 +1,10 @@
 This file contains ALL changes in dependencies in both REQUIRED / OPTIONAL dependencies for all phases (configure/build/runtime/test/develop)
 
-2.001000
+2.001001
+ [Changed / runtime requires]
+ - Moo 0 → 1.006000
+
+2.001000 2014-10-07T07:14:56Z
  [Removed / runtime requires]
  - Role::HasMessage
  - Role::Identifiable::HasIdent

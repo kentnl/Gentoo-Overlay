@@ -22,7 +22,7 @@ my %WriteMakefileArgs = (
   "PREREQ_PM" => {
     "Carp" => 0,
     "Const::Fast" => 0,
-    "Moo" => 0,
+    "Moo" => "1.006000",
     "MooX::ClassAttribute" => 0,
     "MooX::HandlesVia" => 0,
     "MooseX::Has::Sugar" => 0,
@@ -48,7 +48,7 @@ my %WriteMakefileArgs = (
     "Test::More" => "0.96",
     "Test::Output" => 0
   },
-  "VERSION" => "2.001000",
+  "VERSION" => "2.001001",
   "test" => {
     "TESTS" => "t/*.t t/00-compile/*.t"
   }
@@ -61,7 +61,7 @@ my %FallbackPrereqs = (
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "FindBin" => 0,
-  "Moo" => 0,
+  "Moo" => "1.006000",
   "MooX::ClassAttribute" => 0,
   "MooX::HandlesVia" => 0,
   "MooseX::Has::Sugar" => 0,

@@ -93,7 +93,7 @@
          "requires" : {
             "Carp" : "0",
             "Const::Fast" : "0",
-            "Moo" : "0",
+            "Moo" : "1.006000",
             "MooX::ClassAttribute" : "0",
             "MooX::HandlesVia" : "0",
             "MooseX::Has::Sugar" : "0",
@@ -132,27 +132,27 @@
    "provides" : {
       "Gentoo::Overlay" : {
          "file" : "lib/Gentoo/Overlay.pm",
-         "version" : "2.001000"
+         "version" : "2.001001"
       },
       "Gentoo::Overlay::Category" : {
          "file" : "lib/Gentoo/Overlay/Category.pm",
-         "version" : "2.001000"
+         "version" : "2.001001"
       },
       "Gentoo::Overlay::Ebuild" : {
          "file" : "lib/Gentoo/Overlay/Ebuild.pm",
-         "version" : "2.001000"
+         "version" : "2.001001"
       },
       "Gentoo::Overlay::Exceptions" : {
          "file" : "lib/Gentoo/Overlay/Exceptions.pm",
-         "version" : "2.001000"
+         "version" : "2.001001"
       },
       "Gentoo::Overlay::Package" : {
          "file" : "lib/Gentoo/Overlay/Package.pm",
-         "version" : "2.001000"
+         "version" : "2.001001"
       },
       "Gentoo::Overlay::Types" : {
          "file" : "lib/Gentoo/Overlay/Types.pm",
-         "version" : "2.001000"
+         "version" : "2.001001"
       }
    },
    "release_status" : "stable",
@@ -167,7 +167,7 @@
          "web" : "https://github.com/kentnl/Gentoo-Overlay"
       }
    },
-   "version" : "2.001000",
+   "version" : "2.001001",
    "x_BuiltWith" : {
       "modules" : {
          "CPAN::Meta" : "2.142690",
@@ -730,7 +730,7 @@
                "Dist::Zilla::Plugin::Git::Tag" : {
                   "branch" : null,
                   "signed" : 0,
-                  "tag" : "2.001000-source",
+                  "tag" : "2.001001-source",
                   "tag_format" : "%v-source",
                   "tag_message" : "v%v",
                   "time_zone" : "local"
@@ -801,7 +801,7 @@
                "Dist::Zilla::Plugin::Git::Tag" : {
                   "branch" : "releases",
                   "signed" : 0,
-                  "tag" : "2.001000",
+                  "tag" : "2.001001",
                   "tag_format" : "%v",
                   "tag_message" : "v%v",
                   "time_zone" : "local"

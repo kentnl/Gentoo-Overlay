@@ -4,13 +4,13 @@ use warnings;
 
 package Gentoo::Overlay::Category;
 
-our $VERSION = '2.001000';
+our $VERSION = '2.001001';
 
 # ABSTRACT: A singular category in a repository;
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moo qw( has );
+use Moo 1.006000 qw( has );
 use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
 use Types::Standard qw( HashRef Str );
 use Types::Path::Tiny qw( File Dir Path );
@@ -373,7 +373,7 @@ Gentoo::Overlay::Category - A singular category in a repository;
 
 =head1 VERSION
 
-version 2.001000
+version 2.001001
 
 =head1 SYNOPSIS
 
