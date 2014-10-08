@@ -1,6 +1,8 @@
 ﻿Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+2.001001 2014-10-08T05:01:33Z bf1e27d
  [Bugfix]
  - Use a version of Moo that supports coerce => 1
 
