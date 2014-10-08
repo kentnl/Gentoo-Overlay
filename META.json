@@ -93,7 +93,7 @@
          "requires" : {
             "Carp" : "0",
             "Const::Fast" : "0",
-            "Moo" : "0",
+            "Moo" : "1.006000",
             "MooX::ClassAttribute" : "0",
             "MooX::HandlesVia" : "0",
             "MooseX::Has::Sugar" : "0",

@@ -10,7 +10,7 @@ our $VERSION = '2.001001';
 
 our $AUTHORITY = 'cpan:KENTNL'; # AUTHORITY
 
-use Moo qw( has );
+use Moo 1.006000 qw( has );
 use MooseX::Has::Sugar qw( ro required coerce lazy lazy_build );
 use Types::Standard qw( HashRef Str );
 use Types::Path::Tiny qw( File Dir Path );
