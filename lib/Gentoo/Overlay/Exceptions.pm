@@ -4,7 +4,7 @@ use warnings;
 
 package Gentoo::Overlay::Exceptions;
 
-our $VERSION = '2.001002';
+our $VERSION = '2.001003';
 
 # ABSTRACT: A custom Exception class for Gentoo which also has warning-style semantics instead of failure
 
