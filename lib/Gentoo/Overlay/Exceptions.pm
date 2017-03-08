@@ -122,7 +122,7 @@ with( 'Throwable', 'StackTrace::Auto', );
 sub message {
   my ($self) = @_;
   return try {
-    errf( $self->message_fmt, $self->payload )
+    errf( $self->message_fmt, $self->payload );
   }
   catch {
     sprintf '%s (error during formatting)', $self->message_fmt;
